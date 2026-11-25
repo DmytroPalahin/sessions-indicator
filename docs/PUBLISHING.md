@@ -9,9 +9,9 @@ How a release goes from this repository to the TradingView community library.
 | Page | https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/ |
 | Author | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
 | Access | Public, protected: everyone can add it to a chart, TradingView does not show the code. The code is open here. |
-| Code | Version 1.3.0 — the file at the tag `v1.3.0` |
+| Code | Version 1.4.0 — the file at the tag `v1.4.0` |
 | First published | 2026-11-25, from version 1.2.0 |
-| Latest update | 2026-11-25, version 1.3.0, with release notes |
+| Latest update | 2026-11-25, version 1.4.0; the page carries the release notes of 1.3.0 and 1.4.0 |
 | Categories | Multi-timeframe · Pivot points and levels |
 | Tags | `sessions`, `killzones`, `forex` |
 | Picture | `OANDA:EURUSD`, 15 minutes, default settings |
@@ -92,7 +92,9 @@ This script is a charting tool, not financial advice.
 
 1. Open the saved script in the Pine Editor (**Open → My scripts**).
 2. Replace its code with the new version and **Save**.
-3. Open the prepared chart, so the update gets a clean picture.
+3. Open the prepared chart, so the update gets a clean picture. The saved script itself must be on it: an
+   indicator added from the publication does not count, and TradingView then offers to add the saved one. Remove
+   the other copy, so the picture shows the indicator once.
 4. Press **Publish script → Update existing script**.
 5. Choose `Custom Sessions Indicator` in the list of published scripts and leave *Don't update the chart*
    unticked.
@@ -102,7 +104,8 @@ This script is a charting tool, not financial advice.
 An update must describe what changed; the matching `CHANGELOG.md` section does that. Publish an update when the code
 changes, not to edit the page: the release notes are added under the first description, which stays as it is.
 
-People who added the indicator from the publication receive the update on their charts. A copy pasted from this
+People who added the indicator from the publication receive the update on their charts. The Indicators dialog can
+keep offering the previous version for a short while after an update. A copy pasted from this
 repository into someone's own Pine Editor does not change until they paste the new file.
 
 ## Rules worth remembering

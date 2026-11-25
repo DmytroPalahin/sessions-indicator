@@ -55,11 +55,14 @@ All times are in the timezone selected in *① General* — `America/New_York` b
 
 | Slot | Name | Window | On |
 |------|------|--------|----|
-| 1 | Asia | 19:00 – 04:00 | yes |
-| 2 | London | 03:00 – 12:00 | yes |
-| 3 | New York | 08:00 – 17:00 | yes |
-| 4 | Sydney | 17:00 – 02:00 | no |
+| 1 | Asia | 18:00 – 02:00 | yes |
+| 2 | London | 03:00 – 11:00 | yes |
+| 3 | New York | 08:00 – 16:00 | yes |
+| 4 | Sydney | 16:00 – 00:00 | no |
 | 5 | Custom | 09:30 – 16:00 | no |
+
+Each default session is the 08:00 – 16:00 working day of its city, written in New York time. Asia is blue, London
+green and New York orange, drawn as soft boxes without a border.
 
 Killzone presets: Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:00 – 10:00, NY Lunch 12:00 – 13:00,
 NY PM 13:30 – 16:00. These are conventions, not rules: every window is editable.

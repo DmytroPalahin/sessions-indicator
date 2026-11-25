@@ -7,13 +7,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 How versions are counted for an indicator:
 
-- **Major** — a setting was removed or renamed, or a default changed in a way that alters an existing chart.
-- **Minor** — a new module or a new setting; existing charts look the same.
+- **Major** — a setting was removed or renamed, so saved settings stop applying.
+- **Minor** — a new module, a new setting or a changed default. Changed defaults are listed under *Changed*.
 - **Patch** — a fix that does not add settings.
 
 ## [Unreleased]
 
-Nothing yet.
+### Changed
+
+- Default sessions are now the 08:00 – 16:00 working day of each city in New York time: Asia `1800-0200`,
+  London `0300-1100`, New York `0800-1600`, Sydney `1600-0000` (were nine-hour windows).
+- Default colours: Asia blue, London green, New York orange, Sydney purple; the first two killzones follow.
+- Session boxes are softer by default: fill transparency 95 and no border (were 90 and a visible border).
 
 ## [1.0.0] - 2026-11-25
 

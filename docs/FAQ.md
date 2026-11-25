@@ -18,10 +18,10 @@ The session times are read in the timezone from *① General → Timezone*. Two 
 - You entered times for one timezone while another is selected.
 - You use a fixed offset such as `UTC+3`. Offsets do not follow daylight saving time. Use a named zone instead.
 
-## Why does the Asia session start at 19:00?
+## Why does the Asia session start at 18:00?
 
-Because the default timezone is New York. 19:00 in New York is the Tokyo morning. If you prefer to think in another
-timezone, select it and enter the windows in that time.
+Because the default timezone is New York. 18:00 in New York is 08:00 in Tokyo while New York is on winter time. If
+you prefer to think in another timezone, select it and enter the windows in that time.
 
 ## London and New York are "wrong" for a few weeks in March and November
 

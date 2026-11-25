@@ -21,11 +21,16 @@ Five rows. Each row is: checkbox · name · time window · colour.
 
 | Slot | Name | Window | On |
 |------|------|--------|----|
-| 1 | Asia | `1900-0400` | yes |
-| 2 | London | `0300-1200` | yes |
-| 3 | New York | `0800-1700` | yes |
-| 4 | Sydney | `1700-0200` | no |
+| 1 | Asia | `1800-0200` | yes |
+| 2 | London | `0300-1100` | yes |
+| 3 | New York | `0800-1600` | yes |
+| 4 | Sydney | `1600-0000` | no |
 | 5 | Custom | `0930-1600` | no |
+
+The defaults are the 08:00 – 16:00 working day of each city, written in New York time: Tokyo, London, New York and
+Sydney. Tokyo and Sydney do not move their clocks together with New York, so for part of the year their real working
+day is one hour off; edit the window if that matters to you. Default colours: Asia blue, London green, New York
+orange.
 
 A window may cross midnight and may be up to 24 hours long (`1800-1800` restarts every day at 18:00).
 
@@ -34,9 +39,9 @@ A window may cross midnight and may be up to 24 hours long (`1800-1800` restarts
 | Input | Default | What it does |
 |-------|---------|--------------|
 | Style | `Box` | `Box` frames the session range. `Background` shades the whole height of the chart. `Box + background` does both. `Hidden` keeps the session active for levels, alerts and the dashboard without drawing it. |
-| Box fill transparency | `90` | 0 is solid, 100 is invisible. |
+| Box fill transparency | `95` | 0 is solid, 100 is invisible. |
 | Background transparency | `92` | Same scale, for the `Background` style. |
-| Border transparency | `40` | Same scale, for the box border. |
+| Border transparency | `100` | Same scale, for the box border. The default draws no border; lower it to get one. |
 | Border | `Solid`, `1` | Line style and width of the box border. |
 | Label | `Name + range`, `Left` | What the caption above the session says, and where it sits. `Hidden` removes it. |
 | Range unit | `Auto` | Unit of every range in labels and in the dashboard: `Price`, `Ticks`, `Pips` or `Percent`. `Auto` uses pips on forex and price elsewhere. |

@@ -1,0 +1,230 @@
+[project]
+name = "sessions-indicator"
+# the tools are not released as a package; the indicator version lives in
+# src/custom_sessions_indicator.pine and is checked by tools/check.py
+version = "0.0.0"
+description = "Development tools for the Custom Sessions Indicator (TradingView, Pine Script v6)"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+# tools/check.py uses the standard library only
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.12",
+]
+
+# there is nothing to build or install: uv only manages the environment
+[tool.uv]
+package = false
+
+
+# -----------------------------------------------------------------------------
+# ruff general configuration
+# -----------------------------------------------------------------------------
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+# apply safe automatic fixes when running `ruff check --fix`
+fix = true
+
+# do not apply potentially unsafe fixes automatically
+unsafe-fixes = false
+
+# display information about applied fixes
+show-fixes = true
+
+# respect exclusions defined in .gitignore
+respect-gitignore = true
+
+# exclude a path even when it is passed directly to ruff
+force-exclude = true
+
+# detailed terminal output
+output-format = "full"
+
+# tell ruff where the project's python modules are located
+src = ["tools", "tests"]
+
+# additional paths excluded from linting and formatting
+extend-exclude = [
+    ".conda",
+    ".venv",
+    "__pycache__",
+    ".git",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".mypy_cache",
+    "build",
+    "dist",
+    "*.egg-info",
+]
+
+
+# -----------------------------------------------------------------------------
+# ruff formatter
+# -----------------------------------------------------------------------------
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+# format python examples contained inside docstrings
+docstring-code-format = true
+docstring-code-line-length = 88
+
+
+# -----------------------------------------------------------------------------
+# ruff linter
+# -----------------------------------------------------------------------------
+[tool.ruff.lint]
+select = [
+    "F",      # pyflakes: undefined names, unused imports, syntax errors
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "I",      # isort: import sorting
+    "UP",     # pyupgrade: modern python syntax
+    "PL",     # pylint rules
+    "T20",    # flake8-print
+    "S",      # flake8-bandit: common security issues
+    "TC",     # flake8-type-checking
+    "RUF",    # ruff-specific rules
+    "B",      # flake8-bugbear
+    "SIM",    # flake8-simplify
+    "C90",    # mccabe complexity
+    "C4",     # flake8-comprehensions
+    "PERF",   # perflint performance rules
+    "ARG",    # flake8-unused-arguments
+]
+
+ignore = [
+    "PLR0913",  # too many function arguments
+    "E101",     # mixed spaces and tabs
+    "E203",     # whitespace before punctuation
+    "E204",     # whitespace after decorator
+    "E401",     # multiple imports on one line
+    "E501",     # line too long
+    "E701",     # multiple statements on one line
+    "PLE1206",  # logging call has too few arguments
+    "PLE1300",  # invalid format string in logging call
+    # rules that can conflict with ruff formatter
+    "W191",     # tab indentation
+    "E111",     # indentation not a multiple of four
+    "E114",     # comment indentation not a multiple of four
+    "E115",     # expected indented block comment
+    "E116",     # unexpected indentation comment
+    "E117",     # over-indented code
+    "D203",     # blank line required before class docstring
+    "D206",     # docstring tab indentation
+    "D300",     # triple single quotes
+    "Q000",     # bad quotes in inline string
+    "Q001",     # bad quotes in multiline string
+    "Q002",     # bad quotes in docstring
+    "Q003",     # avoidable escaped quote
+    "Q004",     # unnecessary escaped quote
+    "COM812",   # missing trailing comma
+    "COM819",   # prohibited trailing comma
+    "ISC002",   # multiline implicit string concatenation
+]
+
+# allow ruff to fix every selected rule unless explicitly disabled below
+fixable = ["ALL"]
+
+# do not automatically remove unused imports
+unfixable = ["F401"]
+
+
+# -----------------------------------------------------------------------------
+# ruff mccabe complexity
+# -----------------------------------------------------------------------------
+[tool.ruff.lint.mccabe]
+max-complexity = 18
+
+
+# -----------------------------------------------------------------------------
+# ruff pylint settings
+# -----------------------------------------------------------------------------
+[tool.ruff.lint.pylint]
+max-args = 20
+max-branches = 15
+max-returns = 8
+max-statements = 60
+
+
+# -----------------------------------------------------------------------------
+# ruff import sorting
+# -----------------------------------------------------------------------------
+[tool.ruff.lint.isort]
+combine-as-imports = true
+force-sort-within-sections = true
+known-first-party = ["check"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+
+# -----------------------------------------------------------------------------
+# ruff per-file ignores
+# -----------------------------------------------------------------------------
+[tool.ruff.lint.per-file-ignores]
+"tools/**/*.py" = [
+    "T201",     # the check script is a command-line tool: printing is its output
+]
+
+"tests/**/*.py" = [
+    "T201",     # print is acceptable in tests
+    "S101",     # assert is expected in tests
+    "S108",     # temporary paths are acceptable in tests
+    "PLR2004",  # magic values are normal in assertions
+    "PLR0913",  # fixtures can produce functions with many arguments
+    "ARG001",   # fixtures or mocks may leave arguments unused
+]
+
+
+# -----------------------------------------------------------------------------
+# pytest
+# -----------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tools"]
+
+addopts = [
+    "-ra",
+    "--strict-config",
+    "--strict-markers",
+    "--cov=tools",
+    "--cov-report=term-missing",
+]
+
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+
+# -----------------------------------------------------------------------------
+# coverage
+# -----------------------------------------------------------------------------
+[tool.coverage.run]
+branch = true
+source = ["tools"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+precision = 2
+
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+]

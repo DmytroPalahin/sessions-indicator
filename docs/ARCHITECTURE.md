@@ -138,6 +138,20 @@ directly, so each one has a unique name: `Tracker.advance`, `Period.feed`, `Anch
 Pine reserves multiples of four spaces for blocks and requires other indentations for wrapped lines. To keep that rule
 out of everyone's way the source does not wrap lines at all; long calls stay on one line.
 
+### 11. Level labels grow into the chart
+
+A script cannot read how wide the right margin of the chart is, so a label that follows its line cannot be fitted
+to it: with TradingView's default margin the price scale cut `London High` after a few letters. By default the
+label is therefore anchored at the end of the line and grows to the left — over the line, or under it for a low,
+which is the side price is not on while the level is unbroken. `levelTagStyle` picks the label style; the old
+placement stays available as `After the line`.
+
+### 12. New inputs go last
+
+TradingView stores the settings of an indicator by the position of each input. An input added in the middle
+shifts every saved value after it into the wrong field. A new input is declared after the last one, also when
+its group sits earlier in the file — `i_tagSpot` is the example.
+
 ## Object budget
 
 | Drawing | Per day, defaults | Per day, everything on |
@@ -174,5 +188,7 @@ levels fold back to their first bar.
 - Session averages and the running day range depend on the bars loaded on the chart.
 - The dashboard status uses the wall clock; it does not know the exchange calendar.
 - Every level has its own label. Two levels at one price therefore print two labels over each other.
-- A level label starts at the end of its line, `i_offset` bars after the last bar. It is visible only when the
-  right margin of the chart is wider than that.
+- A level label ends at the end of its line, `i_offset` bars after the last bar. It is complete only when the
+  right margin of the chart is at least that wide.
+- The level list is trimmed by age. With `Keep, faded` a broken level can push out an older level that is still
+  live.

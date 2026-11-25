@@ -59,6 +59,8 @@ with these project rules.
 - Every input belongs to a group and, when its meaning is not obvious, has a tooltip.
 - In an inline row only the first input has a title.
 - New modules are off by default.
+- Declare a new input after the last one. TradingView stores settings by input position, so an input added in the
+  middle shifts the saved settings of everyone who uses the indicator.
 
 **Formatting**
 
@@ -82,7 +84,7 @@ change alters what they show.
 - Use a chart with this indicator only: no other indicators, no drawings, the light theme.
 - Symbol `OANDA:EURUSD`: 15 minutes for the session pictures and the dashboard, 5 minutes for killzones and the
   opening range.
-- Leave a right margin wide enough for the level labels.
+- Keep TradingView's default right margin, so the pictures show what a new user sees.
 - Take the picture with TradingView's own snapshot (the camera icon → *Download image*), so the symbol, the
   timeframe and the time are part of it.
 - Keep the file names, and name the settings you switched on in the caption.

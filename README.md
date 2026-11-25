@@ -77,7 +77,7 @@ Every picture below is the same indicator with a few checkboxes switched on. The
 </tr>
 </table>
 
-<sub>EURUSD on 15 and 5 minutes, light chart theme, version 1.2.0. Click a picture to open it in full size.</sub>
+<sub>EURUSD on 15 and 5 minutes, light chart theme. Click a picture to open it in full size.</sub>
 
 ## Quick start
 
@@ -161,6 +161,7 @@ verification log in [docs/TESTING.md](docs/TESTING.md) lists what has been check
 - Session volume profile
 - Statistics: how often one session breaks the range of another
 - One label for levels that share a price, instead of two labels printed over each other
+- When the level list is full, drop broken levels before live ones
 - Alerts for session starts, broken levels and opening range breakouts — built and tried on a live chart, kept on
   the `feature/alerts` branch until a later release
 

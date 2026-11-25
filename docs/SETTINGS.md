@@ -17,7 +17,7 @@ With every input at its default the chart shows the four main sessions and nothi
 | Custom timezone | `UTC+3` | Used only when *Timezone of session times* is `Custom`. Accepts an IANA name (`Europe/Kyiv`) or an offset (`UTC+3`). An offset does not follow daylight saving time. |
 | History, days (0 = all) | `20` | Drawings older than this many days are skipped. `0` draws the whole loaded history. |
 | Hide sessions above, minutes | `60` | Sessions, killzones and the opening range are hidden on chart timeframes above this value. |
-| Level labels offset, bars | `8` | How far to the right of the last bar the level lines end and their labels begin. The label needs free space after that point, so keep the right margin of the chart wider than this value. |
+| Level labels offset, bars | `5` | How many bars to the right of the last bar the level lines end. Their labels sit at that end, so keep the right margin of the chart at least this wide. |
 
 ## ② Sessions
 
@@ -176,3 +176,4 @@ range.
 | Level labels | on | Text at the right end of each level line. |
 | Price in level labels | off | Appends the price to the label. |
 | Hide levels farther than, × ADR (0 = never) | `0.0` | Levels farther from the last price than this many average daily ranges are not drawn. Use it when a distant weekly or monthly level squeezes the candles. Session levels fold back to the bar where they formed. |
+| Level labels position | `At the line end` | `At the line end` prints the text over the right end of the line — under it for lows — inside the chart, where the price scale cannot cut it off. `After the line` prints it to the right of the line; that needs a right margin wide enough for the whole text. |

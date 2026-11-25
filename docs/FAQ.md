@@ -56,9 +56,14 @@ compresses the candles. Two ways out:
 
 ## The level labels are cut off at the right edge
 
-The text of a level label starts *① General → Level labels offset, bars* to the right of the last bar (8 by
-default) and needs free space after that point. When the right margin of the chart is narrower, the price scale
-cuts the text off. Drag the chart to the left to widen the margin, or lower the offset.
+By default a level label sits at the right end of its line — over it, or under it for a low — and that end is
+*① General → Level labels offset, bars* after the last bar (5 by default). The label is complete as long as the right
+margin of the chart is at least that wide; TradingView's default margin is 10 bars. If you made the margin
+narrower, drag the chart to the left or lower the offset.
+
+With *⑫ Style → Level labels position* set to `After the line` the text follows the line instead. It then needs
+room for the whole text after the line end, which the default margin does not give to longer labels such as
+`London High`.
 
 ## Two level labels are printed over each other
 

@@ -76,6 +76,7 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 20 | Light and dark chart themes | All text is readable |
 | 21 | Regular-hours chart (stock or futures, RTH) | The New York session is drawn every day, although no bar separates two days |
 | 22 | *Hide levels farther than* = `2` with weekly and monthly levels on | Distant levels disappear and the price scale stops being stretched |
+| 23 | Level labels on a chart with the default right margin, then *Level labels position* = `After the line` | `At the line end`: every label is complete, over its line or under it for lows. `After the line`: the text follows the line and long labels are cut off by the price scale |
 
 ## Verification log
 
@@ -97,4 +98,6 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 2026-11-25 | 1.2.0 | Release build | The tagged file differs from the build run on the chart only in the `VERSION` string; static checks pass, it was not run on a chart again |
 | 2026-11-25 | 1.2.0 | Published build, modules switched on through the settings | pass — the script published on TradingView, on `OANDA:EURUSD` 15m and 5m: session labels, session levels, killzones, previous day levels, day and midnight opens, opening range with two projections, VWAP with bands, day separators, weekday labels and the dashboard, each without a script error; the dashboard status matched the clock. The pictures in `docs/images` come from this run. |
 | 2026-11-25 | 1.2.0 | Cosmetic findings of that run | recorded in the FAQ: level labels are cut off when the right margin of the chart is narrower than the label offset; labels of two levels at one price overlap; the default yellow VWAP is faint on a light chart |
-| — | 1.2.0 | Chart matrix rows 3, 6, 17, 20 | pending (clock-change week, removed levels, Bar Replay, dark theme) |
+| 2026-11-25 | `main`, after 1.2.0 | Level labels at the line end (new default), offset 5 | Static checks pass. Editor analysis: 0 errors, 0 warnings. Full compile with **Add to chart**: pass, twice (once with the level modules on by default, once with the released defaults). |
+| 2026-11-25 | `main`, after 1.2.0 | Chart matrix rows 23 and 6 | pass — `OANDA:EURUSD` 15m and 5m with TradingView's default right margin (10 bars at 6 pixels): session levels, previous day levels, day and midnight opens are labelled in full, also with *Price in level labels* on and with a 6-bar margin. On the same chart version 1.2.0 cut every one of these labels, and still did with the offset lowered to 2. `After the line` gives the old placement. *Broken levels* = `Remove` deletes the broken lines. |
+| — | `main`, after 1.2.0 | Chart matrix rows 3, 17, 20 | pending (clock-change week, Bar Replay, dark theme) |

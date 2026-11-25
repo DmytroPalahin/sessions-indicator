@@ -13,10 +13,12 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
-No change to how the indicator behaves: the publication, pictures and documentation.
+Level labels that stay readable with TradingView's default right margin, plus the publication, pictures and
+documentation.
 
 ### Added
 
+- *⑫ Style → Level labels position*: `At the line end` (the new default) or `After the line` (the placement of 1.2.0).
 - The indicator is published on TradingView as a public, protected script:
   https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/
 - Screenshots of the default look and of the modules in both READMEs and in the settings reference
@@ -28,9 +30,15 @@ No change to how the indicator behaves: the publication, pictures and documentat
 
 ### Changed
 
+- Level labels sit at the right end of their line — over it, under it for lows — instead of after it.
+- *① General → Level labels offset, bars* defaults to `5` (was `8`).
 - The copyright line of the script names the TradingView account of the author, `dmitry_plhn`.
 - `docs/PUBLISHING.md` describes the publication as it is: categories, tags, picture and what can still be
   changed after publishing.
+
+### Fixed
+
+- Level labels were cut off by the price scale on a chart with the default right margin (`London Hi…`, `D Ope…`).
 
 ## [1.2.0] - 2026-11-25
 

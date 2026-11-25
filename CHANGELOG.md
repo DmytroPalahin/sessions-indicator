@@ -13,6 +13,11 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+### Added
+
+- FAQ and publishing guide: when the Indicators dialog renews its cached Favorites list — after 24 hours without
+  being opened, on sign-out, or when the site data is cleared.
+
 ### Fixed
 
 - The FAQ and the publishing guide said that an indicator added from the publication follows its updates. It

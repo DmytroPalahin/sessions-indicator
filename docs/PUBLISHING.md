@@ -108,7 +108,10 @@ An update does not change charts by itself. An indicator that is already on a ch
 or from the saved script, stays on the version it was added with until it is removed and added again. The new
 version is the one that gets added from then on — with one catch: the Indicators dialog keeps its Favorites list
 in the browser's cache, version included, so a browser that opened the dialog before the update can go on adding
-the previous version until that cache is renewed. To check what the service itself serves, read
+the previous version. A favourite already in that cache is not requested again, and the cache is written anew at
+every opening of the dialog; it is dropped only after 24 hours without being written, on sign-out, or when the
+site data is cleared. Someone who opens the dialog every day therefore keeps getting the old version from
+*Favorites* until one of those happens. To check what the service itself serves, read
 `https://pine-facade.tradingview.com/pine-facade/versions/<pine id>`; the pine id of this publication starts with
 `PUB;550e`. A copy pasted from this
 repository into someone's own Pine Editor does not change until they paste the new file.

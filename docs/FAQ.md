@@ -145,10 +145,17 @@ the Pine Editor and for the publication alike: reloading the chart does not move
   to the script name), or remove the indicator and add it again from *Indicators → My scripts*.
 - **The publication.** Remove the indicator from the chart and add it again.
 
-If the indicator you just added is still the old version, the Indicators dialog is the reason. It keeps its
-Favorites list in the browser's cache and reads the version from there, so a browser that opened the dialog before
-the update can go on adding the previous version. Clearing the cached data of the TradingView site makes the
-dialog load the list again, and then it adds the current version.
+If the indicator you just added from *Favorites* is still the old version, the Indicators dialog is the reason. It
+keeps its Favorites list in the browser's cache, versions included. A favourite that is already in that list is not
+asked for again, and each time the dialog opens the list is stored anew — so the old version stays for as long as
+you open the dialog at least once a day. The list is dropped, and the current version loaded, in three cases:
+
+- the dialog has not been opened in that browser for 24 hours;
+- you sign out of TradingView;
+- you clear the cached data of the TradingView site.
+
+Each browser and the desktop app keep their own copy. Adding your own saved script from *My scripts* gave the
+newest version at once.
 
 Settings you changed by hand stay as you set them; *Settings → Defaults → Reset settings* brings back the defaults
 of the new version.

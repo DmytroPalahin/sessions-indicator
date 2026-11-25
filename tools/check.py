@@ -21,7 +21,8 @@ import sys
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "src" / "custom_sessions_indicator.pine"
-README_FILES = (ROOT / "README.md", ROOT / "README.ru.md")
+# README.md comes first: the translations are compared with it.
+README_FILES = (ROOT / "README.md", ROOT / "README.ru.md", ROOT / "README.fr.md")
 CHANGELOG = ROOT / "CHANGELOG.md"
 DOC_GLOBS = ("*.md", "docs/*.md", ".github/*.md")
 # A Markdown link or picture, or an HTML src / href attribute.
@@ -359,6 +360,50 @@ def check_doc_links() -> list[str]:
     return problems
 
 
+def readme_outline(text: str) -> tuple[int, set[str]]:
+    """Number of sections of a README and its local link targets, without the links between READMEs."""
+    sections = len(re.findall(r"^## ", text, flags=re.MULTILINE))
+    targets = {
+        (match.group(1) or match.group(2)).split("#", 1)[0]
+        for match in DOC_LINK.finditer(text)
+    }
+    local = {
+        target
+        for target in targets
+        if target
+        and not re.match(r"[a-z][a-z0-9+.-]*:", target)
+        and not re.fullmatch(r"README(\.\w+)?\.md", target)
+    }
+    return sections, local
+
+
+def check_translations() -> list[str]:
+    """Every translated README must have the sections, pictures and local links of README.md."""
+    base = README_FILES[0]
+    if not base.exists():
+        return [f"{base.name} is missing"]
+    sections, targets = readme_outline(base.read_text(encoding="utf-8"))
+    problems = []
+    for readme in README_FILES[1:]:
+        if not readme.exists():
+            problems.append(f"{readme.name} is missing")
+            continue
+        own_sections, own_targets = readme_outline(readme.read_text(encoding="utf-8"))
+        if own_sections != sections:
+            problems.append(
+                f"{readme.name}: {own_sections} sections, {base.name} has {sections}"
+            )
+        problems.extend(
+            f"{readme.name}: no link to {target}, which {base.name} has"
+            for target in sorted(targets - own_targets)
+        )
+        problems.extend(
+            f"{readme.name}: links to {target}, which {base.name} does not"
+            for target in sorted(own_targets - targets)
+        )
+    return problems
+
+
 def main() -> int:
     if not SOURCE.exists():
         say(f"FAIL  source file not found: {SOURCE}")
@@ -393,6 +438,10 @@ def main() -> int:
         "version: script, README badges and changelog agree", check_version(lines)
     )
     report.check("docs: local links and pictures resolve", check_doc_links())
+    report.check(
+        "translations: every README has the sections and links of README.md",
+        check_translations(),
+    )
 
     say()
     if report.failures:

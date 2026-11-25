@@ -296,6 +296,55 @@ def test_doc_links_report_missing_targets(
 
 
 # -----------------------------------------------------------------------------
+# translations
+# -----------------------------------------------------------------------------
+ENGLISH_README = (
+    "# Title\n\n**English** · [Русский](README.ru.md)\n\n"
+    "![chart](docs/images/chart.png)\n\n## What it is\n\n[Settings](docs/SETTINGS.md)\n\n"
+    "## License\n\n[MPL](LICENSE), [site](https://example.com)\n"
+)
+
+
+@pytest.fixture
+def readmes(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> tuple[Path, Path]:
+    """An English README and the path of its translation, in a temporary folder."""
+    english = tmp_path / "README.md"
+    english.write_text(ENGLISH_README)
+    russian = tmp_path / "README.ru.md"
+    monkeypatch.setattr(check, "README_FILES", (english, russian))
+    return english, russian
+
+
+def test_translations_accept_the_same_outline_in_another_language(
+    readmes: tuple[Path, Path],
+):
+    readmes[1].write_text(
+        "# Заголовок\n\n[English](README.md) · **Русский**\n\n"
+        '<img src="docs/images/chart.png">\n\n## Что это\n\n[Настройки](docs/SETTINGS.md#top)\n\n'
+        "## Лицензия\n\n[MPL](LICENSE), [сайт](https://example.org)\n"
+    )
+    assert check.check_translations() == []
+
+
+def test_translations_report_what_differs(readmes: tuple[Path, Path]):
+    readmes[1].write_text(
+        "# Заголовок\n\n## Что это\n\n[Настройки](docs/SETTINGS.md), [FAQ](docs/FAQ.md)\n"
+    )
+    assert check.check_translations() == [
+        "README.ru.md: 1 sections, README.md has 2",
+        "README.ru.md: no link to LICENSE, which README.md has",
+        "README.ru.md: no link to docs/images/chart.png, which README.md has",
+        "README.ru.md: links to docs/FAQ.md, which README.md does not",
+    ]
+
+
+def test_translations_need_every_file(readmes: tuple[Path, Path]):
+    assert check.check_translations() == ["README.ru.md is missing"]
+    readmes[0].unlink()
+    assert check.check_translations() == ["README.md is missing"]
+
+
+# -----------------------------------------------------------------------------
 # report and the script as a whole
 # -----------------------------------------------------------------------------
 def test_report_counts_and_prints_each_check(capsys: pytest.CaptureFixture[str]):

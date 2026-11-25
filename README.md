@@ -13,7 +13,7 @@
 [![Keep a Changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog-E05735)](https://keepachangelog.com/en/1.1.0/)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
 
-**English** · [Русский](README.ru.md)
+**English** · [Русский](README.ru.md) · [Français](README.fr.md)
 
 [**Open on TradingView**](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) · [Latest release](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) · [Settings](docs/SETTINGS.md) · [FAQ](docs/FAQ.md) · [Changelog](CHANGELOG.md) · [Report a bug](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose)
 

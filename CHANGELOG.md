@@ -13,6 +13,12 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+### Added
+
+- A French README, `README.fr.md`, next to the English and the Russian one.
+- `tools/check.py` checks that every translated README has the sections, pictures and local links of
+  `README.md`.
+
 ## [2.0.0] - 2026-11-25
 
 A major release. Taking the session VWAP out removes five inputs, and TradingView stores settings

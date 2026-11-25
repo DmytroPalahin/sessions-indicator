@@ -21,7 +21,8 @@ and pull request. It checks:
 - every function and method has its own name (an overload cannot read globals, error `CE10182`);
 - the number of plot-like calls against the limit of 64;
 - the version in the script, the README badge and the changelog agree;
-- every local link and picture in the documentation points at a file that exists.
+- every local link and picture in the documentation points at a file that exists;
+- the Russian and the French README have the sections, pictures and local links of the English one.
 
 The check script has tests of its own in `tests/test_check.py`: every check is run on input that passes and on
 input for each problem it can report, and the whole script is run on this repository and on a broken copy.

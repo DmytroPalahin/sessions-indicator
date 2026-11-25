@@ -1,0 +1,209 @@
+<div align="center">
+
+# Custom Sessions Indicator
+
+**Sessions, killzones, niveaux de liquidité, prix d'ouverture, opening range et tableau de bord — un seul indicateur TradingView, entièrement configurable.**
+
+[![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
+[![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue)](CHANGELOG.md)
+[![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
+[![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/)
+[![Keep a Changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog-E05735)](https://keepachangelog.com/en/1.1.0/)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
+
+[English](README.md) · [Русский](README.ru.md) · **Français**
+
+[**Ouvrir sur TradingView**](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) · [Dernière version](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) · [Paramètres](docs/SETTINGS.md) · [FAQ](docs/FAQ.md) · [Journal des modifications](CHANGELOG.md) · [Signaler un bug](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose)
+
+<a href="https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator avec les paramètres par défaut sur EURUSD, 15 minutes : boîtes des sessions Asia, Frankfurt, London et New York" width="100%"></a>
+
+<sub>Paramètres par défaut sur EURUSD, 15 minutes : Asia, Frankfurt, London et New York.</sub>
+
+</div>
+
+---
+
+## De quoi s'agit-il
+
+Un seul indicateur Pine Script v6 qui découpe la journée de trading sur votre graphique. Dès l'installation, il
+dessine les sessions Asia, Frankfurt, London et New York sous forme de boîtes de couleur douces. Tout le reste
+s'active d'une case à cocher et reste désactivé par défaut : le graphique reste propre tant que vous n'en demandez
+pas plus.
+
+| № | Module | Ce que vous obtenez |
+| --- | -------- | -------------- |
+| ① | **General** | Un fuseau horaire pour tout l'indicateur (heure d'été gérée), profondeur de l'historique, limite d'unité de temps |
+| ② | **Sessions** | 5 emplacements : Asia, Frankfurt, London, New York et un de réserve. Le nom, la plage horaire et la couleur se modifient |
+| ③ | **Session display** | Boîte, fond, les deux ou masqué · étiquette avec le nom et l'amplitude · ligne d'ouverture · médiane à 50 % |
+| ④ | **Session high / low levels** | Les plus hauts et les plus bas restent sur le graphique jusqu'à ce que le prix les traverse |
+| ⑤ | **Killzones** | 5 emplacements de plus avec leur propre apparence, préréglés sur les fenêtres habituelles Asia / London / New York |
+| ⑥ | **Previous day / week / month** | PDH/PDL, PWH/PWL, PMH/PML |
+| ⑦ | **Opening prices** | Ouverture du jour, de la semaine, du mois, de minuit et d'une heure de votre choix |
+| ⑧ | **Opening range** | Boîte du range, lignes prolongées, médiane, projections et marqueurs de cassure |
+| ⑨ | **Time tools** | Séparateurs de jours et étiquettes des jours de la semaine |
+| ⑩ | **Dashboard** | Quelle session est ouverte, temps restant ou temps avant l'ouverture, amplitude en cours face à sa moyenne, amplitude du jour face à l'ADR |
+| ⑪ | **Style** | Taille du texte, style et épaisseur des lignes, options des étiquettes, filtre des niveaux éloignés |
+
+## Captures d'écran
+
+Chaque image ci-dessous montre le même indicateur avec quelques cases cochées. Les légendes indiquent lesquelles.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+<a href="docs/images/sessions-labels-levels.png"><img src="docs/images/sessions-labels-levels.png" alt="Étiquettes des sessions avec l'amplitude en pips, et plus hauts et plus bas des sessions prolongés jusqu'à ce que le prix les traverse"></a>
+<b>Étiquettes et niveaux des sessions</b><br>
+<sub>③ <i>Label</i> = <code>Name + range</code> · ④ <i>Extend session high / low until broken</i></sub>
+</td>
+<td width="50%" valign="top">
+<a href="docs/images/killzones-levels.png"><img src="docs/images/killzones-levels.png" alt="Killzones en bandes de fond avec le plus haut et le plus bas de la veille, l'ouverture du jour et l'ouverture de minuit"></a>
+<b>Killzones, veille et prix d'ouverture</b><br>
+<sub>⑤ <i>Show killzones</i> · ⑥ <i>Previous day high / low</i> · ⑦ <i>Day open</i>, <i>Midnight open</i></sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="docs/images/opening-range.png"><img src="docs/images/opening-range.png" alt="Boîte de l'opening range avec lignes prolongées, médiane, deux projections et marqueurs de cassure"></a>
+<b>Opening range</b><br>
+<sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code></sub>
+</td>
+<td width="50%" valign="top">
+<a href="docs/images/dashboard-time-tools.png"><img src="docs/images/dashboard-time-tools.png" alt="Tableau de bord avec le statut, le compte à rebours et les amplitudes de chaque session, séparateurs de jours et étiquettes des jours de la semaine"></a>
+<b>Tableau de bord et outils de temps</b><br>
+<sub>⑩ <i>Show dashboard</i> · ⑨ <i>Day separators</i>, <i>Weekday labels</i></sub>
+</td>
+</tr>
+</table>
+
+<sub>EURUSD en 15 et 5 minutes, thème de graphique clair. Cliquez sur une image pour l'ouvrir en taille réelle.</sub>
+
+## Démarrage rapide
+
+**Depuis TradingView.** Ouvrez la [publication sur TradingView](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) et cliquez sur **Use on chart**. La
+publication est un script protégé : elle fonctionne comme n'importe quel indicateur, et son code est le fichier de
+ce dépôt.
+
+**Depuis le code source.**
+
+1. Ouvrez [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) et copiez le fichier en entier.
+2. Sur TradingView, ouvrez un graphique, puis le **Pine Editor**.
+3. Remplacez le contenu de l'éditeur par le code copié et cliquez sur **Add to chart**.
+4. Ouvrez les **Settings** de l'indicateur pour activer les modules. Les étiquettes avec le nom et l'amplitude de la
+   session se trouvent dans *③ Session display → Label*.
+
+Les sessions nécessitent un graphique intrajournalier (60 minutes ou moins par défaut).
+
+## Sessions par défaut
+
+Toutes les heures sont écrites dans le fuseau choisi dans *① General* — `America/New_York` par défaut. Ce paramètre
+indique comment lire les nombres ci-dessous ; ce n'est pas votre propre fuseau, et le graphique continue d'afficher
+votre heure.
+
+| Emplacement | Nom | Fenêtre | Activé |
+| ------ | ------ | -------- | ---- |
+| 1 | Asia | 18:00 – 02:00 | oui |
+| 2 | Frankfurt | 02:00 – 03:00 | oui |
+| 3 | London | 03:00 – 11:00 | oui |
+| 4 | New York | 08:00 – 16:00 | oui |
+| 5 | Sydney | 16:00 – 00:00 | non |
+
+Asia, London, New York et Sydney correspondent à la journée de travail 08:00 – 16:00 de leur ville, écrite en heure
+de New York. Frankfurt est l'heure qui précède l'ouverture de Londres. Asia est bleue, Frankfurt violette, London
+verte et New York orange, dessinées en boîtes douces sans bordure. *③ Session display → Style → Background* colore
+toute la hauteur du graphique au lieu de l'amplitude.
+
+Killzones par défaut : Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:00 – 10:00, NY Lunch 12:00 – 13:00,
+NY PM 13:30 – 16:00. Ce sont des conventions, pas des règles : chaque fenêtre est modifiable.
+
+## Documentation
+
+La documentation détaillée est rédigée en anglais.
+
+| Document | À lire pour |
+| ---------- | -------------------------- |
+| [docs/SETTINGS.md](docs/SETTINGS.md) | savoir ce que fait chaque paramètre et quelle est sa valeur par défaut |
+| [docs/FAQ.md](docs/FAQ.md) | régler « rien ne s'affiche » ou « les sessions sont décalées d'une heure » |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | comprendre ou modifier le code |
+| [docs/TESTING.md](docs/TESTING.md) | tester une modification avant de l'envoyer |
+| [docs/PUBLISHING.md](docs/PUBLISHING.md) | publier une version sur TradingView |
+| [CHANGELOG.md](CHANGELOG.md) | voir ce qui a changé d'une version à l'autre |
+| [SUPPORT.md](SUPPORT.md) | poser une question ou signaler un problème |
+
+## Comportement
+
+- **Aucun repaint depuis le futur.** Les valeurs du jour, de la semaine et du mois précédents sont lues avec un
+  décalage d'une barre : une barre historique montre exactement ce qui était connu à sa clôture.
+- **Un niveau de session est cassé par un passage du prix.** Un plus haut est cassé par un plus haut supérieur, un
+  plus bas par un plus bas inférieur.
+- **Une cassure de l'opening range exige une clôture.** Le marqueur apparaît quand une barre clôture en dehors du
+  range.
+- **Les niveaux en cours ne peuvent pas disparaître.** TradingView ne conserve que les 500 lignes, étiquettes et
+  boîtes les plus récentes. Les niveaux en cours sont redessinés sur la dernière barre : la limite ne supprime donc
+  que l'historique ancien.
+
+## Limites
+
+Elles découlent du fonctionnement de Pine Script et de TradingView. Elles sont listées pour que rien ne vous
+surprenne.
+
+- Les sessions, les killzones et l'opening range sont des outils intrajournaliers. Ils se masquent au-dessus de
+  l'unité de temps définie dans *① General*.
+- Les niveaux éloignés du prix écrasent les bougies, car TradingView fait tenir tous les niveaux d'un indicateur dans
+  l'échelle des prix. *⑪ Style → Hide levels farther than* les retire ; l'option *Scale price chart only* du menu de
+  l'échelle des prix aussi.
+- L'horloge du tableau de bord suit l'horaire, pas le calendrier de la bourse : elle ignore les week-ends et les
+  jours fériés. Comme tout script, elle se met à jour quand le graphique reçoit un tick.
+- Les moyennes des sessions sont calculées sur les barres chargées sur le graphique.
+- Un prix d'ouverture personnalisé nécessite une barre qui ouvre à cette heure (ou dans la barre qui suit).
+
+## État du projet
+
+La version 2.0.0 est la version actuelle, celle qui est publiée sur TradingView. Elle compile et fonctionne sans
+erreur ni avertissement, et elle a été exécutée sur des graphiques forex, crypto, futures et actions, de 30 secondes
+au journalier. Le journal de vérification de [docs/TESTING.md](docs/TESTING.md) indique ce qui a été vérifié et ce
+qui reste ouvert.
+
+## Feuille de route
+
+- Un fuseau horaire par session : Asia à l'heure de Tokyo, New York à l'heure de New York
+- Projections en écarts-types de l'amplitude d'une session choisie
+- Profil de volume par session
+- Statistiques : à quelle fréquence une session casse le range d'une autre
+- Une seule étiquette pour les niveaux au même prix, au lieu de deux étiquettes superposées
+- Quand la liste des niveaux est pleine, retirer d'abord les niveaux cassés, pas ceux encore valides
+- VWAP de session, recalculé à chaque session, jour, semaine ou mois — module écrit et testé sur des graphiques
+  réels, conservé sur la branche `feature/vwap` jusqu'à une prochaine version
+- Alertes sur le début d'une session, la cassure d'un niveau et la cassure de l'opening range — module écrit et testé
+  sur un graphique réel, conservé sur la branche `feature/alerts` jusqu'à une prochaine version
+
+Une idée ? [Ouvrez une demande de fonctionnalité](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose).
+
+## Liens
+
+| | |
+| --- | --- |
+| Indicateur sur TradingView | [Custom Sessions Indicator](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) |
+| Auteur sur TradingView | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
+| Code source | [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) |
+| Dernière version | [DmytroPalahin/sessions-indicator/releases/latest](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) |
+| Toutes les versions | [Releases](https://github.com/DmytroPalahin/sessions-indicator/releases) · [Journal des modifications](CHANGELOG.md) |
+| Bugs et idées | [Issues](https://github.com/DmytroPalahin/sessions-indicator/issues) |
+| Signalements de sécurité | [SECURITY.md](SECURITY.md) |
+
+## Contribution et support
+
+Les rapports de bugs, les idées et les pull requests sont les bienvenus. Commencez par
+[CONTRIBUTING.md](CONTRIBUTING.md). Pour obtenir de l'aide, voyez [SUPPORT.md](SUPPORT.md). Merci de respecter le
+[Code de conduite](CODE_OF_CONDUCT.md).
+
+## Licence
+
+[Mozilla Public License 2.0](LICENSE). Vous pouvez utiliser, modifier et partager le script ; les modifications de
+ses fichiers restent ouvertes sous la même licence.
+
+## Avertissement
+
+Cet indicateur est un outil d'analyse graphique. Il ne constitue pas un conseil financier et ne prédit pas le
+marché. Le trading comporte des risques ; vous êtes responsable de vos propres décisions.

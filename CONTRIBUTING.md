@@ -148,13 +148,16 @@ Examples: `feat(killzones): add a sixth slot`, `fix(levels): keep the label when
 - Keep one topic per pull request.
 - Update `CHANGELOG.md` under **Unreleased**.
 - Update `docs/SETTINGS.md` when you add or change an input.
+- Change `README.ru.md` and `README.fr.md` together with `README.md`. The check script compares their sections,
+  pictures and links with the English file.
 - Attach before / after screenshots for anything visible.
 - Fill in the pull request template, including the test rows you ran.
 
 ## Releases (maintainers)
 
 1. Move the **Unreleased** entries of `CHANGELOG.md` under a new version heading with today's date.
-2. Set `VERSION` in the script and the version badge in both READMEs.
+2. Set `VERSION` in the script, and the version badge and the status line in every README (`README.md`,
+   `README.ru.md`, `README.fr.md`).
 3. Run the full matrix of [docs/TESTING.md](docs/TESTING.md) and add a line to its verification log.
 4. Commit as `chore(release): vX.Y.Z`, tag `vX.Y.Z`, push with tags.
 5. Create the GitHub release from the tag with the changelog section as notes.

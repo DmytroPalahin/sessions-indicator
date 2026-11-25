@@ -100,6 +100,11 @@ BUILTIN_METHODS = frozenset(
 )
 
 
+def say(text: str = "") -> None:
+    """Writes one line to standard output."""
+    sys.stdout.write(text + "\n")
+
+
 class Report:
     """Collects failures and prints one line per check."""
 
@@ -109,14 +114,14 @@ class Report:
 
     def check(self, name: str, problems: list[str]) -> None:
         if problems:
-            print(f"FAIL  {name}")
+            say(f"FAIL  {name}")
             for problem in problems[:PROBLEMS_SHOWN]:
-                print(f"        {problem}")
+                say(f"        {problem}")
             if len(problems) > PROBLEMS_SHOWN:
-                print(f"        ... and {len(problems) - PROBLEMS_SHOWN} more")
+                say(f"        ... and {len(problems) - PROBLEMS_SHOWN} more")
             self.failures.append(name)
         else:
-            print(f"ok    {name}")
+            say(f"ok    {name}")
             self.passed += 1
 
 
@@ -356,7 +361,7 @@ def check_doc_links() -> list[str]:
 
 def main() -> int:
     if not SOURCE.exists():
-        print(f"FAIL  source file not found: {SOURCE}")
+        say(f"FAIL  source file not found: {SOURCE}")
         return 1
     raw = SOURCE.read_bytes().decode("utf-8")
     lines = raw.split("\n")
@@ -389,11 +394,11 @@ def main() -> int:
     )
     report.check("docs: local links and pictures resolve", check_doc_links())
 
-    print()
+    say()
     if report.failures:
-        print(f"{len(report.failures)} check(s) failed, {report.passed} passed.")
+        say(f"{len(report.failures)} check(s) failed, {report.passed} passed.")
         return 1
-    print(f"All {report.passed} checks passed ({len(lines)} lines).")
+    say(f"All {report.passed} checks passed ({len(lines)} lines).")
     return 0
 
 

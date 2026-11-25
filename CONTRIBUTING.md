@@ -103,7 +103,8 @@ uv run ruff format
 uv run pytest
 ```
 
-The settings of ruff, pytest and coverage are in `pyproject.toml`. A new check comes with tests: one input that
+The settings of ruff, pytest and coverage are in `pyproject.toml`. The script writes its output with `say()`:
+the ruff rules keep `print` for tests. A new check comes with tests: one input that
 passes and one for every problem it can report. CI runs the same commands on every push and pull request.
 
 ## Screenshots

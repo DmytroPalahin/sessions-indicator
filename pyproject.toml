@@ -46,8 +46,9 @@ force-exclude = true
 # detailed terminal output
 output-format = "full"
 
-# tell ruff where the project's python modules are located
-src = [".", "tests"]
+# the same roots as in the template, so an editor that runs ruff with the template
+# settings sorts imports exactly as the command line does
+src = ["src", "tests"]
 
 # additional paths excluded from linting and formatting
 extend-exclude = [
@@ -160,7 +161,6 @@ max-statements = 60
 [tool.ruff.lint.isort]
 combine-as-imports = true
 force-sort-within-sections = true
-known-first-party = ["tools"]
 section-order = [
     "future",
     "standard-library",
@@ -174,10 +174,6 @@ section-order = [
 # ruff per-file ignores
 # -----------------------------------------------------------------------------
 [tool.ruff.lint.per-file-ignores]
-"tools/**/*.py" = [
-    "T201",     # the check script is a command-line tool: printing is its output
-]
-
 "tests/**/*.py" = [
     "T201",     # print is acceptable in tests
     "S101",     # assert is expected in tests

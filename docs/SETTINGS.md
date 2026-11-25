@@ -22,15 +22,16 @@ Five rows. Each row is: checkbox · name · time window · colour.
 | Slot | Name | Window | On |
 |------|------|--------|----|
 | 1 | Asia | `1800-0200` | yes |
-| 2 | London | `0300-1100` | yes |
-| 3 | New York | `0800-1600` | yes |
-| 4 | Sydney | `1600-0000` | no |
-| 5 | Custom | `0930-1600` | no |
+| 2 | Frankfurt | `0200-0300` | yes |
+| 3 | London | `0300-1100` | yes |
+| 4 | New York | `0800-1600` | yes |
+| 5 | Sydney | `1600-0000` | no |
 
-The defaults are the 08:00 – 16:00 working day of each city, written in New York time: Tokyo, London, New York and
-Sydney. Tokyo and Sydney do not move their clocks together with New York, so for part of the year their real working
-day is one hour off; edit the window if that matters to you. Default colours: Asia blue, London green, New York
-orange.
+Asia, London, New York and Sydney are the 08:00 – 16:00 working day of their city, written in New York time.
+Frankfurt is the hour before London opens: 08:00 – 09:00 in Frankfurt. Tokyo and Sydney do not move their clocks
+together with New York, so for part of the year their real working day is one hour off; edit the window if that
+matters to you. Default colours: Asia blue, Frankfurt purple, London green, New York orange. Every slot can be
+renamed and retimed, so the fifth one doubles as a spare.
 
 A window may cross midnight and may be up to 24 hours long (`1800-1800` restarts every day at 18:00).
 

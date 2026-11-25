@@ -21,14 +21,14 @@
 
 ## What it is
 
-A single Pine Script v6 indicator that maps the trading day on your chart. Out of the box it draws the Asia, London
-and New York sessions as soft colour boxes. Everything else is one checkbox away and off by default,
+A single Pine Script v6 indicator that maps the trading day on your chart. Out of the box it draws the Asia,
+Frankfurt, London and New York sessions as soft colour boxes. Everything else is one checkbox away and off by default,
 so the chart stays clean until you ask for more.
 
 | # | Module | What you get |
 |---|--------|--------------|
 | ① | **General** | One timezone for the whole indicator (DST-aware), history depth, timeframe limit |
-| ② | **Sessions** | 5 slots: Asia, London, New York + 2 spare. Name, time window and colour are yours to change |
+| ② | **Sessions** | 5 slots: Asia, Frankfurt, London, New York and one spare. Name, time window and colour are yours to change |
 | ③ | **Session display** | Box, background, both or hidden · label with name and range · open line · 50% midline |
 | ④ | **Session high / low levels** | Highs and lows stay on the chart until price trades through them |
 | ⑤ | **Killzones** | 5 more slots with their own look, preset to the usual Asia / London / New York windows |
@@ -58,13 +58,14 @@ to read the numbers below; it is not your own timezone, and the chart keeps show
 | Slot | Name | Window | On |
 |------|------|--------|----|
 | 1 | Asia | 18:00 – 02:00 | yes |
-| 2 | London | 03:00 – 11:00 | yes |
-| 3 | New York | 08:00 – 16:00 | yes |
-| 4 | Sydney | 16:00 – 00:00 | no |
-| 5 | Custom | 09:30 – 16:00 | no |
+| 2 | Frankfurt | 02:00 – 03:00 | yes |
+| 3 | London | 03:00 – 11:00 | yes |
+| 4 | New York | 08:00 – 16:00 | yes |
+| 5 | Sydney | 16:00 – 00:00 | no |
 
-Each default session is the 08:00 – 16:00 working day of its city, written in New York time. Asia is blue, London
-green and New York orange, drawn as soft boxes without a border.
+Asia, London, New York and Sydney are the 08:00 – 16:00 working day of their city, written in New York time.
+Frankfurt is the hour before London opens. Asia is blue, Frankfurt purple, London green and New York orange, drawn
+as soft boxes without a border.
 
 Killzone presets: Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:00 – 10:00, NY Lunch 12:00 – 13:00,
 NY PM 13:30 – 16:00. These are conventions, not rules: every window is editable.

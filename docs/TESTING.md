@@ -53,7 +53,7 @@ Run before every release. Add the indicator to the chart and walk through the ro
 
 | # | Check | Expected |
 |---|-------|----------|
-| 1 | Defaults on a 15-minute chart | Three session boxes per day, no labels, nothing else |
+| 1 | Defaults on a 15-minute chart | Four session boxes per day (Asia, Frankfurt, London, New York), no labels, nothing else |
 | 2 | Change *Timezone* to `UTC` | Boxes move; their width stays the same |
 | 3 | A week with a US clock change (March, November) | Sessions keep their New York times |
 | 4 | Style `Background`, then `Box + background`, then `Hidden` | Bands, both, nothing — labels stay for all but `Hidden` caption |
@@ -91,4 +91,5 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 2026-11-25 | 1.1.0 | New default sessions, colours and box style | pass — `OANDA:EURUSD` 15m: full compile, and the boxes coincide edge to edge with an 08:00 – 16:00 per-city reference indicator |
 | 2026-11-25 | 1.1.0 | Release build | The tagged file differs from the build run on the chart only in the `VERSION` string; static checks pass, it was not run on a chart again |
 | 2026-11-25 | unreleased | Labels hidden by default, timezone setting renamed | pass — `OANDA:EURUSD` 15m: full compile; boxes only, no labels, same edges as the reference indicator |
+| 2026-11-25 | unreleased | Frankfurt session in the defaults, slots in time order | pass — `OANDA:GBPUSD` 15m: full compile; the purple Frankfurt box sits between the Asia and London boxes, at the same place as in the reference indicator |
 | — | 1.1.0 | Chart matrix rows 3, 6, 17, 20 | pending (clock-change week, removed levels, Bar Replay, dark theme) |

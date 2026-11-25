@@ -13,8 +13,14 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+### Added
+
+- A **Frankfurt** session, on by default: the hour before London opens, `0200-0300` in New York time, purple.
+
 ### Changed
 
+- The default slots are in time order: Asia, Frankfurt, London, New York, Sydney. The `Custom` preset is gone;
+  every slot can still be renamed and retimed.
 - Session labels are hidden by default. Switch them on in *③ Session display → Label*.
 - The *Timezone* setting is now called *Timezone of session times*, and its tooltip says that it is the timezone the
   times are written in, not the timezone of the user.

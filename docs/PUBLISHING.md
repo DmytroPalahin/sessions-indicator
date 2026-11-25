@@ -30,7 +30,7 @@ TradingView's House Rules ask a description to explain what the script does, how
 your own words and without links that advertise. A text that fits:
 
 ```
-Custom Sessions Indicator maps the trading day on an intraday chart. It starts with the Asia, London and New York
+Custom Sessions Indicator maps the trading day on an intraday chart. It starts with the Asia, Frankfurt, London and New York
 sessions and lets you switch on the rest module by module.
 
 WHAT IT SHOWS

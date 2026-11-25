@@ -142,8 +142,8 @@ out of everyone's way the source does not wrap lines at all; long calls stay on 
 
 | Drawing | Per day, defaults | Per day, everything on |
 |---------|-------------------|------------------------|
-| Boxes | 3 | 9 |
-| Labels | 3 | about 22 |
+| Boxes | 4 | 10 |
+| Labels | 0 | about 23 |
 | Lines | 0 | about 30 |
 
 With everything enabled the 500-line limit covers roughly two weeks of history, which is why *History* defaults to

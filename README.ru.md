@@ -9,8 +9,17 @@
 [![Version](https://img.shields.io/badge/version-1.2.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
 [![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/)
+[![Keep a Changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog-E05735)](https://keepachangelog.com/en/1.1.0/)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
 
 [English](README.md) · **Русский**
+
+[**Открыть на TradingView**](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) · [Последний релиз](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) · [Настройки](docs/SETTINGS.md) · [FAQ](docs/FAQ.md) · [История изменений](CHANGELOG.md) · [Сообщить об ошибке](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose)
+
+<a href="https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator с настройками по умолчанию на EURUSD, 15 минут: боксы сессий Asia, Frankfurt, London и New York" width="100%"></a>
+
+<sub>Настройки по умолчанию на EURUSD, 15 минут: Asia, Frankfurt, London и New York.</sub>
 
 </div>
 
@@ -36,6 +45,39 @@ Asia, Frankfurt, London и New York мягкими цветными боксам
 | ⑩ | **Time tools** | Разделители дней и подписи дней недели |
 | ⑪ | **Dashboard** | Какая сессия открыта, сколько до конца или до открытия, диапазон против среднего, день против ADR |
 | ⑫ | **Style** | Размер текста, стиль и толщина линий, подписи уровней, фильтр далёких уровней |
+
+## Скриншоты
+
+На каждой картинке тот же индикатор, в котором включено несколько галочек. В подписях указано, какие именно.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+<a href="docs/images/sessions-labels-levels.png"><img src="docs/images/sessions-labels-levels.png" alt="Подписи сессий с диапазоном в пипсах и уровни high и low сессий, продлённые до пробоя"></a>
+<b>Подписи и уровни сессий</b><br>
+<sub>③ <i>Label</i> = <code>Name + range</code> · ④ <i>Extend session high / low until broken</i></sub>
+</td>
+<td width="50%" valign="top">
+<a href="docs/images/killzones-levels.png"><img src="docs/images/killzones-levels.png" alt="Killzones в виде фоновых полос, high и low прошлого дня, открытие дня и открытие полуночи"></a>
+<b>Killzones, прошлый день и цены открытия</b><br>
+<sub>⑤ <i>Show killzones</i> · ⑥ <i>Previous day high / low</i> · ⑦ <i>Day open</i>, <i>Midnight open</i></sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="docs/images/opening-range-vwap.png"><img src="docs/images/opening-range-vwap.png" alt="Бокс opening range с продлёнными линиями, серединой, двумя проекциями и меткой пробоя, а также сессионный VWAP с полосами"></a>
+<b>Opening range и сессионный VWAP</b><br>
+<sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code> · ⑨ <i>Show VWAP</i>, <i>Bands ×</i> = <code>1</code></sub>
+</td>
+<td width="50%" valign="top">
+<a href="docs/images/dashboard-time-tools.png"><img src="docs/images/dashboard-time-tools.png" alt="Дашборд со статусом, обратным отсчётом и диапазонами каждой сессии, разделители дней и подписи дней недели"></a>
+<b>Дашборд и инструменты времени</b><br>
+<sub>⑪ <i>Show dashboard</i> · ⑩ <i>Day separators</i>, <i>Weekday labels</i></sub>
+</td>
+</tr>
+</table>
+
+<sub>EURUSD на 15 и 5 минутах, светлая тема графика, версия 1.2.0. Нажмите на картинку, чтобы открыть её в полном размере.</sub>
 
 ## Быстрый старт
 
@@ -84,6 +126,7 @@ NY PM 13:30 – 16:00. Это общепринятые значения, а не
 | [docs/TESTING.md](docs/TESTING.md) | как проверить изменение |
 | [docs/PUBLISHING.md](docs/PUBLISHING.md) | как опубликовать релиз на TradingView |
 | [CHANGELOG.md](CHANGELOG.md) | что менялось между версиями |
+| [SUPPORT.md](SUPPORT.md) | где задать вопрос или сообщить о проблеме |
 
 ## Как он себя ведёт
 
@@ -109,14 +152,39 @@ NY PM 13:30 – 16:00. Это общепринятые значения, а не
 
 ## Статус проекта
 
-Версия 1.2.0 компилируется и работает на TradingView без ошибок и предупреждений. Она запускалась на графиках
-форекса, крипты, фьючерсов и акций на таймфреймах от 30 секунд до дня. Что проверено и что ещё осталось, записано в
-журнале проверок в [docs/TESTING.md](docs/TESTING.md).
+Версия 1.2.0 — текущий релиз, и именно она опубликована на TradingView. Она компилируется и работает без ошибок и
+предупреждений и запускалась на графиках форекса, крипты, фьючерсов и акций на таймфреймах от 30 секунд до дня. Что
+проверено и что ещё осталось, записано в журнале проверок в [docs/TESTING.md](docs/TESTING.md).
+
+## Планы
+
+- Свой часовой пояс у каждой сессии: Asia по токийскому времени, New York по нью-йоркскому
+- Проекции стандартных отклонений от диапазона выбранной сессии
+- Профиль объёма сессии
+- Статистика: как часто одна сессия пробивает диапазон другой
+- Одна подпись для уровней с одинаковой ценой вместо двух подписей друг на друге
+- Алерты на начало сессии, пробой уровня и пробой opening range — модуль написан и проверен на живом графике, он
+  лежит в ветке `feature/alerts` до одного из следующих релизов
+
+Есть идея? [Откройте запрос на новую функцию](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose).
+
+## Ссылки
+
+| | |
+|---|---|
+| Индикатор на TradingView | [Custom Sessions Indicator](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) |
+| Автор на TradingView | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
+| Исходный код | [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) |
+| Последний релиз | [DmytroPalahin/sessions-indicator/releases/latest](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) |
+| Все релизы | [Releases](https://github.com/DmytroPalahin/sessions-indicator/releases) · [История изменений](CHANGELOG.md) |
+| Ошибки и идеи | [Issues](https://github.com/DmytroPalahin/sessions-indicator/issues) |
+| Сообщения о безопасности | [SECURITY.md](SECURITY.md) |
 
 ## Участие и поддержка
 
 Сообщения об ошибках, идеи и pull request приветствуются. Начните с [CONTRIBUTING.md](CONTRIBUTING.md).
-Где получить помощь, написано в [SUPPORT.md](SUPPORT.md).
+Где получить помощь, написано в [SUPPORT.md](SUPPORT.md). Пожалуйста, соблюдайте
+[Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Лицензия
 

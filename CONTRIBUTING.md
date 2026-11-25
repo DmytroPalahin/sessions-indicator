@@ -74,6 +74,19 @@ with these project rules.
 - Respect the timeframe gates: if a module cannot be right on a timeframe, it must draw nothing.
 - Count your drawings. The budget is 500 lines, 500 labels and 500 boxes for the whole script.
 
+## Screenshots
+
+The pictures in the READMEs and in `docs/SETTINGS.md` live in [docs/images](docs/images). Retake them when a
+change alters what they show.
+
+- Use a chart with this indicator only: no other indicators, no drawings, the light theme.
+- Symbol `OANDA:EURUSD`: 15 minutes for the session pictures and the dashboard, 5 minutes for killzones and the
+  opening range.
+- Leave a right margin wide enough for the level labels.
+- Take the picture with TradingView's own snapshot (the camera icon → *Download image*), so the symbol, the
+  timeframe and the time are part of it.
+- Keep the file names, and name the settings you switched on in the caption.
+
 ## Commits
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):
@@ -113,6 +126,7 @@ Examples: `feat(killzones): add a sixth slot`, `fix(levels): keep the label when
 4. Commit as `chore(release): vX.Y.Z`, tag `vX.Y.Z`, push with tags.
 5. Create the GitHub release from the tag with the changelog section as notes.
 6. Update the script on TradingView as described in [docs/PUBLISHING.md](docs/PUBLISHING.md).
+7. Retake the screenshots if the release changes how the chart looks.
 
 ## License
 

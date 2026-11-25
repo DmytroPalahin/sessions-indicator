@@ -5,6 +5,10 @@ as the titled input before them.
 
 > **Tip.** Hover the ⓘ icon next to an input in TradingView to read the same explanation without leaving the chart.
 
+With every input at its default the chart shows the four main sessions and nothing else:
+
+![Default settings: Asia, Frankfurt, London and New York session boxes](images/sessions-default.png)
+
 ## ① General
 
 | Input | Default | What it does |
@@ -13,7 +17,7 @@ as the titled input before them.
 | Custom timezone | `UTC+3` | Used only when *Timezone of session times* is `Custom`. Accepts an IANA name (`Europe/Kyiv`) or an offset (`UTC+3`). An offset does not follow daylight saving time. |
 | History, days (0 = all) | `20` | Drawings older than this many days are skipped. `0` draws the whole loaded history. |
 | Hide sessions above, minutes | `60` | Sessions, killzones and the opening range are hidden on chart timeframes above this value. |
-| Level labels offset, bars | `8` | How far to the right of the last bar the level lines and their labels end. |
+| Level labels offset, bars | `8` | How far to the right of the last bar the level lines end and their labels begin. The label needs free space after that point, so keep the right margin of the chart wider than this value. |
 
 ## ② Sessions
 
@@ -39,7 +43,7 @@ A window may cross midnight and may be up to 24 hours long (`1800-1800` restarts
 
 | Input | Default | What it does |
 |-------|---------|--------------|
-| Style | `Box` | `Box` frames the session range. `Background` shades the whole height of the chart. `Box + background` does both. `Hidden` keeps the session active for levels, alerts and the dashboard without drawing it. |
+| Style | `Box` | `Box` frames the session range. `Background` shades the whole height of the chart. `Box + background` does both. `Hidden` keeps the session active for levels and the dashboard without drawing it. |
 | Box fill transparency | `95` | 0 is solid, 100 is invisible. |
 | Background transparency | `92` | Same scale, for the `Background` style. |
 | Border transparency | `100` | Same scale, for the box border. The default draws no border; lower it to get one. |
@@ -56,6 +60,11 @@ A window may cross midnight and may be up to 24 hours long (`1800-1800` restarts
 | Extend session high / low until broken | off | When a session ends, its high and low stay as lines. A high is broken by a higher high, a low by a lower low. |
 | Broken levels | `Keep, faded` | `Keep, faded` stops the line at the breaking bar and dims it. `Remove` deletes it. |
 | Max levels on chart | `12` | The oldest level is removed when this number is exceeded. |
+
+![Session labels and session levels](images/sessions-labels-levels.png)
+
+*③ Label = `Name + range` and ④ Extend session high / low until broken, EURUSD on 15 minutes. The dotted lines
+are levels that price has already traded through.*
 
 ## ⑤ Killzones
 
@@ -102,6 +111,10 @@ A period is shown only on chart timeframes lower than the period itself.
 Day, week and month follow the trading calendar of the symbol. Midnight and the custom time follow the indicator
 timezone.
 
+![Killzones, previous day high and low, day open and midnight open](images/killzones-levels.png)
+
+*⑤ Show killzones, ⑥ Previous day high / low, ⑦ Day open and Midnight open, EURUSD on 5 minutes.*
+
 ## ⑧ Opening range
 
 | Input | Default | What it does |
@@ -121,8 +134,12 @@ timezone.
 |-------|---------|--------------|
 | Show VWAP | off | Master switch. Needs a symbol with volume. |
 | Anchor | `Each session start` | Where the calculation restarts: every enabled session, or each day, week or month. |
-| Colour, width | yellow, `1` | Look of the line. |
+| Colour, width | yellow, `1` | Look of the line. Yellow is chosen for dark charts; on a light chart pick a darker colour. |
 | Bands × | `0.0` | Standard-deviation multiplier of the bands. `0` hides them. |
+
+![Opening range with projections and a breakout marker, session VWAP with bands](images/opening-range-vwap.png)
+
+*⑧ Show opening range with Projection 2 × = `2`, ⑨ Show VWAP with Bands × = `1`, EURUSD on 5 minutes.*
 
 ## ⑩ Time tools
 
@@ -143,6 +160,10 @@ timezone.
 
 Columns: session name · status (`Open · 2h 05m left` or `Opens in 5h 03m`) · current or latest range · average
 range.
+
+![Dashboard, day separators and weekday labels](images/dashboard-time-tools.png)
+
+*⑩ Day separators and Weekday labels, ⑪ Show dashboard, EURUSD on 15 minutes.*
 
 ## ⑫ Style
 

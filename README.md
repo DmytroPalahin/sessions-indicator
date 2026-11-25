@@ -15,6 +15,12 @@
 
 **English** · [Русский](README.ru.md)
 
+[**Open on TradingView**](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) · [Latest release](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) · [Settings](docs/SETTINGS.md) · [FAQ](docs/FAQ.md) · [Changelog](CHANGELOG.md) · [Report a bug](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose)
+
+<a href="https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator with default settings on EURUSD, 15 minutes: Asia, Frankfurt, London and New York session boxes" width="100%"></a>
+
+<sub>Default settings on EURUSD, 15 minutes: Asia, Frankfurt, London and New York.</sub>
+
 </div>
 
 ---
@@ -39,6 +45,39 @@ so the chart stays clean until you ask for more.
 | ⑩ | **Time tools** | Day separators and weekday labels |
 | ⑪ | **Dashboard** | Which session is open, time left or time to open, current range against its average, day range against ADR |
 | ⑫ | **Style** | Text size, line style and width, label options, a filter for distant levels |
+
+## Screenshots
+
+Every picture below is the same indicator with a few checkboxes switched on. The captions name them.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+<a href="docs/images/sessions-labels-levels.png"><img src="docs/images/sessions-labels-levels.png" alt="Session labels with the range in pips, and session highs and lows extended until price trades through them"></a>
+<b>Labels and session levels</b><br>
+<sub>③ <i>Label</i> = <code>Name + range</code> · ④ <i>Extend session high / low until broken</i></sub>
+</td>
+<td width="50%" valign="top">
+<a href="docs/images/killzones-levels.png"><img src="docs/images/killzones-levels.png" alt="Killzones as background bands with the previous day high and low, the day open and the midnight open"></a>
+<b>Killzones, previous day and opening prices</b><br>
+<sub>⑤ <i>Show killzones</i> · ⑥ <i>Previous day high / low</i> · ⑦ <i>Day open</i>, <i>Midnight open</i></sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="docs/images/opening-range-vwap.png"><img src="docs/images/opening-range-vwap.png" alt="Opening range box with extended lines, midline, two projections and a breakout marker, plus the session VWAP with bands"></a>
+<b>Opening range and session VWAP</b><br>
+<sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code> · ⑨ <i>Show VWAP</i>, <i>Bands ×</i> = <code>1</code></sub>
+</td>
+<td width="50%" valign="top">
+<a href="docs/images/dashboard-time-tools.png"><img src="docs/images/dashboard-time-tools.png" alt="Dashboard with the status, countdown and ranges of every session, day separators and weekday labels"></a>
+<b>Dashboard and time tools</b><br>
+<sub>⑪ <i>Show dashboard</i> · ⑩ <i>Day separators</i>, <i>Weekday labels</i></sub>
+</td>
+</tr>
+</table>
+
+<sub>EURUSD on 15 and 5 minutes, light chart theme, version 1.2.0. Click a picture to open it in full size.</sub>
 
 ## Quick start
 
@@ -85,6 +124,7 @@ NY PM 13:30 – 16:00. These are conventions, not rules: every window is editabl
 | [docs/TESTING.md](docs/TESTING.md) | test a change before sending it |
 | [docs/PUBLISHING.md](docs/PUBLISHING.md) | publish a release on TradingView |
 | [CHANGELOG.md](CHANGELOG.md) | see what changed between versions |
+| [SUPPORT.md](SUPPORT.md) | ask a question or report a problem |
 
 ## How it behaves
 
@@ -110,9 +150,9 @@ These come from how Pine Script and TradingView work. They are listed so that no
 
 ## Project status
 
-Version 1.2.0 compiles and runs on TradingView with no errors and no warnings. It has been run on forex, crypto,
-futures and stock charts from 30 seconds to daily. The verification log in [docs/TESTING.md](docs/TESTING.md) lists
-what has been checked and what is still open.
+Version 1.2.0 is the current release and the version published on TradingView. It compiles and runs with no errors
+and no warnings, and it has been run on forex, crypto, futures and stock charts from 30 seconds to daily. The
+verification log in [docs/TESTING.md](docs/TESTING.md) lists what has been checked and what is still open.
 
 ## Roadmap
 
@@ -120,10 +160,23 @@ what has been checked and what is still open.
 - Standard-deviation projections of a chosen session range
 - Session volume profile
 - Statistics: how often one session breaks the range of another
+- One label for levels that share a price, instead of two labels printed over each other
 - Alerts for session starts, broken levels and opening range breakouts — built and tried on a live chart, kept on
   the `feature/alerts` branch until a later release
 
 Have an idea? [Open a feature request](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose).
+
+## Links
+
+| | |
+|---|---|
+| Indicator on TradingView | [Custom Sessions Indicator](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) |
+| Author on TradingView | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
+| Source code | [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) |
+| Latest release | [DmytroPalahin/sessions-indicator/releases/latest](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) |
+| All releases | [Releases](https://github.com/DmytroPalahin/sessions-indicator/releases) · [Changelog](CHANGELOG.md) |
+| Bugs and ideas | [Issues](https://github.com/DmytroPalahin/sessions-indicator/issues) |
+| Security reports | [SECURITY.md](SECURITY.md) |
 
 ## Contributing and support
 

@@ -39,7 +39,7 @@ from the 10:00 bar. Use a timeframe that divides the session time evenly.
 TradingView fits every line an indicator draws into the price scale. A monthly high far above price therefore
 compresses the candles. Two ways out:
 
-- *⑬ Style → Hide levels farther than, × ADR* — set it to `2` or `3` and distant levels are not drawn;
+- *⑫ Style → Hide levels farther than, × ADR* — set it to `2` or `3` and distant levels are not drawn;
 - right-click the price scale and tick **Scale price chart only** — the scale then ignores all indicators.
 
 ## Some old sessions are missing
@@ -81,7 +81,7 @@ breakout markers appear only after a bar has closed.
 
 ## Can I rename "Asia" to something else?
 
-Yes. The name field in each row is free text, and the new name is used in labels, the dashboard and alerts.
+Yes. The name field in each row is free text, and the new name is used in labels and in the dashboard.
 
 ## Pips look wrong on my symbol
 

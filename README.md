@@ -38,8 +38,7 @@ so the chart stays clean until you ask for more.
 | ⑨ | **Session VWAP** | Re-anchored at each session, day, week or month, with optional bands |
 | ⑩ | **Time tools** | Day separators and weekday labels |
 | ⑪ | **Dashboard** | Which session is open, time left or time to open, current range against its average, day range against ADR |
-| ⑫ | **Alerts** | 9 ready-made conditions plus dynamic alerts that carry your session names |
-| ⑬ | **Style** | Text size, line style and width, label options |
+| ⑫ | **Style** | Text size, line style and width, label options, a filter for distant levels |
 
 ## Quick start
 
@@ -70,7 +69,6 @@ NY PM 13:30 – 16:00. These are conventions, not rules: every window is editabl
 | Document | Read it when you want to |
 |----------|--------------------------|
 | [docs/SETTINGS.md](docs/SETTINGS.md) | know what every input does and what its default is |
-| [docs/ALERTS.md](docs/ALERTS.md) | set up alerts |
 | [docs/FAQ.md](docs/FAQ.md) | fix "nothing is drawn" or "sessions are an hour off" |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | understand or change the code |
 | [docs/TESTING.md](docs/TESTING.md) | test a change before sending it |
@@ -82,7 +80,7 @@ NY PM 13:30 – 16:00. These are conventions, not rules: every window is editabl
 - **No repainting from the future.** Previous day / week / month values are read with a one-bar offset, so a
   historical bar shows exactly what was known when it closed.
 - **Session levels break on a trade-through.** A high is broken by a higher high, a low by a lower low.
-- **Opening range breakouts need a close.** The marker and the alert appear when a bar closes outside the range.
+- **Opening range breakouts need a close.** The marker appears when a bar closes outside the range.
 - **Live levels cannot disappear.** TradingView keeps only the newest 500 lines, labels and boxes. Current levels are
   redrawn on the last bar, so the limit only ever removes old history.
 
@@ -92,7 +90,7 @@ These come from how Pine Script and TradingView work. They are listed so that no
 
 - Sessions, killzones and the opening range are intraday tools. They hide above the timeframe set in *① General*.
 - Levels far from price squeeze the candles, because TradingView fits every level of an indicator into the price
-  scale. *⑬ Style → Hide levels farther than* removes them; so does *Scale price chart only* in the price-scale menu.
+  scale. *⑫ Style → Hide levels farther than* removes them; so does *Scale price chart only* in the price-scale menu.
 - Session VWAP needs volume. On symbols without volume nothing is plotted.
 - The dashboard clock follows the schedule, not the exchange calendar: it does not know about weekends and holidays.
   Like every script, it refreshes when the chart receives a tick.
@@ -111,6 +109,8 @@ what has been checked and what is still open.
 - Standard-deviation projections of a chosen session range
 - Session volume profile
 - Statistics: how often one session breaks the range of another
+- Alerts for session starts, broken levels and opening range breakouts — built and tried on a live chart, kept on
+  the `feature/alerts` branch until a later release
 
 Have an idea? [Open a feature request](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose).
 

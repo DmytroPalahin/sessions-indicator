@@ -6,7 +6,6 @@ Most questions are answered in one of these:
 
 1. [docs/FAQ.md](docs/FAQ.md) — nothing is drawn, sessions are an hour off, missing history, VWAP, dashboard.
 2. [docs/SETTINGS.md](docs/SETTINGS.md) — what each input does.
-3. [docs/ALERTS.md](docs/ALERTS.md) — alerts that do not fire.
 
 ## Where to ask
 

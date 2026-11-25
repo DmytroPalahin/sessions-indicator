@@ -56,10 +56,6 @@ HOW TO USE IT
 Add the indicator to a chart of 60 minutes or lower. Set the timezone in "General", adjust the session rows, then
 switch on the modules you need. Everything except the three main sessions is off by default.
 
-ALERTS
-Tick the events you want in "Alerts", then create one alert with the condition "Any alert() function call".
-Nine fixed conditions are also available.
-
 LIMITATIONS
 Sessions need an intraday chart. VWAP needs volume. Levels far from price can squeeze the price scale; the
 "Hide levels farther than" setting removes them. The dashboard

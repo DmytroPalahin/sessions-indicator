@@ -31,7 +31,6 @@ Planned as **1.0.0**, the first release. It will be tagged once the chart test m
 - **Session VWAP** — anchored to each session start, day, week or month, with optional bands.
 - **Time tools** — day separators and weekday labels.
 - **Dashboard** — open / closed status with countdown, current range, average range and day range against ADR.
-- **Alerts** — nine `alertcondition()` entries and dynamic `alert()` events that carry the session names.
 - **Style** — text size, level line style, level labels and a distance filter that hides levels far from price so
   they do not squeeze the price scale.
 - **Data Window values** — running high and low of every session slot, usable in user-made alerts.

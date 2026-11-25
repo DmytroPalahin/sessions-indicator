@@ -12,12 +12,12 @@ Pine Script is not a general-purpose language, and four of its rules shape every
    Structure therefore comes from regions, types and naming, not from folders.
 3. **Drawings are limited.** A script keeps at most 500 lines, 500 labels and 500 boxes. When the limit is reached
    TradingView silently deletes the oldest ones.
-4. **`plot`, `bgcolor` and `alertcondition` must be called in the global scope.** They cannot sit in a loop or a
+4. **`plot` and `bgcolor` must be called in the global scope.** They cannot sit in a loop or a
    function, so the code that feeds them is written out once per slot.
 
 ## File layout
 
-[src/custom_sessions_indicator.pine](../src/custom_sessions_indicator.pine) is divided into twelve regions. A region
+[src/custom_sessions_indicator.pine](../src/custom_sessions_indicator.pine) is divided into eleven regions. A region
 only uses what the regions above it define.
 
 | # | Region | Contains | Rule |
@@ -33,7 +33,6 @@ only uses what the regions above it define.
 | 9 | Pipeline | the per-bar orchestration | reads top to bottom, no logic of its own |
 | 10 | Plots | `bgcolor` and `plot` calls | global scope |
 | 11 | Dashboard | the table | runs on the last bar only |
-| 12 | Alerts | `alertcondition` entries and `alert()` calls | global scope |
 
 ## The per-bar pipeline
 
@@ -55,11 +54,6 @@ flowchart TD
     I --> L
     B --> M[Dashboard]
     F --> M
-    B --> N[Alerts]
-    C --> N
-    E --> N
-    F --> N
-    H --> N
 ```
 
 ## Types
@@ -126,7 +120,7 @@ checks the chart timeframe and stays silent when it cannot be right (`intradayOk
 - A **session level** or a **previous high / low** is broken by a trade-through: `high > level` or `low < level`.
 - An **opening range breakout** is a close outside the range on a confirmed bar, once per side.
 
-Alerts, markers and line styles all read the same flags, so they cannot disagree.
+Markers and line styles read the same flags, and so will alerts when they return.
 
 ### 8. Enums for every dropdown
 
@@ -160,6 +154,14 @@ With everything enabled the 500-line limit covers roughly two weeks of history, 
 On the realtime bar Pine re-runs the script on every tick and rolls `var` state back to the last confirmed bar first.
 The design relies on that: a level broken intrabar is "re-broken" on each tick and stays broken at the close, because
 a bar's high and low only ever widen.
+
+## Parked: alerts
+
+The engine reports events on every bar: zones that started or ended, session levels that broke, previous highs and
+lows that broke, opening range breakouts. An alerts module that turned them into `alertcondition()` entries and
+`alert()` messages was built and tried on a live chart, then left out of the first release to keep it focused. It
+lives on the `feature/alerts` branch. The event outputs stay in the engine, so bringing alerts back means adding one
+region and one group of inputs, not touching the engine.
 
 ## Scale and distant levels
 

@@ -70,7 +70,7 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 15 | 4-hour chart | No sessions, killzones or opening range; previous week and month levels remain |
 | 16 | Daily chart | Only previous week and month levels and week / month opens remain |
 | 17 | Bar Replay | Drawings build up bar by bar and match the non-replay chart |
-| 18 | Alerts: *Any alert() function call* on a 1-minute chart | One message per event, with the session name |
+| 18 | *(reserved for alerts, which are parked on the `feature/alerts` branch)* | — |
 | 19 | History = `0` on a 1-minute chart | The script loads without a runtime error |
 | 20 | Light and dark chart themes | All text is readable |
 | 21 | Regular-hours chart (stock or futures, RTH) | The New York session is drawn every day, although no bar separates two days |
@@ -86,4 +86,6 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 2026-11-25 | 1.0.0 | Chart matrix rows 1, 5, 7, 9, 11, 13, 14, 15, 16, 21, 22 | pass — `OANDA:GBPUSD` on 30s, 5m, 15m, 30m, 1h, 4h, D; `BINANCE:BTCUSDT`, `CME_MINI:ES1!` and `NASDAQ:AAPL` on 15m. Row 21 failed first and was fixed (`windowKey`). |
 | 2026-11-25 | 1.0.0 | Chart matrix rows 8, 10, 12 | drawn and plausible; values not cross-checked against the candles |
 | 2026-11-25 | 1.0.0 | Chart matrix rows 2, 4, 19 | pass — `OANDA:GBPUSD` 1m with History = 0, Timezone = UTC, Style = Box + background |
-| — | 1.0.0 | Chart matrix rows 3, 6, 17, 18, 20 | pending (clock-change week, removed levels, Bar Replay, alerts, dark theme) |
+| 2026-11-25 | `feature/alerts` | Alerts on `OANDA:GBPUSD` 1m with *Any alert() function call* | Session start and killzone start were delivered on the first tick of their bar, and a broken session level at the close of its bar, each with the session name. The module was then parked. |
+| 2026-11-25 | 1.0.0 | Full compile and chart run after removing the alerts module | pass — `OANDA:GBPUSD` and `TVC:DXY`, all modules on |
+| — | 1.0.0 | Chart matrix rows 3, 6, 17, 20 | pending (clock-change week, removed levels, Bar Replay, dark theme) |

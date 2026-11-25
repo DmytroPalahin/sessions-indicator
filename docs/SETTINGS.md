@@ -138,22 +138,7 @@ timezone.
 Columns: session name · status (`Open · 2h 05m left` or `Opens in 5h 03m`) · current or latest range · average
 range.
 
-## ⑫ Alerts
-
-| Input | Default | What it does |
-|-------|---------|--------------|
-| Enable alert() events | on | Master switch of the dynamic alerts. |
-| Session start | on | |
-| Session end | off | |
-| Killzone start | on | |
-| Session level broken | on | Needs *④ Session high / low levels*. |
-| Previous high / low broken | on | Fires for each period switched on in *⑥ Previous day / week / month*. |
-| Opening range breakout | on | Needs *⑧ Opening range*. |
-| Wait for bar close | on | Level and previous high / low alerts wait for the bar to close. Turn off for the first crossing tick. |
-
-Nothing is sent until you create a TradingView alert. See [ALERTS.md](ALERTS.md).
-
-## ⑬ Style
+## ⑫ Style
 
 | Input | Default | What it does |
 |-------|---------|--------------|

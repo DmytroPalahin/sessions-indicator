@@ -22,7 +22,6 @@ indicator("Custom Sessions Indicator", "Sessions", overlay = true, max_boxes_cou
 //    9 · Pipeline       the per-bar orchestration, top to bottom
 //   10 · Plots          bgcolor / plot calls (must live in the global scope)
 //   11 · Dashboard      the table, rendered on the last bar only
-//   12 · Alerts         alertcondition() entries and dynamic alert() calls
 //
 //  Design rules:
 //    · State and drawing are separated: a Tracker never draws, a view never decides.
@@ -54,8 +53,7 @@ const string G_OR       = "⑧ Opening range"
 const string G_VWAP     = "⑨ Session VWAP"
 const string G_TIME     = "⑩ Time tools"
 const string G_DASH     = "⑪ Dashboard"
-const string G_ALERTS   = "⑫ Alerts"
-const string G_STYLE    = "⑬ Style"
+const string G_STYLE    = "⑫ Style"
 
 const string TT_TZ       = "Every time in this indicator is read in this timezone. 'Exchange' follows the symbol. Named zones follow daylight saving time automatically."
 const string TT_TZ_CUST  = "Used only when Timezone is 'Custom'. Accepts an IANA name (Europe/Kyiv) or an offset (UTC+3)."
@@ -73,9 +71,7 @@ const string TT_OR_EXT   = "How long the range lines keep extending after the wi
 const string TT_OR_PROJ  = "Projection of the range above its high and below its low, as a multiple of the range. 0 turns a projection off."
 const string TT_VW_BANDS = "Standard-deviation multiplier of the bands. 0 hides the bands."
 const string TT_AVG      = "Number of completed sessions (and days) used for the 'Avg' column."
-const string TT_ALERTS   = "Sends alert() events. Create one TradingView alert with the condition 'Any alert() function call' to receive them."
 const string TT_MAX_DIST = "TradingView fits every level of an indicator into the price scale, so a level far from price squeezes the candles. Levels farther from the last price than this many average daily ranges are not drawn. 0 draws all of them."
-const string TT_ON_CLOSE = "Level and breakout alerts wait for the bar to close. Turn off to be notified on the first tick that crosses."
 
 //#endregion
 
@@ -267,17 +263,7 @@ TextSize i_dashSize = input.enum(TextSize.small, "Text size", group = G_DASH)
 int      i_avgLen   = input.int(20, "Average length", minval = 1, maxval = 200, tooltip = TT_AVG, group = G_DASH)
 bool     i_dashDay  = input.bool(true, "Day range row", group = G_DASH)
 
-// ⑫ Alerts
-bool i_alOn      = input.bool(true, "Enable alert() events", tooltip = TT_ALERTS, group = G_ALERTS)
-bool i_alStart   = input.bool(true, "Session start", group = G_ALERTS)
-bool i_alEnd     = input.bool(false, "Session end", group = G_ALERTS)
-bool i_alKz      = input.bool(true, "Killzone start", group = G_ALERTS)
-bool i_alLevels  = input.bool(true, "Session level broken", group = G_ALERTS)
-bool i_alPeriods = input.bool(true, "Previous high / low broken", group = G_ALERTS)
-bool i_alOr      = input.bool(true, "Opening range breakout", group = G_ALERTS)
-bool i_alOnClose = input.bool(true, "Wait for bar close", tooltip = TT_ON_CLOSE, group = G_ALERTS)
-
-// ⑬ Style
+// ⑫ Style
 TextSize i_textSize = input.enum(TextSize.small, "Text size", group = G_STYLE)
 bool     i_textAuto = input.bool(true, "Dashboard text follows the chart theme", group = G_STYLE)
 color    i_textCol  = input.color(#D1D4DC, "Dashboard text colour", group = G_STYLE)
@@ -905,6 +891,10 @@ var array<string> WEEKDAYS = array.from("Sun", "Mon", "Tue", "Wed", "Thu", "Fri"
 
 //#region ═════════════════════════════════════════ 9 · Pipeline ══════════════════════════════════════════
 
+// The engine reports events as it goes: zones that started or ended, levels that broke, range breakouts.
+// Only the session starts are consumed today (they anchor the VWAP); the alerts module that turns the rest into
+// notifications is parked on the feature/alerts branch.
+
 // 1. Sessions and killzones.
 [sessionsStarted, sessionsEnded]   = runZones(sessions, sessionView)
 [killzonesStarted, killzonesEnded] = runZones(killzones, killzoneView)
@@ -1020,59 +1010,5 @@ if i_dashOn and barstate.islast
         dashCell(1, row, share, dim, text.align_left)
         dashCell(2, row, fmtSpan(daySpan, dayPeriod.curLo), DASH_TEXT, text.align_right)
         dashCell(3, row, fmtSpan(adr, dayPeriod.curLo), dim, text.align_right)
-
-//#endregion
-
-//#region ═════════════════════════════════════════ 12 · Alerts ═══════════════════════════════════════════
-
-// Fixed conditions, selectable one by one in the "Create alert" dialog.
-alertcondition(sessionsStarted != "", "Session started", "{{ticker}}: a session has started")
-alertcondition(sessionsEnded != "", "Session ended", "{{ticker}}: a session has ended")
-alertcondition(killzonesStarted != "", "Killzone started", "{{ticker}}: a killzone has started")
-alertcondition(brokenHighs != "", "Session high broken", "{{ticker}}: price traded above a session high at {{close}}")
-alertcondition(brokenLows != "", "Session low broken", "{{ticker}}: price traded below a session low at {{close}}")
-alertcondition(dayPeriod.hiBreak, "Previous day high broken", "{{ticker}}: price traded above the previous day high at {{close}}")
-alertcondition(dayPeriod.loBreak, "Previous day low broken", "{{ticker}}: price traded below the previous day low at {{close}}")
-alertcondition(openingRange.upNow, "Opening range breakout up", "{{ticker}}: closed above the opening range at {{close}}")
-alertcondition(openingRange.dnNow, "Opening range breakout down", "{{ticker}}: closed below the opening range at {{close}}")
-
-// @function Sends one dynamic alert.
-// @param atClose True to wait for the bar to close.
-notify(string message, bool atClose) =>
-    string body = syminfo.ticker + " · " + message
-    if atClose
-        alert(body, alert.freq_once_per_bar_close)
-    else
-        alert(body, alert.freq_once_per_bar)
-    true
-
-// @function Sends the break alerts of one period.
-notifyPeriod(Period p) =>
-    if p.visible and p.showHL and p.hiBreak
-        notify("Previous " + p.code + " high broken", i_alOnClose)
-    if p.visible and p.showHL and p.loBreak
-        notify("Previous " + p.code + " low broken", i_alOnClose)
-    true
-
-// Dynamic events, with the real session names. One TradingView alert on "Any alert() function call" receives them all.
-if i_alOn
-    if i_alStart and sessionsStarted != ""
-        notify("Session started: " + sessionsStarted, false)
-    if i_alEnd and sessionsEnded != ""
-        notify("Session ended: " + sessionsEnded, false)
-    if i_alKz and killzonesStarted != ""
-        notify("Killzone started: " + killzonesStarted, false)
-    if i_alLevels and brokenHighs != ""
-        notify("Broken above: " + brokenHighs, i_alOnClose)
-    if i_alLevels and brokenLows != ""
-        notify("Broken below: " + brokenLows, i_alOnClose)
-    if i_alPeriods
-        notifyPeriod(dayPeriod)
-        notifyPeriod(weekPeriod)
-        notifyPeriod(monthPeriod)
-    if i_alOr and openingRange.upNow
-        notify("Opening range breakout up", true)
-    if i_alOr and openingRange.dnNow
-        notify("Opening range breakout down", true)
 
 //#endregion

@@ -47,7 +47,7 @@ force-exclude = true
 output-format = "full"
 
 # tell ruff where the project's python modules are located
-src = ["tools", "tests"]
+src = [".", "tests"]
 
 # additional paths excluded from linting and formatting
 extend-exclude = [
@@ -160,7 +160,7 @@ max-statements = 60
 [tool.ruff.lint.isort]
 combine-as-imports = true
 force-sort-within-sections = true
-known-first-party = ["check"]
+known-first-party = ["tools"]
 section-order = [
     "future",
     "standard-library",
@@ -193,7 +193,8 @@ section-order = [
 # -----------------------------------------------------------------------------
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["tools"]
+# the tests import `tools.check` from the root of the repository
+pythonpath = ["."]
 
 addopts = [
     "-ra",

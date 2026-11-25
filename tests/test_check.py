@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-import check
+from tools import check
 
 if TYPE_CHECKING:
     from pathlib import Path

@@ -19,7 +19,8 @@ The script needs only the Python standard library. CI runs it on every push and 
 - inline input rows with a title on their first input only (TradingView warning `CW10026`);
 - every function and method has its own name (an overload cannot read globals, error `CE10182`);
 - the number of plot-like calls against the limit of 64;
-- the version in the script, the README badge and the changelog agree.
+- the version in the script, the README badge and the changelog agree;
+- every local link and picture in the documentation points at a file that exists.
 
 ## 2. Compile check
 
@@ -54,7 +55,7 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | # | Check | Expected |
 |---|-------|----------|
 | 1 | Defaults on a 15-minute chart | Four session boxes per day (Asia, Frankfurt, London, New York), no labels, nothing else |
-| 2 | Change *Timezone* to `UTC` | Boxes move; their width stays the same |
+| 2 | Change *Timezone of session times* to `UTC` | Boxes move; their width stays the same |
 | 3 | A week with a US clock change (March, November) | Sessions keep their New York times |
 | 4 | Style `Background`, then `Box + background`, then `Hidden` | Bands, both, nothing — labels stay for all but `Hidden` caption |
 | 5 | *④ Session levels* on | Two lines per finished session; a line stops and fades on the bar that trades through it |
@@ -94,4 +95,6 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 2026-11-25 | 1.2.0 | Frankfurt session in the defaults, slots in time order | pass — `OANDA:GBPUSD` 15m: full compile; the purple Frankfurt box sits between the Asia and London boxes, at the same place as in the reference indicator |
 | 2026-11-25 | 1.2.0 | VWAP plots taken out of the status line while VWAP is off | pass — `OANDA:GBPUSD` 15m: full compile; the legend shows the indicator name with no empty values |
 | 2026-11-25 | 1.2.0 | Release build | The tagged file differs from the build run on the chart only in the `VERSION` string; static checks pass, it was not run on a chart again |
+| 2026-11-25 | 1.2.0 | Published build, modules switched on through the settings | pass — the script published on TradingView, on `OANDA:EURUSD` 15m and 5m: session labels, session levels, killzones, previous day levels, day and midnight opens, opening range with two projections, VWAP with bands, day separators, weekday labels and the dashboard, each without a script error; the dashboard status matched the clock. The pictures in `docs/images` come from this run. |
+| 2026-11-25 | 1.2.0 | Cosmetic findings of that run | recorded in the FAQ: level labels are cut off when the right margin of the chart is narrower than the label offset; labels of two levels at one price overlap; the default yellow VWAP is faint on a light chart |
 | — | 1.2.0 | Chart matrix rows 3, 6, 17, 20 | pending (clock-change week, removed levels, Bar Replay, dark theme) |

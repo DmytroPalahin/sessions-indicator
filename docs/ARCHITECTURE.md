@@ -173,3 +173,6 @@ levels fold back to their first bar.
 
 - Session averages and the running day range depend on the bars loaded on the chart.
 - The dashboard status uses the wall clock; it does not know the exchange calendar.
+- Every level has its own label. Two levels at one price therefore print two labels over each other.
+- A level label starts at the end of its line, `i_offset` bars after the last bar. It is visible only when the
+  right margin of the chart is wider than that.

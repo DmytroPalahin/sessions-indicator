@@ -14,8 +14,8 @@ Check these in order.
 ## I set the timezone to my own and every session moved
 
 *① General → Timezone of session times* is the timezone in which the session times are **written**, not the timezone
-you live in. The default times (`1800-0200`, `0200-0300`, `0300-1100`, `0800-1600`) are New York times. Select Berlin and the same
-numbers are read as Berlin times, six hours away from where they should be.
+you live in. The default times (`1800-0200`, `0200-0300`, `0300-1100`, `0800-1600`) are New York times. Select Berlin and the
+same numbers are read as Berlin times, six hours away from where they should be.
 
 Two ways to fix it:
 
@@ -54,6 +54,24 @@ compresses the candles. Two ways out:
 - *⑫ Style → Hide levels farther than, × ADR* — set it to `2` or `3` and distant levels are not drawn;
 - right-click the price scale and tick **Scale price chart only** — the scale then ignores all indicators.
 
+## The level labels are cut off at the right edge
+
+The text of a level label starts *① General → Level labels offset, bars* to the right of the last bar (8 by
+default) and needs free space after that point. When the right margin of the chart is narrower, the price scale
+cuts the text off. Drag the chart to the left to widen the margin, or lower the offset.
+
+## Two level labels are printed over each other
+
+Two levels share one price — for example London and New York made the same high. Every level has its own label,
+and two labels at one price overlap. Nothing is wrong with the levels themselves. One label for such levels is on
+the roadmap.
+
+## A session label is crossed by candles
+
+The label sits above the high of its session. After a short session such as Frankfurt, which lasts one hour, price
+often keeps moving through that spot and the next candles cross the text. A shorter label helps: choose `Name` or
+`Range` in *③ Session display → Label*.
+
 ## Some old sessions are missing
 
 TradingView keeps the newest 500 boxes, 500 lines and 500 labels of a script and deletes the oldest. Lower
@@ -63,6 +81,11 @@ TradingView keeps the newest 500 boxes, 500 lines and 500 labels of a script and
 
 VWAP needs volume. Some indices and some forex feeds have none. With the anchor *Each session start* the VWAP also
 hides above the session timeframe limit.
+
+## The VWAP line is hard to see
+
+The default VWAP colour is yellow. It reads well on a dark chart and is faint on a light one. Pick a darker colour
+in *⑨ Session VWAP → Colour*.
 
 ## The dashboard says a session is open on Saturday
 
@@ -106,6 +129,13 @@ Yes. The name field in each row is free text, and the new name is used in labels
 
 `Pips` is defined for forex pairs: 0.0001, or 0.01 for JPY pairs. On other markets it falls back to the minimum tick.
 Choose `Price`, `Ticks` or `Percent` in *③ Session display → Range unit* instead.
+
+## Where do I get the indicator?
+
+From its [page on TradingView](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/): press **Use on chart**. The publication is protected, so TradingView does
+not show its code there; the same code is open in this repository, in
+[src/custom_sessions_indicator.pine](../src/custom_sessions_indicator.pine). An indicator added from the
+publication follows its updates; reload the chart if a new version does not show up.
 
 ## Still stuck?
 

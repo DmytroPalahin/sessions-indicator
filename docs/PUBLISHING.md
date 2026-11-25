@@ -2,26 +2,48 @@
 
 How a release goes from this repository to the TradingView community library.
 
-The indicator is published at https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/
-as a public, protected script by `dmitry_plhn` (first published 2026-11-25 from version 1.2.0 of the code, with the
-author line changed to the TradingView account name).
+## What is published now
+
+| | |
+|---|---|
+| Page | https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/ |
+| Author | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
+| Access | Public, protected: everyone can add it to a chart, TradingView does not show the code. The code is open here. |
+| Code | Version 1.2.0 — the file on `main`, which differs from the tag `v1.2.0` only in the copyright line |
+| First published | 2026-11-25 |
+| Categories | Multi-timeframe · Pivot points and levels |
+| Tags | `sessions`, `killzones`, `forex` |
+| Picture | `OANDA:EURUSD`, 15 minutes, default settings |
+
+The description on that page is the text in [Description](#description) below.
 
 ## Before you publish
 
 - [ ] `python3 tools/check.py` passes.
 - [ ] The compile check shows zero errors and zero warnings (see [TESTING.md](TESTING.md)).
 - [ ] The chart matrix in [TESTING.md](TESTING.md) is complete and logged.
-- [ ] `VERSION` in the script, the README badge and `CHANGELOG.md` show the new version.
-- [ ] The release is tagged in git: `git tag -a v1.0.0 -m "v1.0.0"`.
+- [ ] `VERSION` in the script, the README badges and `CHANGELOG.md` show the new version.
+- [ ] The release is tagged in git: `git tag -a vX.Y.Z -m "vX.Y.Z"`.
+
+## The chart is the picture
+
+TradingView takes the publication picture from the chart that is open when you press **Publish script**, and it
+takes a new one with every update. Prepare the chart first:
+
+- one symbol, this indicator only, no other indicators and no drawings — moderators reject cluttered pictures;
+- a liquid symbol and an intraday timeframe on which the sessions are easy to read (`OANDA:EURUSD`, 15 minutes);
+- default settings, so the picture shows what a new user gets;
+- two or three days on screen.
+
+Keeping a separate chart layout for this makes the picture repeatable.
 
 ## First publication
 
 1. Open the script in the Pine Editor and **Save** it as `Custom Sessions Indicator`.
-2. Prepare a clean chart: one symbol, the indicator only, no other drawings. TradingView uses the chart as the
-   publication picture, and moderators reject cluttered ones.
+2. Open the prepared chart and add the saved script to it.
 3. Press **Publish script** and choose **Public**, then the visibility: **Open-source** shows the code to everyone,
-   **Protected** hides it. The first publication of this indicator is protected; the same code stays open here.
-4. Fill in the form with the texts below.
+   **Protected** hides it. This indicator is published as protected; the same code stays open here.
+4. Fill in the form with the texts below, tick the House Rules box and publish.
 
 ### Title
 
@@ -32,7 +54,7 @@ Custom Sessions Indicator
 ### Description
 
 TradingView's House Rules ask a description to explain what the script does, how it does it and how to use it, in
-your own words and without links that advertise. A text that fits:
+your own words and without links that advertise. The description field is plain text. The text of the publication:
 
 ```
 Custom Sessions Indicator maps the trading day on an intraday chart. Out of the box it draws the Asia, Frankfurt, London and New York sessions as soft colour boxes; everything else is switched on module by module.
@@ -61,25 +83,33 @@ This script is a charting tool, not financial advice.
 
 ### Category and tags
 
-- Category: **Trend analysis** or **Chart patterns** — pick the closer one in the form.
-- Tags: `sessions`, `killzones`, `liquidity`, `vwap`, `openingrange`.
+- Categories: **Multi-timeframe** and **Pivot points and levels**.
+- Tags: `sessions`, `killzones`, `forex`.
 
 ## Updating a published script
 
-1. Open the published script from the Pine Editor (**Open → My scripts**).
+1. Open the saved script in the Pine Editor (**Open → My scripts**).
 2. Replace its code with the new version and **Save**.
-3. Press **Publish script → Update existing**.
-4. Paste the changelog section of the release as the release notes.
+3. Open the prepared chart, so the update gets a clean picture.
+4. Press **Publish script → Update existing script**.
+5. Paste the changelog section of the release as the release notes.
 
-An update must describe what changed. The text of the matching `CHANGELOG.md` section does that.
+An update must describe what changed; the matching `CHANGELOG.md` section does that. Publish an update when the code
+changes, not to edit the page: the release notes are added under the first description, which stays as it is.
+
+People who added the indicator from the publication receive the update on their charts. A copy pasted from this
+repository into someone's own Pine Editor does not change until they paste the new file.
 
 ## Rules worth remembering
 
-- A script can be edited freely for 15 minutes after publication; after that only updates are possible.
+- A publication can be edited or deleted for 15 minutes. After that the title and the description are final, and
+  only updates with release notes are possible.
 - A public open-source script cannot be made private later.
-- The description may not contain links that sell or advertise.
+- The description may not contain links that sell or advertise. For that reason the publication does not link to
+  this repository, while the repository links to the publication.
 - Moderators hide scripts that duplicate existing ones without adding anything; the description should say what is
   different here.
+- The copyright line of a published script names the TradingView account that publishes it.
 
 Read the current [House Rules](https://www.tradingview.com/house-rules/) and
 [Script Publishing Rules](https://www.tradingview.com/support/solutions/43000590599/) before publishing — they change.

@@ -13,14 +13,24 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
-### Changed
-
-- The copyright line of the script names the TradingView account of the author, `dmitry_plhn`.
+No change to how the indicator behaves: the publication, pictures and documentation.
 
 ### Added
 
 - The indicator is published on TradingView as a public, protected script:
   https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/
+- Screenshots of the default look and of the modules in both READMEs and in the settings reference
+  (`docs/images`).
+- A links section in both READMEs, and the roadmap in the Russian README.
+- FAQ entries: where to get the indicator, level labels cut off at the right edge, two labels at one price, a
+  session label crossed by candles, a faint VWAP line on a light chart.
+- `tools/check.py` checks that every local link and picture in the documentation resolves.
+
+### Changed
+
+- The copyright line of the script names the TradingView account of the author, `dmitry_plhn`.
+- `docs/PUBLISHING.md` describes the publication as it is: categories, tags, picture and what can still be
+  changed after publishing.
 
 ## [1.2.0] - 2026-11-25
 

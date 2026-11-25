@@ -2,7 +2,10 @@ blank_issues_enabled: false
 contact_links:
   - name: Questions and troubleshooting
     url: https://github.com/DmytroPalahin/sessions-indicator/blob/main/docs/FAQ.md
-    about: Nothing is drawn, sessions are an hour off, alerts do not fire — start here.
+    about: Nothing is drawn, sessions are an hour off, labels are cut off — start here.
+  - name: The indicator on TradingView
+    url: https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/
+    about: Add it to a chart, or leave a short question in the comments.
   - name: Security problem
     url: https://github.com/DmytroPalahin/sessions-indicator/blob/main/SECURITY.md
     about: Please report security problems privately.

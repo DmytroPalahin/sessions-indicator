@@ -13,6 +13,16 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+The next release is a major one. Taking the session VWAP out removes five inputs, and TradingView stores settings
+by input position: what you changed in *Time tools*, *Dashboard* or *Style* will not carry over. After updating,
+use *Settings → Defaults → Reset settings* and set those groups again. Sessions, levels, killzones, previous
+periods, opening prices and the opening range keep their settings.
+
+### Removed
+
+- **Session VWAP** — the line, its anchors and its bands — is taken out for now. The code is kept on the
+  `feature/vwap` branch.
+
 ### Added
 
 - Tests for `tools/check.py` (`tests/test_check.py`): every check on passing input and on each problem it
@@ -23,6 +33,8 @@ How versions are counted for an indicator:
 
 ### Changed
 
+- The settings groups after the opening range are renumbered: *⑨ Time tools*, *⑩ Dashboard*, *⑪ Style*. Earlier
+  entries of this file use the numbers of their time.
 - CI installs uv, lints and format-checks the Python tools, runs their tests and then checks the indicator.
 - `tools/check.py` follows the ruff rules of the project; what it checks is unchanged.
 

@@ -51,7 +51,7 @@ from the 10:00 bar. Use a timeframe that divides the session time evenly.
 TradingView fits every line an indicator draws into the price scale. A monthly high far above price therefore
 compresses the candles. Two ways out:
 
-- *⑫ Style → Hide levels farther than, × ADR* — set it to `2` or `3` and distant levels are not drawn;
+- *⑪ Style → Hide levels farther than, × ADR* — set it to `2` or `3` and distant levels are not drawn;
 - right-click the price scale and tick **Scale price chart only** — the scale then ignores all indicators.
 
 ## The level labels are cut off at the right edge
@@ -61,7 +61,7 @@ By default a level label sits at the right end of its line — over it, or under
 margin of the chart is at least that wide; TradingView's default margin is 10 bars. If you made the margin
 narrower, drag the chart to the left or lower the offset.
 
-With *⑫ Style → Level labels position* set to `After the line` the text follows the line instead. It then needs
+With *⑪ Style → Level labels position* set to `After the line` the text follows the line instead. It then needs
 room for the whole text after the line end, which the default margin does not give to longer labels such as
 `London High`.
 
@@ -82,32 +82,16 @@ often keeps moving through that spot and the next candles cross the text. A shor
 TradingView keeps the newest 500 boxes, 500 lines and 500 labels of a script and deletes the oldest. Lower
 *History, days* or switch off modules you do not use.
 
-## VWAP is not plotted
-
-VWAP needs volume. Some indices and some forex feeds have none. With the anchor *Each session start* the VWAP also
-hides above the session timeframe limit.
-
-## The VWAP line is hard to see
-
-The default VWAP colour is yellow. It reads well on a dark chart and is faint on a light one. Pick a darker colour
-in *⑨ Session VWAP → Colour*.
-
 ## The text of a label is a shade darker than its line
 
 That is on purpose. A label takes the colour of its line or zone, and most default colours are chosen for dark
-charts: on a white background yellow, orange, light green and grey text is hard to read. With *⑫ Style → Label
+charts: on a white background yellow, orange, light green and grey text is hard to read. With *⑪ Style → Label
 text adapts to the chart background* on, which is the default, such a colour is darkened on a light chart and
 lightened on a dark one until the text reads well. Lines and zones keep the colour you chose. Switch the setting
 off to print text in the exact colour.
 
 A thin line in a pale colour can still be faint on a white chart. Pick a darker colour for it in the input next
 to the line it belongs to.
-
-## VWAP in Bar Replay is not exactly the VWAP of the live chart
-
-TradingView's replay data carries a slightly different tick volume on some bars; the prices are the same. VWAP is
-weighted by volume, so inside an affected session it can sit about a pip away from the live chart. Sessions,
-levels and everything else that depends on price only are identical in a replay.
 
 ## The dashboard says a session is open on Saturday
 
@@ -123,6 +107,17 @@ computed values.
 
 The average needs at least one completed session on the chart. On timeframes above the session limit there are no
 sessions to average.
+
+## Can a session fill the whole height of the chart?
+
+Yes. Set *③ Session display → Style* to `Background`: every session shades the chart from top to bottom, like a
+classic session-highlight indicator. `Box + background` draws the range box on top of the band. *Background
+transparency* sets how strong the shade is.
+
+## Where did the session VWAP go?
+
+It is taken out of the indicator for now. The code is kept on the `feature/vwap` branch of the repository and may
+return in a later release.
 
 ## Can I use a 24-hour session?
 

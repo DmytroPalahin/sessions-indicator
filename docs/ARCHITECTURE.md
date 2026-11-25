@@ -45,7 +45,6 @@ flowchart TD
     A --> F[Period.feed × 3<br/>day, week, month]
     A --> G[Anchor.capture × 2<br/>midnight, custom time]
     A --> H[OpeningRange.run]
-    B --> I[ta.vwap<br/>anchor = session start]
     F --> J{last bar?}
     G --> J
     J -- yes --> K[Period.redraw / Anchor.refresh<br/>redraw current levels]
@@ -185,6 +184,13 @@ lows that broke, opening range breakouts. An alerts module that turned them into
 `alert()` messages was built and tried on a live chart, then left out of the first release to keep it focused. It
 lives on the `feature/alerts` branch. The event outputs stay in the engine, so bringing alerts back means adding one
 region and one group of inputs, not touching the engine.
+
+## Parked: session VWAP
+
+A VWAP that restarts at each session, day, week or month, with optional bands, was part of versions 1.0 to 1.4.
+It is taken out for now and lives on the `feature/vwap` branch. It needs nothing from the engine but the list of
+sessions that started on the bar, which `runZones` still returns, so bringing it back means one group of inputs,
+one step in the pipeline and three plots.
 
 ## Scale and distant levels
 

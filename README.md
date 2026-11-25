@@ -2,7 +2,7 @@
 
 # Custom Sessions Indicator
 
-**Sessions, killzones, liquidity levels, opening prices, opening range, session VWAP and a dashboard — one TradingView overlay, every part of it configurable.**
+**Sessions, killzones, liquidity levels, opening prices, opening range and a dashboard — one TradingView overlay, every part of it configurable.**
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
 [![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/)
@@ -41,10 +41,9 @@ so the chart stays clean until you ask for more.
 | ⑥ | **Previous day / week / month** | PDH/PDL, PWH/PWL, PMH/PML |
 | ⑦ | **Opening prices** | Day, week, month, midnight and one custom time of day |
 | ⑧ | **Opening range** | Range box, extended lines, midline, projections and breakout markers |
-| ⑨ | **Session VWAP** | Re-anchored at each session, day, week or month, with optional bands |
-| ⑩ | **Time tools** | Day separators and weekday labels |
-| ⑪ | **Dashboard** | Which session is open, time left or time to open, current range against its average, day range against ADR |
-| ⑫ | **Style** | Text size, line style and width, label options, a filter for distant levels |
+| ⑨ | **Time tools** | Day separators and weekday labels |
+| ⑩ | **Dashboard** | Which session is open, time left or time to open, current range against its average, day range against ADR |
+| ⑪ | **Style** | Text size, line style and width, label options, a filter for distant levels |
 
 ## Screenshots
 
@@ -65,14 +64,14 @@ Every picture below is the same indicator with a few checkboxes switched on. The
 </tr>
 <tr>
 <td width="50%" valign="top">
-<a href="docs/images/opening-range-vwap.png"><img src="docs/images/opening-range-vwap.png" alt="Opening range box with extended lines, midline, two projections and a breakout marker, plus the session VWAP with bands"></a>
-<b>Opening range and session VWAP</b><br>
-<sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code> · ⑨ <i>Show VWAP</i>, <i>Bands ×</i> = <code>1</code></sub>
+<a href="docs/images/opening-range.png"><img src="docs/images/opening-range.png" alt="Opening range box with extended lines, midline, two projections and breakout markers"></a>
+<b>Opening range</b><br>
+<sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code></sub>
 </td>
 <td width="50%" valign="top">
 <a href="docs/images/dashboard-time-tools.png"><img src="docs/images/dashboard-time-tools.png" alt="Dashboard with the status, countdown and ranges of every session, day separators and weekday labels"></a>
 <b>Dashboard and time tools</b><br>
-<sub>⑪ <i>Show dashboard</i> · ⑩ <i>Day separators</i>, <i>Weekday labels</i></sub>
+<sub>⑩ <i>Show dashboard</i> · ⑨ <i>Day separators</i>, <i>Weekday labels</i></sub>
 </td>
 </tr>
 </table>
@@ -109,7 +108,8 @@ to read the numbers below; it is not your own timezone, and the chart keeps show
 
 Asia, London, New York and Sydney are the 08:00 – 16:00 working day of their city, written in New York time.
 Frankfurt is the hour before London opens. Asia is blue, Frankfurt purple, London green and New York orange, drawn
-as soft boxes without a border.
+as soft boxes without a border. *③ Session display → Style → Background* shades the whole height of the chart
+instead of the range.
 
 Killzone presets: Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:00 – 10:00, NY Lunch 12:00 – 13:00,
 NY PM 13:30 – 16:00. These are conventions, not rules: every window is editable.
@@ -141,8 +141,7 @@ These come from how Pine Script and TradingView work. They are listed so that no
 
 - Sessions, killzones and the opening range are intraday tools. They hide above the timeframe set in *① General*.
 - Levels far from price squeeze the candles, because TradingView fits every level of an indicator into the price
-  scale. *⑫ Style → Hide levels farther than* removes them; so does *Scale price chart only* in the price-scale menu.
-- Session VWAP needs volume. On symbols without volume nothing is plotted.
+  scale. *⑪ Style → Hide levels farther than* removes them; so does *Scale price chart only* in the price-scale menu.
 - The dashboard clock follows the schedule, not the exchange calendar: it does not know about weekends and holidays.
   Like every script, it refreshes when the chart receives a tick.
 - Session averages are computed from the bars loaded on the chart.
@@ -162,6 +161,8 @@ verification log in [docs/TESTING.md](docs/TESTING.md) lists what has been check
 - Statistics: how often one session breaks the range of another
 - One label for levels that share a price, instead of two labels printed over each other
 - When the level list is full, drop broken levels before live ones
+- Session VWAP, re-anchored at each session, day, week or month — built and run on live charts, kept on the
+  `feature/vwap` branch until a later release
 - Alerts for session starts, broken levels and opening range breakouts — built and tried on a live chart, kept on
   the `feature/alerts` branch until a later release
 

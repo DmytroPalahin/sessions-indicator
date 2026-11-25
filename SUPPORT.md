@@ -4,7 +4,7 @@
 
 Most questions are answered in one of these:
 
-1. [docs/FAQ.md](docs/FAQ.md) — nothing is drawn, sessions are an hour off, missing history, VWAP, dashboard.
+1. [docs/FAQ.md](docs/FAQ.md) — nothing is drawn, sessions are an hour off, missing history, labels, dashboard.
 2. [docs/SETTINGS.md](docs/SETTINGS.md) — what each input does, with pictures of the modules.
 
 ## Where to ask

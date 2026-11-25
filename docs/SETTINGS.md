@@ -53,6 +53,10 @@ A window may cross midnight and may be up to 24 hours long (`1800-1800` restarts
 | Open line | off | A dotted line at the opening price of the session. |
 | Midline (50%) | off | A dashed line at the middle of the session range. It moves while the range grows. |
 
+![Sessions as full-height background bands](images/sessions-background.png)
+
+*③ Style = `Background`: every session shades the whole height of the chart. EURUSD on 15 minutes.*
+
 ## ④ Session high / low levels
 
 | Input | Default | What it does |
@@ -128,27 +132,18 @@ timezone.
 | Projection 2 × | `0.0` | A second pair of projections. |
 | Breakout markers | on | A triangle on the first bar that closes outside the range, once per side. |
 
-## ⑨ Session VWAP
+![Opening range with projections and breakout markers](images/opening-range.png)
 
-| Input | Default | What it does |
-| ------- | --------- | -------------- |
-| Show VWAP | off | Master switch. Needs a symbol with volume. |
-| Anchor | `Each session start` | Where the calculation restarts: every enabled session, or each day, week or month. |
-| Colour, width | yellow, `1` | Look of the line. Yellow is chosen for dark charts; on a light chart pick a darker colour. |
-| Bands × | `0.0` | Standard-deviation multiplier of the bands. `0` hides them. |
+*⑧ Show opening range with Projection 2 × = `2`, EURUSD on 5 minutes.*
 
-![Opening range with projections and a breakout marker, session VWAP with bands](images/opening-range-vwap.png)
-
-*⑧ Show opening range with Projection 2 × = `2`, ⑨ Show VWAP with Bands × = `1`, EURUSD on 5 minutes.*
-
-## ⑩ Time tools
+## ⑨ Time tools
 
 | Input | Default | What it does |
 |-------|---------|--------------|
 | Day separators | off | A dotted vertical line at the first bar of each calendar day in the indicator timezone. |
 | Weekday labels | off | `Mon`, `Tue`, … below that bar. |
 
-## ⑪ Dashboard
+## ⑩ Dashboard
 
 | Input | Default | What it does |
 | ------- | --------- | -------------- |
@@ -163,9 +158,9 @@ range.
 
 ![Dashboard, day separators and weekday labels](images/dashboard-time-tools.png)
 
-*⑩ Day separators and Weekday labels, ⑪ Show dashboard, EURUSD on 15 minutes.*
+*⑨ Day separators and Weekday labels, ⑩ Show dashboard, EURUSD on 15 minutes.*
 
-## ⑫ Style
+## ⑪ Style
 
 | Input | Default | What it does |
 | ------- | --------- | -------------- |

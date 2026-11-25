@@ -83,6 +83,9 @@ Sessions need an intraday chart. VWAP needs volume. Levels far from price can sq
 This script is a charting tool, not financial advice.
 ```
 
+The text is final on TradingView and still lists the session VWAP. That module is parked on the `feature/vwap`
+branch; the release notes of the update that removes it have to say so.
+
 ### Category and tags
 
 - Categories: **Multi-timeframe** and **Pivot points and levels**.

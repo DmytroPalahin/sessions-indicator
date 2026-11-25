@@ -2,7 +2,7 @@
 
 # Custom Sessions Indicator
 
-**Сессии, killzones, уровни ликвидности, цены открытия, opening range, сессионный VWAP и дашборд — один индикатор для TradingView, в котором настраивается всё.**
+**Сессии, killzones, уровни ликвидности, цены открытия, opening range и дашборд — один индикатор для TradingView, в котором настраивается всё.**
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
 [![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/)
@@ -41,10 +41,9 @@ Asia, Frankfurt, London и New York мягкими цветными боксам
 | ⑥ | **Previous day / week / month** | PDH/PDL, PWH/PWL, PMH/PML |
 | ⑦ | **Opening prices** | Открытие дня, недели, месяца, полуночи и одного своего времени |
 | ⑧ | **Opening range** | Бокс диапазона, продлённые линии, середина, проекции и метки пробоя |
-| ⑨ | **Session VWAP** | Пересчёт с начала каждой сессии, дня, недели или месяца, с полосами по желанию |
-| ⑩ | **Time tools** | Разделители дней и подписи дней недели |
-| ⑪ | **Dashboard** | Какая сессия открыта, сколько до конца или до открытия, диапазон против среднего, день против ADR |
-| ⑫ | **Style** | Размер текста, стиль и толщина линий, подписи уровней, фильтр далёких уровней |
+| ⑨ | **Time tools** | Разделители дней и подписи дней недели |
+| ⑩ | **Dashboard** | Какая сессия открыта, сколько до конца или до открытия, диапазон против среднего, день против ADR |
+| ⑪ | **Style** | Размер текста, стиль и толщина линий, подписи уровней, фильтр далёких уровней |
 
 ## Скриншоты
 
@@ -65,14 +64,14 @@ Asia, Frankfurt, London и New York мягкими цветными боксам
 </tr>
 <tr>
 <td width="50%" valign="top">
-<a href="docs/images/opening-range-vwap.png"><img src="docs/images/opening-range-vwap.png" alt="Бокс opening range с продлёнными линиями, серединой, двумя проекциями и меткой пробоя, а также сессионный VWAP с полосами"></a>
-<b>Opening range и сессионный VWAP</b><br>
-<sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code> · ⑨ <i>Show VWAP</i>, <i>Bands ×</i> = <code>1</code></sub>
+<a href="docs/images/opening-range.png"><img src="docs/images/opening-range.png" alt="Бокс opening range с продлёнными линиями, серединой, двумя проекциями и метками пробоя"></a>
+<b>Opening range</b><br>
+<sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code></sub>
 </td>
 <td width="50%" valign="top">
 <a href="docs/images/dashboard-time-tools.png"><img src="docs/images/dashboard-time-tools.png" alt="Дашборд со статусом, обратным отсчётом и диапазонами каждой сессии, разделители дней и подписи дней недели"></a>
 <b>Дашборд и инструменты времени</b><br>
-<sub>⑪ <i>Show dashboard</i> · ⑩ <i>Day separators</i>, <i>Weekday labels</i></sub>
+<sub>⑩ <i>Show dashboard</i> · ⑨ <i>Day separators</i>, <i>Weekday labels</i></sub>
 </td>
 </tr>
 </table>
@@ -109,7 +108,8 @@ Asia, Frankfurt, London и New York мягкими цветными боксам
 
 Asia, London, New York и Sydney — это рабочий день своего города с 08:00 до 16:00, записанный по нью-йоркскому
 времени. Frankfurt — час перед открытием Лондона. Asia синяя, Frankfurt фиолетовая, London зелёная, New York
-оранжевая; боксы мягкие, без рамки.
+оранжевая; боксы мягкие, без рамки. Настройка *③ Session display → Style → Background* закрашивает всю высоту
+графика вместо диапазона.
 
 Killzones по умолчанию: Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:00 – 10:00, NY Lunch 12:00 – 13:00,
 NY PM 13:30 – 16:00. Это общепринятые значения, а не правило: любое окно можно изменить.
@@ -143,8 +143,7 @@ NY PM 13:30 – 16:00. Это общепринятые значения, а не
 
 - Сессии, killzones и opening range — внутридневные инструменты. Выше таймфрейма из *① General* они скрываются.
 - Уровни далеко от цены сжимают свечи, потому что TradingView вписывает в шкалу цены все уровни индикатора.
-  Их убирает настройка *⑫ Style → Hide levels farther than* или пункт *Scale price chart only* в меню шкалы цены.
-- Сессионному VWAP нужен объём. На инструментах без объёма он не рисуется.
+  Их убирает настройка *⑪ Style → Hide levels farther than* или пункт *Scale price chart only* в меню шкалы цены.
 - Часы дашборда идут по расписанию, а не по календарю биржи: о выходных и праздниках они не знают. Как любой скрипт,
   дашборд обновляется, когда на график приходит тик.
 - Средние значения сессий считаются по барам, загруженным на график.
@@ -164,6 +163,8 @@ NY PM 13:30 – 16:00. Это общепринятые значения, а не
 - Статистика: как часто одна сессия пробивает диапазон другой
 - Одна подпись для уровней с одинаковой ценой вместо двух подписей друг на друге
 - Когда список уровней заполнен, сначала убирать пробитые уровни, а не действующие
+- Сессионный VWAP с пересчётом от начала сессии, дня, недели или месяца — модуль написан и проверен на живых
+  графиках, он лежит в ветке `feature/vwap` до одного из следующих релизов
 - Алерты на начало сессии, пробой уровня и пробой opening range — модуль написан и проверен на живом графике, он
   лежит в ветке `feature/alerts` до одного из следующих релизов
 

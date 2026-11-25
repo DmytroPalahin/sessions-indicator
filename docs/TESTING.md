@@ -73,9 +73,9 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 9 | *Keep past periods* on | Earlier days keep their lines, ending at the day boundary |
 | 10 | *⑦ Opening prices* on | Each line starts on the right bar and matches that bar's open |
 | 11 | *⑧ Opening range* on, stock chart | Box for 09:30–10:00, lines for six hours, one triangle per side at most |
-| 12 | *⑨ VWAP* on with each anchor | The line restarts at the anchor and matches the built-in anchored VWAP |
-| 13 | *⑩ Time tools* on | One separator and one weekday label per day |
-| 14 | *⑪ Dashboard* on | Status matches the clock; ranges match the labels on the chart |
+| 12 | *(reserved for the session VWAP, which is parked on the `feature/vwap` branch)* | — |
+| 13 | *⑨ Time tools* on | One separator and one weekday label per day |
+| 14 | *⑩ Dashboard* on | Status matches the clock; ranges match the labels on the chart |
 | 15 | 4-hour chart | No sessions, killzones or opening range; previous week and month levels remain |
 | 16 | Daily chart | Only previous week and month levels and week / month opens remain |
 | 17 | Bar Replay | Drawings build up bar by bar and match the non-replay chart |
@@ -118,3 +118,4 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 2026-11-25 | 1.4.0 | Release build | pass — the tagged file itself was saved in TradingView, added to the chart and published as the update: editor analysis and compile with 0 errors and 0 warnings; on `OANDA:EURUSD` 15m the indicator shows the new input with its default and reports no script error |
 | 2026-11-25 | 1.4.0 | The version the Indicators dialog adds | pass, with a finding — the script service lists the update as version 3.0 from the moment it was published. Added from *Indicators → Favorites* on an empty chart with a freshly loaded list, the publication comes as version 3.0: 115 inputs, the new one among them, no script error. Before that the dialog kept adding version 2.0 for more than twenty minutes, across reloads: it reads the version from its Favorites list in the browser's cache. An instance already on a chart stayed on 2.0 after reloading. *My scripts* added the saved script in its newest version at once. Recorded in the FAQ and in PUBLISHING.md. |
 | 2026-11-25 | 1.4.0 | When the Indicators dialog renews its cached Favorites list | Read from TradingView's client code and confirmed on the live dialog. The list is valid for 24 hours from its last write; a favourite found in it is not requested again; opening the dialog writes the list anew. A cache entry made to look 23 hours old, holding version 2.0, was kept at 2.0 and stored with a new time. One made to look 25 hours old was dropped and rebuilt with version 3.0. Reopening the dialog twenty seconds later rewrote the entry again. The code also drops the list on sign-out; that was not run. |
+| 2026-11-25 | `main`, after 1.4.0 | Session VWAP taken out, later settings groups renumbered | Static checks pass. Editor analysis: 0 errors, 0 warnings. Full compile with **Add to chart**: pass. On `OANDA:EURUSD` 15m and 5m the build has 110 inputs in groups ① to ⑪ and 20 plots, none of them a VWAP, and reports no script error with sessions as a background, with the opening range, and with labels, levels, killzones, previous day levels, opens, time tools and the dashboard on together. |

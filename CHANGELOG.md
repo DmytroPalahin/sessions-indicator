@@ -21,10 +21,13 @@ How versions are counted for an indicator:
 
 - The default slots are in time order: Asia, Frankfurt, London, New York, Sydney. The `Custom` preset is gone;
   every slot can still be renamed and retimed.
-- The legend no longer shows three empty values (`∅ ∅ ∅`) next to the indicator name while VWAP is off.
 - Session labels are hidden by default. Switch them on in *③ Session display → Label*.
 - The *Timezone* setting is now called *Timezone of session times*, and its tooltip says that it is the timezone the
   times are written in, not the timezone of the user.
+
+### Fixed
+
+- The legend no longer shows three empty values (`∅ ∅ ∅`) next to the indicator name while VWAP is off.
 
 ## [1.1.0] - 2026-11-25
 

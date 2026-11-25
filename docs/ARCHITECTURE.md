@@ -190,5 +190,7 @@ levels fold back to their first bar.
 - Every level has its own label. Two levels at one price therefore print two labels over each other.
 - A level label ends at the end of its line, `i_offset` bars after the last bar. It is complete only when the
   right margin of the chart is at least that wide.
+- A label takes the colour of its line or zone. The defaults suit dark charts; on a white background most of
+  them have a contrast below 3 : 1.
 - The level list is trimmed by age. With `Keep, faded` a broken level can push out an older level that is still
   live.

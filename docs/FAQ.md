@@ -92,6 +92,20 @@ hides above the session timeframe limit.
 The default VWAP colour is yellow. It reads well on a dark chart and is faint on a light one. Pick a darker colour
 in *⑨ Session VWAP → Colour*.
 
+## Some labels are pale on a light chart
+
+A label is printed in the colour of its line or zone, and most default colours are chosen for dark charts. On a
+white background the yellow, orange, light green and grey ones lose contrast: `PWH`, `W Open`, `00:00 Open`,
+`PDH`, the New York and London captions, the killzone names. Asia blue, Frankfurt purple, the weekday labels and
+the dashboard stay clear. Every one of these colours has its own input next to the line it belongs to — pick
+darker shades there. On a dark chart all default colours read well; Frankfurt purple is the dimmest.
+
+## VWAP in Bar Replay is not exactly the VWAP of the live chart
+
+TradingView's replay data carries a slightly different tick volume on some bars; the prices are the same. VWAP is
+weighted by volume, so inside an affected session it can sit about a pip away from the live chart. Sessions,
+levels and everything else that depends on price only are identical in a replay.
+
 ## The dashboard says a session is open on Saturday
 
 The status follows the clock and the session schedule. It does not know the exchange calendar, so weekends and

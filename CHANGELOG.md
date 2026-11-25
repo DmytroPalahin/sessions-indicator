@@ -13,6 +13,12 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+### Added
+
+- FAQ entries: labels that are pale on a light chart, and VWAP in Bar Replay.
+- The verification log covers the last open rows of the chart matrix: the US clock change, Bar Replay, light and
+  dark charts.
+
 ## [1.3.0] - 2026-11-25
 
 Level labels that stay readable with TradingView's default right margin, plus the publication, pictures and

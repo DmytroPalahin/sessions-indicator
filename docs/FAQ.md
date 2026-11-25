@@ -1,0 +1,84 @@
+# FAQ and troubleshooting
+
+## Nothing is drawn
+
+Check these in order.
+
+1. **Timeframe.** Sessions are hidden above *① General → Hide sessions above, minutes* (60 by default). Switch to
+   a lower timeframe or raise the limit.
+2. **History.** Only the last *History, days* are drawn. Scroll to recent bars or raise the value.
+3. **The slot is off.** In *② Sessions* the checkbox of the row must be ticked.
+4. **The market does not trade then.** A stock chart without extended hours has no bars at 03:00, so there is no
+   London session to draw.
+
+## Sessions are shifted by an hour
+
+The session times are read in the timezone from *① General → Timezone*. Two common causes:
+
+- You entered times for one timezone while another is selected.
+- You use a fixed offset such as `UTC+3`. Offsets do not follow daylight saving time. Use a named zone instead.
+
+## Why does the Asia session start at 19:00?
+
+Because the default timezone is New York. 19:00 in New York is the Tokyo morning. If you prefer to think in another
+timezone, select it and enter the windows in that time.
+
+## London and New York are "wrong" for a few weeks in March and November
+
+The United States and Europe change their clocks on different dates. For two or three weeks a year the gap between
+London and New York is four hours instead of five. With one timezone for all sessions, the session defined in the
+other city's time shifts for those weeks. This is real: the markets do open at a different New York time then.
+
+## The box does not start exactly at the session time
+
+A session starts on the first bar that opens inside the window. On a 1-hour chart a 09:30 start can only be shown
+from the 10:00 bar. Use a timeframe that divides the session time evenly.
+
+## Some old sessions are missing
+
+TradingView keeps the newest 500 boxes, 500 lines and 500 labels of a script and deletes the oldest. Lower
+*History, days* or switch off modules you do not use.
+
+## VWAP is not plotted
+
+VWAP needs volume. Some indices and some forex feeds have none. With the anchor *Each session start* the VWAP also
+hides above the session timeframe limit.
+
+## The dashboard says a session is open on Saturday
+
+The status follows the clock and the session schedule. It does not know the exchange calendar, so weekends and
+holidays are not excluded.
+
+## The dashboard countdown does not move
+
+A script runs when the chart receives a tick. On a closed market there are no ticks, so the table shows the last
+computed values.
+
+## The "Avg" column is empty
+
+The average needs at least one completed session on the chart. On timeframes above the session limit there are no
+sessions to average.
+
+## Can I use a 24-hour session?
+
+No. Two runs of the same window must be separated by a gap, otherwise the indicator sees one endless window. Use
+`1800-1700` rather than `1800-1800`.
+
+## Does it repaint?
+
+Previous day, week and month values do not: they are read with a one-bar offset. The high and low of the session
+that is *still running* move while the session makes new extremes — that is what a running range is. Opening range
+breakout markers appear only after a bar has closed.
+
+## Can I rename "Asia" to something else?
+
+Yes. The name field in each row is free text, and the new name is used in labels, the dashboard and alerts.
+
+## Pips look wrong on my symbol
+
+`Pips` is defined for forex pairs: 0.0001, or 0.01 for JPY pairs. On other markets it falls back to the minimum tick.
+Choose `Price`, `Ticks` or `Percent` in *③ Session display → Range unit* instead.
+
+## Still stuck?
+
+See [SUPPORT.md](../SUPPORT.md).

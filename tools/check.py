@@ -33,6 +33,13 @@ PLOT_CALLS = ("plot", "bgcolor", "plotshape", "plotchar", "plotarrow", "hline", 
 
 BRACKETS = {"(": ")", "[": "]", "{": "}"}
 
+# Names of built-in Pine methods. A user function with one of these names is an overload of the built-in.
+BUILTIN_METHODS = frozenset(
+    "abs avg binary_search clear concat contains copy covariance delete every fill first get includes indexof insert "
+    "join keys last lastindexof max median min mode percentrank pop push put put_all range remove reverse set shift "
+    "size slice some sort sort_indices standardize stdev sum unshift values variance".split()
+)
+
 
 class Report:
     """Collects failures and prints one line per check."""
@@ -188,6 +195,23 @@ def check_inline_inputs(lines: list[str]) -> list[str]:
     return problems
 
 
+def check_unique_names(lines: list[str]) -> list[str]:
+    """An overloaded function may not read global variables (TradingView error CE10182)."""
+    seen: dict[str, int] = {}
+    problems = []
+    for number, text in enumerate(lines, 1):
+        match = re.match(r"(?:method\s+)?(\w+)\(.*\)\s*=>", text)
+        if not match:
+            continue
+        name = match.group(1)
+        if name in seen:
+            problems.append(f"line {number}: '{name}' is already defined on line {seen[name]} (overloads cannot read globals)")
+        elif name in BUILTIN_METHODS:
+            problems.append(f"line {number}: '{name}' is the name of a built-in method, which makes this an overload")
+        seen.setdefault(name, number)
+    return problems
+
+
 def check_plot_budget(lines: list[str]) -> list[str]:
     count = 0
     for text in lines:
@@ -236,6 +260,7 @@ def main() -> int:
     report.check("brackets: balanced on every line", check_brackets(lines))
     report.check("regions: every //#region is closed", check_regions(lines))
     report.check("inputs: inline rows have one title", check_inline_inputs(lines))
+    report.check("names: every function and method has its own name", check_unique_names(lines))
     report.check("plots: within the limit of plot-like calls", check_plot_budget(lines))
     report.check("version: script, README badges and changelog agree", check_version(lines))
 

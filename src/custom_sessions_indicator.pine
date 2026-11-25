@@ -74,6 +74,7 @@ const string TT_OR_PROJ  = "Projection of the range above its high and below its
 const string TT_VW_BANDS = "Standard-deviation multiplier of the bands. 0 hides the bands."
 const string TT_AVG      = "Number of completed sessions (and days) used for the 'Avg' column."
 const string TT_ALERTS   = "Sends alert() events. Create one TradingView alert with the condition 'Any alert() function call' to receive them."
+const string TT_MAX_DIST = "TradingView fits every level of an indicator into the price scale, so a level far from price squeezes the candles. Levels farther from the last price than this many average daily ranges are not drawn. 0 draws all of them."
 const string TT_ON_CLOSE = "Level and breakout alerts wait for the bar to close. Turn off to be notified on the first tick that crosses."
 
 //#endregion
@@ -284,6 +285,7 @@ Stroke   i_lvStroke = input.enum(Stroke.solid, "Level lines", inline = "lv", gro
 int      i_lvWidth  = input.int(1, "", minval = 1, maxval = 4, inline = "lv", group = G_STYLE)
 bool     i_tags     = input.bool(true, "Level labels", group = G_STYLE)
 bool     i_tagPrice = input.bool(false, "Price in level labels", group = G_STYLE)
+float    i_maxDist  = input.float(0.0, "Hide levels farther than, × ADR (0 = never)", minval = 0.0, step = 0.5, tooltip = TT_MAX_DIST, group = G_STYLE)
 
 //#endregion
 
@@ -361,6 +363,7 @@ type Marker
 // @field lastLoTime Open time of the bar that made lastLo.
 // @field lastEnd    Close time of the latest completed window.
 // @field spans      Ranges (high - low) of the latest completed windows, oldest first.
+// @field key        Identity of the running window: the calendar date on which it started.
 type Tracker
     bool         active     = false
     bool         started    = false
@@ -378,6 +381,7 @@ type Tracker
     int          lastLoTime = na
     int          lastEnd    = na
     array<float> spans
+    int          key        = na
 
 // @type  How a family of zones (sessions or killzones) is drawn.
 type ZoneView
@@ -391,12 +395,15 @@ type ZoneView
     Align     align
     bool      showOpen
     bool      showMid
+    bool      captionBelow
 
 // @type  One slot of the settings panel: a session or a killzone.
 type Zone
     bool    enabled
     string  title
     string  sess
+    int     startMin
+    int     endMin
     color   col
     Tracker trk
     box     frame
@@ -410,6 +417,7 @@ type Level
     bool   isHigh
     string title
     color  col
+    int    born
     bool   live = true
     line   seg
     label  tag
@@ -472,12 +480,12 @@ positionOf(Corner c) =>
         Corner.bottomRight  => position.bottom_right
         => position.top_right
 
-// @function Label style that anchors a caption above a zone at the chosen side.
-tagStyleOf(Align a) =>
+// @function Label style that anchors a caption above or below a zone at the chosen side.
+tagStyleOf(Align a, bool below) =>
     switch a
-        Align.start  => label.style_label_lower_left
-        Align.finish => label.style_label_lower_right
-        => label.style_label_down
+        Align.start  => below ? label.style_label_upper_left : label.style_label_lower_left
+        Align.finish => below ? label.style_label_upper_right : label.style_label_lower_right
+        => below ? label.style_label_up : label.style_label_down
 
 // @function Formats a price distance in the unit chosen by the user.
 // @param span The distance (high - low).
@@ -519,10 +527,25 @@ clockInside(int startMin, int endMin) =>
     int nowMin = hour(timenow, TZ) * 60 + minute(timenow, TZ)
     startMin < endMin ? (nowMin >= startMin and nowMin < endMin) : (nowMin >= startMin or nowMin < endMin)
 
+// @function Identity of the run of a window that the current bar belongs to: the calendar date on which that run started.
+//           Two bars of the same run get the same key; the first bar of the next run gets a new one, even when the chart
+//           has no bar between the two runs (regular-hours charts, 24-hour windows).
+// @param startMin Start of the window in minutes since midnight.
+// @param endMin   End of the window in minutes since midnight.
+windowKey(int startMin, int endMin) =>
+    int  barMin        = hour(time, TZ) * 60 + minute(time, TZ)
+    bool startedBefore = startMin >= endMin and barMin < startMin
+    int  moment        = startedBefore ? time - MS_DAY : time
+    year(moment, TZ) * 10000 + month(moment, TZ) * 100 + dayofmonth(moment, TZ)
+
 // @function True on the bar that opens at the given time of day (or is the first bar within one bar length after it).
 opensAt(int hh, int mm) =>
     int target = timestamp(TZ, year(time, TZ), month(time, TZ), dayofmonth(time, TZ), hh, mm, 0)
     not na(prevTime) and prevTime < target and time >= target and time < target + tfMs
+
+// @function True when a level is too far from the last price to be drawn (see "Hide levels farther than").
+tooFar(float price) =>
+    i_maxDist > 0 and not na(adr) and math.abs(price - close) > i_maxDist * adr
 
 // @function Appends a name to a comma-separated list.
 joinName(string list, string name) =>
@@ -535,12 +558,12 @@ joinName(string list, string name) =>
 // ── Marker ───────────────────────────────────────────────────────────────────────────────────────────────
 
 // @function Redraws the marker from scratch. A marker with no price is erased.
-method put(Marker this, int x1, int x2, float y, string txt, color col) =>
+method place(Marker this, int x1, int x2, float y, string txt, color col) =>
     this.seg.delete()
     this.tag.delete()
     this.seg := na
     this.tag := na
-    if not na(y) and not na(x1)
+    if not na(y) and not na(x1) and not tooFar(y)
         this.seg := line.new(x1, y, x2, y, xloc = xloc.bar_time, color = col, style = LV_STYLE, width = i_lvWidth)
         if i_tags
             string caption = i_tagPrice ? txt + "  " + str.tostring(y, format.mintick) : txt
@@ -551,9 +574,12 @@ method put(Marker this, int x1, int x2, float y, string txt, color col) =>
 
 // @function Advances the state machine by one bar.
 // @param inside True when the current bar belongs to the window.
-method tick(Tracker this, bool inside) =>
-    this.started := inside and not this.active
-    this.ended   := not inside and this.active
+// @param key    Identity of the run the bar belongs to (see windowKey). A change of key while the window is active
+//               means one run ended and the next began with no bar between them: both flags are set on that bar.
+method advance(Tracker this, bool inside, int key) =>
+    bool renewed = inside and this.active and key != this.key
+    this.started := inside and (not this.active or renewed)
+    this.ended   := this.active and (not inside or renewed)
     if this.ended
         this.lastHi     := this.hi
         this.lastLo     := this.lo
@@ -564,6 +590,7 @@ method tick(Tracker this, bool inside) =>
         if this.spans.size() > i_avgLen
             this.spans.shift()
     if this.started
+        this.key       := key
         this.startTime := time
         this.openPrice := open
         this.hi        := high
@@ -584,7 +611,7 @@ method tick(Tracker this, bool inside) =>
 
 // ── Zone ─────────────────────────────────────────────────────────────────────────────────────────────────
 
-// @function Text of the caption above a zone.
+// @function Text of the caption of a zone.
 method captionOf(Zone this, ZoneView v) =>
     Tracker t = this.trk
     string span = fmtSpan(t.hi - t.lo, t.lo)
@@ -593,7 +620,7 @@ method captionOf(Zone this, ZoneView v) =>
         Caption.rangeOnly => span
         => this.title + "  " + span
 
-// @function Time coordinate of the caption above a zone.
+// @function Time coordinate of the caption of a zone.
 method captionX(Zone this, ZoneView v) =>
     Tracker t = this.trk
     int middle = math.round((t.startTime + t.endTime) / 2.0)
@@ -616,7 +643,7 @@ method draw(Zone this, ZoneView v, bool visible) =>
             if boxed
                 this.frame := box.new(t.startTime, t.hi, t.endTime, t.lo, xloc = xloc.bar_time, border_color = color.new(this.col, v.borderTransp), border_width = v.borderWidth, border_style = v.borderStyle, bgcolor = color.new(this.col, v.fillTransp))
             if v.caption != Caption.hidden
-                this.tag := label.new(this.captionX(v), t.hi, this.captionOf(v), xloc = xloc.bar_time, style = tagStyleOf(v.align), color = color(na), textcolor = this.col, size = TEXT_SIZE)
+                this.tag := label.new(this.captionX(v), v.captionBelow ? t.lo : t.hi, this.captionOf(v), xloc = xloc.bar_time, style = tagStyleOf(v.align, v.captionBelow), color = color(na), textcolor = this.col, size = TEXT_SIZE)
             if v.showOpen
                 this.openLn := line.new(t.startTime, t.openPrice, t.endTime, t.openPrice, xloc = xloc.bar_time, color = this.col, style = line.style_dotted, width = 1)
             if v.showMid
@@ -627,7 +654,7 @@ method draw(Zone this, ZoneView v, bool visible) =>
         this.frame.set_top(t.hi)
         this.frame.set_bottom(t.lo)
         this.frame.set_right(t.endTime)
-        this.tag.set_xy(this.captionX(v), t.hi)
+        this.tag.set_xy(this.captionX(v), v.captionBelow ? t.lo : t.hi)
         this.tag.set_text(this.captionOf(v))
         this.openLn.set_x2(t.endTime)
         this.midLn.set_xy1(t.startTime, mid)
@@ -641,7 +668,7 @@ runZones(array<Zone> zones, ZoneView v) =>
     string endedNames   = ""
     for z in zones
         bool inside = z.enabled and intradayOk and not na(time(timeframe.period, z.sess, TZ))
-        z.trk.tick(inside)
+        z.trk.advance(inside, windowKey(z.startMin, z.endMin))
         z.draw(v, inWindow)
         if z.trk.started
             startedNames := joinName(startedNames, z.title)
@@ -659,7 +686,7 @@ bandOf(array<Zone> zones, int index, ZoneView v) =>
 
 // @function Puts a new session level on the chart and enforces the maximum number of levels.
 addLevel(array<Level> levels, float price, int fromTime, bool isHigh, string title, color col) =>
-    Level lv = Level.new(price, isHigh, title, col)
+    Level lv = Level.new(price, isHigh, title, col, fromTime)
     lv.seg := line.new(fromTime, price, barEnd, price, xloc = xloc.bar_time, color = col, style = LV_STYLE, width = i_lvWidth)
     if i_tags
         string caption = i_tagPrice ? title + "  " + str.tostring(price, format.mintick) : title
@@ -697,8 +724,10 @@ updateLevels(array<Level> levels) =>
                         lv.seg.set_style(line.style_dotted)
                         lv.seg.set_color(color.new(lv.col, 55))
                 else if barstate.islast
-                    lv.seg.set_x2(rightEdge)
-                    lv.tag.set_x(rightEdge)
+                    // A level that is far from price is folded back to its first bar, so it cannot stretch the price scale.
+                    int reach = tooFar(lv.price) ? lv.born : rightEdge
+                    lv.seg.set_x2(reach)
+                    lv.tag.set_x(reach)
     [brokenHighs, brokenLows]
 
 // ── Period ───────────────────────────────────────────────────────────────────────────────────────────────
@@ -709,7 +738,7 @@ updateLevels(array<Level> levels) =>
 // @param pHi     High of the previous period.
 // @param pLo     Low of the previous period.
 // @param visible False on chart timeframes that are not lower than the period.
-method tick(Period this, int pStart, float pOpen, float pHi, float pLo, bool visible) =>
+method feed(Period this, int pStart, float pOpen, float pHi, float pLo, bool visible) =>
     this.visible := visible
     bool rolled = not na(pStart) and (na(this.startTime) or pStart != this.startTime)
     if rolled
@@ -740,18 +769,18 @@ method tick(Period this, int pStart, float pOpen, float pHi, float pLo, bool vis
     true
 
 // @function Redraws the lines of the current period. Called on the last bar only.
-method live(Period this) =>
+method redraw(Period this) =>
     bool hl = this.visible and this.showHL
     bool op = this.visible and this.showOpen
-    this.hiMk.put(this.startTime, rightEdge, hl ? this.prevHi : na, "P" + this.code + "H", this.hlCol)
-    this.loMk.put(this.startTime, rightEdge, hl ? this.prevLo : na, "P" + this.code + "L", this.hlCol)
-    this.openMk.put(this.startTime, rightEdge, op ? this.openPrice : na, this.code + " Open", this.openCol)
+    this.hiMk.place(this.startTime, rightEdge, hl ? this.prevHi : na, "P" + this.code + "H", this.hlCol)
+    this.loMk.place(this.startTime, rightEdge, hl ? this.prevLo : na, "P" + this.code + "L", this.hlCol)
+    this.openMk.place(this.startTime, rightEdge, op ? this.openPrice : na, this.code + " Open", this.openCol)
     true
 
 // ── Anchor ───────────────────────────────────────────────────────────────────────────────────────────────
 
 // @function Takes a new opening price when the trigger fires.
-method tick(Anchor this, bool trigger) =>
+method capture(Anchor this, bool trigger) =>
     if this.enabled and trigger
         if i_pHistory and inWindow and not na(this.price)
             line.new(this.startTime, this.price, time, this.price, xloc = xloc.bar_time, color = color.new(this.col, 45), style = LV_STYLE, width = i_lvWidth)
@@ -760,8 +789,8 @@ method tick(Anchor this, bool trigger) =>
     true
 
 // @function Redraws the line of the latest opening price. Called on the last bar only.
-method live(Anchor this) =>
-    this.mk.put(this.startTime, rightEdge, this.enabled and timeframe.isintraday ? this.price : na, this.title, this.col)
+method refresh(Anchor this) =>
+    this.mk.place(this.startTime, rightEdge, this.enabled and timeframe.isintraday ? this.price : na, this.title, this.col)
     true
 
 // ── Opening range ────────────────────────────────────────────────────────────────────────────────────────
@@ -772,9 +801,9 @@ method rail(OpeningRange this, float price, string style) =>
     true
 
 // @function Advances the opening range by one bar: measures the window, extends its lines and detects the breakout.
-method tick(OpeningRange this, bool inside, bool visible) =>
+method run(OpeningRange this, bool inside, int key, bool visible) =>
     Tracker t = this.trk
-    t.tick(inside)
+    t.advance(inside, key)
     this.upNow := false
     this.dnNow := false
     if t.started
@@ -833,7 +862,7 @@ newTracker() =>
 
 // @function A zone slot built from its four inputs.
 newZone(bool enabled, string title, string sess, color col) =>
-    Zone.new(enabled, title, sess, col, newTracker())
+    Zone.new(enabled, title, sess, clockMinutes(sess, 0), clockMinutes(sess, 5), col, newTracker())
 
 // @function A period with its three markers ready.
 newPeriod(string code, bool showHL, bool showOpen, color hlCol, color openCol) =>
@@ -855,8 +884,8 @@ if barstate.isfirst
     killzones.push(newZone(i_kzOn and i_k4On, i_k4Name, i_k4Time, i_k4Col))
     killzones.push(newZone(i_kzOn and i_k5On, i_k5Name, i_k5Time, i_k5Col))
 
-var ZoneView sessionView  = ZoneView.new(i_sStyle, i_sFill, i_sBand, i_sBorder, i_sWidth, strokeOf(i_sStroke), i_sCaption, i_sAlign, i_sOpen, i_sMid)
-var ZoneView killzoneView = ZoneView.new(i_kStyle, i_kFill, i_kBand, 55, 1, line.style_dotted, i_kCaption, i_kAlign, false, false)
+var ZoneView sessionView  = ZoneView.new(i_sStyle, i_sFill, i_sBand, i_sBorder, i_sWidth, strokeOf(i_sStroke), i_sCaption, i_sAlign, i_sOpen, i_sMid, false)
+var ZoneView killzoneView = ZoneView.new(i_kStyle, i_kFill, i_kBand, 55, 1, line.style_dotted, i_kCaption, i_kAlign, false, false, true)
 
 var Period dayPeriod   = newPeriod("D", i_pdOn, i_doOn, i_pdCol, i_doCol)
 var Period weekPeriod  = newPeriod("W", i_pwOn, i_woOn, i_pwCol, i_woCol)
@@ -886,22 +915,22 @@ if i_lvOn and inWindow
 [brokenHighs, brokenLows] = updateLevels(levels)
 
 // 3. Previous day / week / month and the opening prices.
-dayPeriod.tick(dStart, dOpen, pdh, pdl, tfSec < timeframe.in_seconds("D"))
-weekPeriod.tick(wStart, wOpen, pwh, pwl, tfSec < timeframe.in_seconds("W"))
-monthPeriod.tick(mStart, mOpen, pmh, pml, tfSec < timeframe.in_seconds("M"))
-midnightOpen.tick(opensAt(0, 0))
-customOpen.tick(opensAt(i_coHour, i_coMin))
+dayPeriod.feed(dStart, dOpen, pdh, pdl, tfSec < timeframe.in_seconds("D"))
+weekPeriod.feed(wStart, wOpen, pwh, pwl, tfSec < timeframe.in_seconds("W"))
+monthPeriod.feed(mStart, mOpen, pmh, pml, tfSec < timeframe.in_seconds("M"))
+midnightOpen.capture(opensAt(0, 0))
+customOpen.capture(opensAt(i_coHour, i_coMin))
 
 if barstate.islast
-    dayPeriod.live()
-    weekPeriod.live()
-    monthPeriod.live()
-    midnightOpen.live()
-    customOpen.live()
+    dayPeriod.redraw()
+    weekPeriod.redraw()
+    monthPeriod.redraw()
+    midnightOpen.refresh()
+    customOpen.refresh()
 
 // 4. Opening range.
 bool inOpeningRange = i_orOn and intradayOk and not na(time(timeframe.period, i_orTime, TZ))
-openingRange.tick(inOpeningRange, inWindow)
+openingRange.run(inOpeningRange, windowKey(clockMinutes(i_orTime, 0), clockMinutes(i_orTime, 5)), inWindow)
 
 // 5. Session VWAP.
 bool vwapAnchor = switch i_vwAnchor
@@ -972,10 +1001,8 @@ if i_dashOn and barstate.islast
     for z in sessions
         if z.enabled
             Tracker t     = z.trk
-            int startMin  = clockMinutes(z.sess, 0)
-            int endMin    = clockMinutes(z.sess, 5)
-            bool isOpen   = clockInside(startMin, endMin)
-            string status = isOpen ? "Open · " + fmtDuration(nextClock(endMin) - timenow) + " left" : "Opens in " + fmtDuration(nextClock(startMin) - timenow)
+            bool isOpen   = clockInside(z.startMin, z.endMin)
+            string status = isOpen ? "Open · " + fmtDuration(nextClock(z.endMin) - timenow) + " left" : "Opens in " + fmtDuration(nextClock(z.startMin) - timenow)
             float span    = t.active ? t.hi - t.lo : t.lastHi - t.lastLo
             float base    = t.active ? t.lo : t.lastLo
             dashCell(0, row, "● " + z.title, z.col, text.align_left)

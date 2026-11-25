@@ -1,0 +1,1048 @@
+// This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © DmytroPalahin
+
+//@version=6
+indicator("Custom Sessions Indicator", "Sessions", overlay = true, max_boxes_count = 500, max_lines_count = 500, max_labels_count = 500)
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+//  Custom Sessions Indicator
+//  Sessions, killzones, liquidity levels, opening prices, opening range, session VWAP and a dashboard in one overlay.
+//
+//  Source, documentation and issue tracker: https://github.com/DmytroPalahin/sessions-indicator
+//
+//  File layout (see docs/ARCHITECTURE.md for the reasoning):
+//    1 · Constants      compile-time values, group names, tooltips
+//    2 · Enums          every dropdown of the settings panel
+//    3 · Inputs         the settings panel, one group per module
+//    4 · Environment    values derived once per bar from the chart and the inputs
+//    5 · Types          state containers (no logic)
+//    6 · Helpers        pure functions: conversion and formatting
+//    7 · Engine         methods that advance state and draw
+//    8 · State          the long-lived objects of the script
+//    9 · Pipeline       the per-bar orchestration, top to bottom
+//   10 · Plots          bgcolor / plot calls (must live in the global scope)
+//   11 · Dashboard      the table, rendered on the last bar only
+//   12 · Alerts         alertcondition() entries and dynamic alert() calls
+//
+//  Design rules:
+//    · State and drawing are separated: a Tracker never draws, a view never decides.
+//    · Nothing is drawn on a bar that is older than the "History" input.
+//    · Live levels are redrawn on the last bar, so the 500-object limit can never delete them.
+//    · No value from the future is used: higher-timeframe data is read with a one-bar offset.
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+//#region ═════════════════════════════════════════ 1 · Constants ═════════════════════════════════════════
+
+const string VERSION   = "1.0.0"
+const int    MS_MINUTE = 60000
+const int    MS_HOUR   = 3600000
+const int    MS_DAY    = 86400000
+const string NO_VALUE  = "—"
+
+const string TZ_EXCHANGE = "Exchange"
+const string TZ_UTC      = "UTC"
+const string TZ_CUSTOM   = "Custom"
+
+const string G_GENERAL  = "① General"
+const string G_SESSIONS = "② Sessions"
+const string G_SVIEW    = "③ Session display"
+const string G_LEVELS   = "④ Session high / low levels"
+const string G_KZ       = "⑤ Killzones"
+const string G_PERIODS  = "⑥ Previous day / week / month"
+const string G_OPENS    = "⑦ Opening prices"
+const string G_OR       = "⑧ Opening range"
+const string G_VWAP     = "⑨ Session VWAP"
+const string G_TIME     = "⑩ Time tools"
+const string G_DASH     = "⑪ Dashboard"
+const string G_ALERTS   = "⑫ Alerts"
+const string G_STYLE    = "⑬ Style"
+
+const string TT_TZ       = "Every time in this indicator is read in this timezone. 'Exchange' follows the symbol. Named zones follow daylight saving time automatically."
+const string TT_TZ_CUST  = "Used only when Timezone is 'Custom'. Accepts an IANA name (Europe/Kyiv) or an offset (UTC+3)."
+const string TT_LOOKBACK = "Drawings older than this many days are skipped. 0 draws the whole loaded history (TradingView still keeps only the newest 500 objects of each kind)."
+const string TT_MAX_TF   = "Sessions, killzones and the opening range are hidden on chart timeframes above this many minutes, where they stop being meaningful."
+const string TT_OFFSET   = "How many bars to the right of the last bar the level lines and their labels end."
+const string TT_SLOT     = "Checkbox · name · time window · colour. A window may cross midnight (1900-0400)."
+const string TT_UNIT     = "Unit of every range shown in labels and in the dashboard. 'Auto' uses pips on forex and price elsewhere."
+const string TT_LEVELS   = "When a session ends, its high and low stay on the chart as lines until price trades through them."
+const string TT_LV_MAX   = "The oldest level is removed when this number is exceeded."
+const string TT_HISTORY  = "Keeps the lines of past days, weeks and months instead of showing only the current ones."
+const string TT_CUSTOM_O = "Opening price of the bar that starts at this time of day."
+const string TT_OR_TIME  = "The window in which the opening range is measured."
+const string TT_OR_EXT   = "How long the range lines keep extending after the window closes."
+const string TT_OR_PROJ  = "Projection of the range above its high and below its low, as a multiple of the range. 0 turns a projection off."
+const string TT_VW_BANDS = "Standard-deviation multiplier of the bands. 0 hides the bands."
+const string TT_AVG      = "Number of completed sessions (and days) used for the 'Avg' column."
+const string TT_ALERTS   = "Sends alert() events. Create one TradingView alert with the condition 'Any alert() function call' to receive them."
+const string TT_ON_CLOSE = "Level and breakout alerts wait for the bar to close. Turn off to be notified on the first tick that crosses."
+
+//#endregion
+
+//#region ═════════════════════════════════════════ 2 · Enums ═════════════════════════════════════════════
+
+enum ZoneStyle
+    boxed     = "Box"
+    band      = "Background"
+    boxedBand = "Box + background"
+    hidden    = "Hidden"
+
+enum Caption
+    nameRange = "Name + range"
+    nameOnly  = "Name"
+    rangeOnly = "Range"
+    hidden    = "Hidden"
+
+enum Align
+    start  = "Left"
+    middle = "Center"
+    finish = "Right"
+
+enum RangeUnit
+    automatic = "Auto"
+    price     = "Price"
+    ticks     = "Ticks"
+    pips      = "Pips"
+    percent   = "Percent"
+
+enum Stroke
+    solid  = "Solid"
+    dashed = "Dashed"
+    dotted = "Dotted"
+
+enum TextSize
+    tiny   = "Tiny"
+    small  = "Small"
+    normal = "Normal"
+    large  = "Large"
+
+enum Corner
+    topLeft      = "Top left"
+    topCenter    = "Top center"
+    topRight     = "Top right"
+    middleLeft   = "Middle left"
+    middleRight  = "Middle right"
+    bottomLeft   = "Bottom left"
+    bottomCenter = "Bottom center"
+    bottomRight  = "Bottom right"
+
+enum Broken
+    faded  = "Keep, faded"
+    erased = "Remove"
+
+enum VwapAnchor
+    perSession = "Each session start"
+    daily      = "Day"
+    weekly     = "Week"
+    monthly    = "Month"
+
+//#endregion
+
+//#region ═════════════════════════════════════════ 3 · Inputs ════════════════════════════════════════════
+
+// ① General
+string i_tz       = input.string("America/New_York", "Timezone", options = [TZ_EXCHANGE, TZ_UTC, "America/New_York", "America/Chicago", "America/Los_Angeles", "America/Sao_Paulo", "Europe/London", "Europe/Berlin", "Europe/Athens", "Asia/Dubai", "Asia/Kolkata", "Asia/Shanghai", "Asia/Hong_Kong", "Asia/Singapore", "Asia/Tokyo", "Asia/Seoul", "Australia/Sydney", "Pacific/Auckland", TZ_CUSTOM], tooltip = TT_TZ, group = G_GENERAL)
+string i_tzCustom = input.string("UTC+3", "Custom timezone", tooltip = TT_TZ_CUST, group = G_GENERAL)
+int    i_lookback = input.int(20, "History, days (0 = all)", minval = 0, tooltip = TT_LOOKBACK, group = G_GENERAL)
+int    i_maxTf    = input.int(60, "Hide sessions above, minutes", minval = 1, maxval = 1440, tooltip = TT_MAX_TF, group = G_GENERAL)
+int    i_offset   = input.int(8, "Level labels offset, bars", minval = 0, maxval = 200, tooltip = TT_OFFSET, group = G_GENERAL)
+
+// ② Sessions
+bool   i_s1On   = input.bool(true, "", inline = "s1", group = G_SESSIONS)
+string i_s1Name = input.string("Asia", "", inline = "s1", group = G_SESSIONS)
+string i_s1Time = input.session("1900-0400", "", inline = "s1", group = G_SESSIONS)
+color  i_s1Col  = input.color(#AB47BC, "", inline = "s1", group = G_SESSIONS, tooltip = TT_SLOT)
+bool   i_s2On   = input.bool(true, "", inline = "s2", group = G_SESSIONS)
+string i_s2Name = input.string("London", "", inline = "s2", group = G_SESSIONS)
+string i_s2Time = input.session("0300-1200", "", inline = "s2", group = G_SESSIONS)
+color  i_s2Col  = input.color(#2962FF, "", inline = "s2", group = G_SESSIONS, tooltip = TT_SLOT)
+bool   i_s3On   = input.bool(true, "", inline = "s3", group = G_SESSIONS)
+string i_s3Name = input.string("New York", "", inline = "s3", group = G_SESSIONS)
+string i_s3Time = input.session("0800-1700", "", inline = "s3", group = G_SESSIONS)
+color  i_s3Col  = input.color(#FF9800, "", inline = "s3", group = G_SESSIONS, tooltip = TT_SLOT)
+bool   i_s4On   = input.bool(false, "", inline = "s4", group = G_SESSIONS)
+string i_s4Name = input.string("Sydney", "", inline = "s4", group = G_SESSIONS)
+string i_s4Time = input.session("1700-0200", "", inline = "s4", group = G_SESSIONS)
+color  i_s4Col  = input.color(#26A69A, "", inline = "s4", group = G_SESSIONS, tooltip = TT_SLOT)
+bool   i_s5On   = input.bool(false, "", inline = "s5", group = G_SESSIONS)
+string i_s5Name = input.string("Custom", "", inline = "s5", group = G_SESSIONS)
+string i_s5Time = input.session("0930-1600", "", inline = "s5", group = G_SESSIONS)
+color  i_s5Col  = input.color(#78909C, "", inline = "s5", group = G_SESSIONS, tooltip = TT_SLOT)
+
+// ③ Session display
+ZoneStyle i_sStyle   = input.enum(ZoneStyle.boxed, "Style", group = G_SVIEW)
+int       i_sFill    = input.int(90, "Box fill transparency", minval = 0, maxval = 100, group = G_SVIEW)
+int       i_sBand    = input.int(92, "Background transparency", minval = 0, maxval = 100, group = G_SVIEW)
+int       i_sBorder  = input.int(40, "Border transparency", minval = 0, maxval = 100, group = G_SVIEW)
+Stroke    i_sStroke  = input.enum(Stroke.solid, "Border", inline = "sb", group = G_SVIEW)
+int       i_sWidth   = input.int(1, "", minval = 1, maxval = 4, inline = "sb", group = G_SVIEW)
+Caption   i_sCaption = input.enum(Caption.nameRange, "Label", inline = "sl", group = G_SVIEW)
+Align     i_sAlign   = input.enum(Align.start, "", inline = "sl", group = G_SVIEW)
+RangeUnit i_unit     = input.enum(RangeUnit.automatic, "Range unit", tooltip = TT_UNIT, group = G_SVIEW)
+bool      i_sOpen    = input.bool(false, "Open line", group = G_SVIEW)
+bool      i_sMid     = input.bool(false, "Midline (50%)", group = G_SVIEW)
+
+// ④ Session high / low levels
+bool   i_lvOn   = input.bool(false, "Extend session high / low until broken", tooltip = TT_LEVELS, group = G_LEVELS)
+Broken i_lvMode = input.enum(Broken.faded, "Broken levels", group = G_LEVELS)
+int    i_lvMax  = input.int(12, "Max levels on chart", minval = 2, maxval = 100, tooltip = TT_LV_MAX, group = G_LEVELS)
+
+// ⑤ Killzones
+bool      i_kzOn      = input.bool(false, "Show killzones", group = G_KZ)
+bool      i_k1On      = input.bool(true, "", inline = "k1", group = G_KZ)
+string    i_k1Name    = input.string("Asia KZ", "", inline = "k1", group = G_KZ)
+string    i_k1Time    = input.session("2000-0000", "", inline = "k1", group = G_KZ)
+color     i_k1Col     = input.color(#7E57C2, "", inline = "k1", group = G_KZ, tooltip = TT_SLOT)
+bool      i_k2On      = input.bool(true, "", inline = "k2", group = G_KZ)
+string    i_k2Name    = input.string("London KZ", "", inline = "k2", group = G_KZ)
+string    i_k2Time    = input.session("0200-0500", "", inline = "k2", group = G_KZ)
+color     i_k2Col     = input.color(#42A5F5, "", inline = "k2", group = G_KZ, tooltip = TT_SLOT)
+bool      i_k3On      = input.bool(true, "", inline = "k3", group = G_KZ)
+string    i_k3Name    = input.string("NY AM KZ", "", inline = "k3", group = G_KZ)
+string    i_k3Time    = input.session("0700-1000", "", inline = "k3", group = G_KZ)
+color     i_k3Col     = input.color(#FFA726, "", inline = "k3", group = G_KZ, tooltip = TT_SLOT)
+bool      i_k4On      = input.bool(true, "", inline = "k4", group = G_KZ)
+string    i_k4Name    = input.string("NY Lunch", "", inline = "k4", group = G_KZ)
+string    i_k4Time    = input.session("1200-1300", "", inline = "k4", group = G_KZ)
+color     i_k4Col     = input.color(#9E9E9E, "", inline = "k4", group = G_KZ, tooltip = TT_SLOT)
+bool      i_k5On      = input.bool(true, "", inline = "k5", group = G_KZ)
+string    i_k5Name    = input.string("NY PM KZ", "", inline = "k5", group = G_KZ)
+string    i_k5Time    = input.session("1330-1600", "", inline = "k5", group = G_KZ)
+color     i_k5Col     = input.color(#EF5350, "", inline = "k5", group = G_KZ, tooltip = TT_SLOT)
+ZoneStyle i_kStyle    = input.enum(ZoneStyle.band, "Style", group = G_KZ)
+int       i_kFill     = input.int(88, "Box fill transparency", minval = 0, maxval = 100, group = G_KZ)
+int       i_kBand     = input.int(90, "Background transparency", minval = 0, maxval = 100, group = G_KZ)
+Caption   i_kCaption  = input.enum(Caption.nameOnly, "Label", inline = "kl", group = G_KZ)
+Align     i_kAlign    = input.enum(Align.start, "", inline = "kl", group = G_KZ)
+
+// ⑥ Previous day / week / month
+bool  i_pdOn     = input.bool(false, "Previous day high / low", inline = "pd", group = G_PERIODS)
+color i_pdCol    = input.color(#B0BEC5, "", inline = "pd", group = G_PERIODS)
+bool  i_pwOn     = input.bool(false, "Previous week high / low", inline = "pw", group = G_PERIODS)
+color i_pwCol    = input.color(#FFD54F, "", inline = "pw", group = G_PERIODS)
+bool  i_pmOn     = input.bool(false, "Previous month high / low", inline = "pm", group = G_PERIODS)
+color i_pmCol    = input.color(#FF8A65, "", inline = "pm", group = G_PERIODS)
+bool  i_pHistory = input.bool(false, "Keep past periods", tooltip = TT_HISTORY, group = G_PERIODS)
+
+// ⑦ Opening prices
+bool  i_doOn   = input.bool(false, "Day open", inline = "do", group = G_OPENS)
+color i_doCol  = input.color(#90A4AE, "", inline = "do", group = G_OPENS)
+bool  i_woOn   = input.bool(false, "Week open", inline = "wo", group = G_OPENS)
+color i_woCol  = input.color(#FFCA28, "", inline = "wo", group = G_OPENS)
+bool  i_moOn   = input.bool(false, "Month open", inline = "mo", group = G_OPENS)
+color i_moCol  = input.color(#FF7043, "", inline = "mo", group = G_OPENS)
+bool  i_mnOn   = input.bool(false, "Midnight open (00:00)", inline = "mn", group = G_OPENS)
+color i_mnCol  = input.color(#4DD0E1, "", inline = "mn", group = G_OPENS)
+bool  i_coOn   = input.bool(false, "Custom open (hour, minute)", inline = "co", group = G_OPENS)
+int   i_coHour = input.int(8, "", minval = 0, maxval = 23, inline = "co", group = G_OPENS)
+int   i_coMin  = input.int(30, "", minval = 0, maxval = 59, inline = "co", group = G_OPENS)
+color i_coCol  = input.color(#81C784, "", inline = "co", group = G_OPENS, tooltip = TT_CUSTOM_O)
+
+// ⑧ Opening range
+bool   i_orOn      = input.bool(false, "Show opening range", group = G_OR)
+string i_orTime    = input.session("0930-1000", "Window", tooltip = TT_OR_TIME, group = G_OR)
+color  i_orCol     = input.color(#00BCD4, "Colour", group = G_OR)
+float  i_orHours   = input.float(6.0, "Extend for, hours", minval = 0.0, maxval = 24.0, step = 0.5, tooltip = TT_OR_EXT, group = G_OR)
+bool   i_orMid     = input.bool(true, "Midline", group = G_OR)
+float  i_orProj1   = input.float(1.0, "Projection 1 ×", minval = 0.0, step = 0.5, tooltip = TT_OR_PROJ, group = G_OR)
+float  i_orProj2   = input.float(0.0, "Projection 2 ×", minval = 0.0, step = 0.5, tooltip = TT_OR_PROJ, group = G_OR)
+bool   i_orSignals = input.bool(true, "Breakout markers", group = G_OR)
+
+// ⑨ Session VWAP
+bool       i_vwOn     = input.bool(false, "Show VWAP", group = G_VWAP)
+VwapAnchor i_vwAnchor = input.enum(VwapAnchor.perSession, "Anchor", group = G_VWAP)
+color      i_vwCol    = input.color(#FFEB3B, "Colour", inline = "vw", group = G_VWAP)
+int        i_vwWidth  = input.int(1, "", minval = 1, maxval = 4, inline = "vw", group = G_VWAP)
+float      i_vwBands  = input.float(0.0, "Bands ×", minval = 0.0, step = 0.5, tooltip = TT_VW_BANDS, group = G_VWAP)
+
+// ⑩ Time tools
+bool  i_sepOn  = input.bool(false, "Day separators", inline = "sep", group = G_TIME)
+color i_sepCol = input.color(color.new(#787B86, 50), "", inline = "sep", group = G_TIME)
+bool  i_wdOn   = input.bool(false, "Weekday labels", group = G_TIME)
+
+// ⑪ Dashboard
+bool     i_dashOn   = input.bool(false, "Show dashboard", group = G_DASH)
+Corner   i_dashPos  = input.enum(Corner.topRight, "Position", group = G_DASH)
+TextSize i_dashSize = input.enum(TextSize.small, "Text size", group = G_DASH)
+int      i_avgLen   = input.int(20, "Average length", minval = 1, maxval = 200, tooltip = TT_AVG, group = G_DASH)
+bool     i_dashDay  = input.bool(true, "Day range row", group = G_DASH)
+
+// ⑫ Alerts
+bool i_alOn      = input.bool(true, "Enable alert() events", tooltip = TT_ALERTS, group = G_ALERTS)
+bool i_alStart   = input.bool(true, "Session start", group = G_ALERTS)
+bool i_alEnd     = input.bool(false, "Session end", group = G_ALERTS)
+bool i_alKz      = input.bool(true, "Killzone start", group = G_ALERTS)
+bool i_alLevels  = input.bool(true, "Session level broken", group = G_ALERTS)
+bool i_alPeriods = input.bool(true, "Previous high / low broken", group = G_ALERTS)
+bool i_alOr      = input.bool(true, "Opening range breakout", group = G_ALERTS)
+bool i_alOnClose = input.bool(true, "Wait for bar close", tooltip = TT_ON_CLOSE, group = G_ALERTS)
+
+// ⑬ Style
+TextSize i_textSize = input.enum(TextSize.small, "Text size", group = G_STYLE)
+bool     i_textAuto = input.bool(true, "Dashboard text follows the chart theme", group = G_STYLE)
+color    i_textCol  = input.color(#D1D4DC, "Dashboard text colour", group = G_STYLE)
+Stroke   i_lvStroke = input.enum(Stroke.solid, "Level lines", inline = "lv", group = G_STYLE)
+int      i_lvWidth  = input.int(1, "", minval = 1, maxval = 4, inline = "lv", group = G_STYLE)
+bool     i_tags     = input.bool(true, "Level labels", group = G_STYLE)
+bool     i_tagPrice = input.bool(false, "Price in level labels", group = G_STYLE)
+
+//#endregion
+
+//#region ═════════════════════════════════════════ 4 · Environment ═══════════════════════════════════════
+
+// @function Converts the Stroke dropdown into a line style constant.
+strokeOf(Stroke s) =>
+    switch s
+        Stroke.dashed => line.style_dashed
+        Stroke.dotted => line.style_dotted
+        => line.style_solid
+
+// @function Converts the TextSize dropdown into a size constant.
+sizeOf(TextSize s) =>
+    switch s
+        TextSize.tiny  => size.tiny
+        TextSize.small => size.small
+        TextSize.large => size.large
+        => size.normal
+
+string TZ = switch i_tz
+    TZ_EXCHANGE => syminfo.timezone
+    TZ_UTC      => "Etc/UTC"
+    TZ_CUSTOM   => i_tzCustom
+    => i_tz
+
+int    tfSec      = timeframe.in_seconds()
+int    tfMs       = tfSec * 1000
+bool   intradayOk = timeframe.isintraday and tfSec <= i_maxTf * 60
+bool   inWindow   = i_lookback == 0 or time >= last_bar_time - i_lookback * MS_DAY
+int    barEnd     = nz(time_close, time + tfMs)
+int    rightEdge  = time + (i_offset + 1) * tfMs
+int    prevTime   = time[1]
+bool   dayRolled  = not na(prevTime) and dayofmonth(time, TZ) != dayofmonth(prevTime, TZ)
+float  PIP        = syminfo.type == "forex" ? (syminfo.currency == "JPY" ? 0.01 : 0.0001) : syminfo.mintick
+string TEXT_SIZE  = sizeOf(i_textSize)
+string LV_STYLE   = strokeOf(i_lvStroke)
+color  DASH_TEXT  = i_textAuto ? chart.fg_color : i_textCol
+
+// Higher-timeframe data. Highs and lows are read with a one-bar offset, so only completed periods are used;
+// the open and the start time of the current period are known from its first bar, so reading them is not a look-ahead.
+[dStart, dOpen, pdh, pdl, adr] = request.security(syminfo.tickerid, "D", [time, open, high[1], low[1], ta.sma(high - low, i_avgLen)[1]], lookahead = barmerge.lookahead_on)
+[wStart, wOpen, pwh, pwl]      = request.security(syminfo.tickerid, "W", [time, open, high[1], low[1]], lookahead = barmerge.lookahead_on)
+[mStart, mOpen, pmh, pml]      = request.security(syminfo.tickerid, "M", [time, open, high[1], low[1]], lookahead = barmerge.lookahead_on)
+
+bool newDay   = timeframe.change("D")
+bool newWeek  = timeframe.change("W")
+bool newMonth = timeframe.change("M")
+
+//#endregion
+
+//#region ═════════════════════════════════════════ 5 · Types ═════════════════════════════════════════════
+
+// @type  A horizontal segment with an optional text tag at its right end.
+// @field seg The line.
+// @field tag The label at the right end of the line.
+type Marker
+    line  seg
+    label tag
+
+// @type  State machine of one recurring time window. It never draws.
+// @field active     The current bar is inside the window.
+// @field started    The current bar is the first bar of a window.
+// @field ended      The current bar is the first bar after a window.
+// @field startTime  Open time of the first bar of the running window.
+// @field endTime    Close time of the latest bar of the running window.
+// @field openPrice  Open of the first bar of the running window.
+// @field hi         Highest high of the running window.
+// @field lo         Lowest low of the running window.
+// @field hiTime     Open time of the bar that made the high.
+// @field loTime     Open time of the bar that made the low.
+// @field lastHi     High of the latest completed window.
+// @field lastLo     Low of the latest completed window.
+// @field lastHiTime Open time of the bar that made lastHi.
+// @field lastLoTime Open time of the bar that made lastLo.
+// @field lastEnd    Close time of the latest completed window.
+// @field spans      Ranges (high - low) of the latest completed windows, oldest first.
+type Tracker
+    bool         active     = false
+    bool         started    = false
+    bool         ended      = false
+    int          startTime  = na
+    int          endTime    = na
+    float        openPrice  = na
+    float        hi         = na
+    float        lo         = na
+    int          hiTime     = na
+    int          loTime     = na
+    float        lastHi     = na
+    float        lastLo     = na
+    int          lastHiTime = na
+    int          lastLoTime = na
+    int          lastEnd    = na
+    array<float> spans
+
+// @type  How a family of zones (sessions or killzones) is drawn.
+type ZoneView
+    ZoneStyle style
+    int       fillTransp
+    int       bandTransp
+    int       borderTransp
+    int       borderWidth
+    string    borderStyle
+    Caption   caption
+    Align     align
+    bool      showOpen
+    bool      showMid
+
+// @type  One slot of the settings panel: a session or a killzone.
+type Zone
+    bool    enabled
+    string  title
+    string  sess
+    color   col
+    Tracker trk
+    box     frame
+    label   tag
+    line    openLn
+    line    midLn
+
+// @type  A session high or low that stays on the chart until price trades through it.
+type Level
+    float  price
+    bool   isHigh
+    string title
+    color  col
+    bool   live = true
+    line   seg
+    label  tag
+
+// @type  A higher-timeframe period (day, week or month) with its previous high / low and its open.
+type Period
+    string code
+    bool   showHL
+    bool   showOpen
+    color  hlCol
+    color  openCol
+    bool   visible   = false
+    int    startTime = na
+    float  openPrice = na
+    float  prevHi    = na
+    float  prevLo    = na
+    float  curHi     = na
+    float  curLo     = na
+    bool   hiTaken   = false
+    bool   loTaken   = false
+    bool   hiBreak   = false
+    bool   loBreak   = false
+    Marker hiMk
+    Marker loMk
+    Marker openMk
+
+// @type  An opening price taken at a fixed time of day.
+type Anchor
+    string title
+    color  col
+    bool   enabled
+    int    startTime = na
+    float  price     = na
+    Marker mk
+
+// @type  The opening range: a window, the lines extended from it and its breakout state.
+type OpeningRange
+    Tracker     trk
+    bool        armed  = false
+    bool        upDone = false
+    bool        dnDone = false
+    bool        upNow  = false
+    bool        dnNow  = false
+    box         frame
+    array<line> rails
+
+//#endregion
+
+//#region ═════════════════════════════════════════ 6 · Helpers ═══════════════════════════════════════════
+
+// @function Converts the Corner dropdown into a table position.
+positionOf(Corner c) =>
+    switch c
+        Corner.topLeft      => position.top_left
+        Corner.topCenter    => position.top_center
+        Corner.middleLeft   => position.middle_left
+        Corner.middleRight  => position.middle_right
+        Corner.bottomLeft   => position.bottom_left
+        Corner.bottomCenter => position.bottom_center
+        Corner.bottomRight  => position.bottom_right
+        => position.top_right
+
+// @function Label style that anchors a caption above a zone at the chosen side.
+tagStyleOf(Align a) =>
+    switch a
+        Align.start  => label.style_label_lower_left
+        Align.finish => label.style_label_lower_right
+        => label.style_label_down
+
+// @function Formats a price distance in the unit chosen by the user.
+// @param span The distance (high - low).
+// @param base A price of the same move, used for the percentage.
+fmtSpan(float span, float base) =>
+    RangeUnit unit = i_unit == RangeUnit.automatic ? (syminfo.type == "forex" ? RangeUnit.pips : RangeUnit.price) : i_unit
+    string result = switch unit
+        RangeUnit.ticks   => str.tostring(math.round(span / syminfo.mintick)) + " t"
+        RangeUnit.pips    => str.tostring(span / PIP, "0.0") + " p"
+        RangeUnit.percent => str.tostring(span / base * 100, "0.00") + "%"
+        => str.tostring(span, format.mintick)
+    na(span) ? NO_VALUE : result
+
+// @function Formats a duration in milliseconds as "2h 05m" or "12m".
+fmtDuration(int ms) =>
+    int totalMin = math.max(math.ceil(ms / 60000.0), 0)
+    int hours    = math.floor(totalMin / 60.0)
+    int minutes  = totalMin % 60
+    hours > 0 ? str.tostring(hours) + "h " + str.tostring(minutes, "00") + "m" : str.tostring(minutes) + "m"
+
+// @function Reads "HHMM" at a position of a session string and returns minutes since midnight.
+clockMinutes(string sess, int pos) =>
+    float hh = str.tonumber(str.substring(sess, pos, pos + 2))
+    float mm = str.tonumber(str.substring(sess, pos + 2, pos + 4))
+    int(nz(hh) * 60 + nz(mm))
+
+// @function The next moment (after the real current time) at which the clock of the indicator timezone shows the given minute of the day.
+nextClock(int minuteOfDay) =>
+    int hh       = math.floor(minuteOfDay / 60.0)
+    int mm       = minuteOfDay % 60
+    int nowMs    = timenow
+    int laterMs  = nowMs + MS_DAY
+    int today    = timestamp(TZ, year(nowMs, TZ), month(nowMs, TZ), dayofmonth(nowMs, TZ), hh, mm, 0)
+    int tomorrow = timestamp(TZ, year(laterMs, TZ), month(laterMs, TZ), dayofmonth(laterMs, TZ), hh, mm, 0)
+    today > nowMs ? today : tomorrow
+
+// @function True when the real current time is inside a window given in minutes of the day. Handles windows that cross midnight.
+clockInside(int startMin, int endMin) =>
+    int nowMin = hour(timenow, TZ) * 60 + minute(timenow, TZ)
+    startMin < endMin ? (nowMin >= startMin and nowMin < endMin) : (nowMin >= startMin or nowMin < endMin)
+
+// @function True on the bar that opens at the given time of day (or is the first bar within one bar length after it).
+opensAt(int hh, int mm) =>
+    int target = timestamp(TZ, year(time, TZ), month(time, TZ), dayofmonth(time, TZ), hh, mm, 0)
+    not na(prevTime) and prevTime < target and time >= target and time < target + tfMs
+
+// @function Appends a name to a comma-separated list.
+joinName(string list, string name) =>
+    list == "" ? name : list + ", " + name
+
+//#endregion
+
+//#region ═════════════════════════════════════════ 7 · Engine ════════════════════════════════════════════
+
+// ── Marker ───────────────────────────────────────────────────────────────────────────────────────────────
+
+// @function Redraws the marker from scratch. A marker with no price is erased.
+method put(Marker this, int x1, int x2, float y, string txt, color col) =>
+    this.seg.delete()
+    this.tag.delete()
+    this.seg := na
+    this.tag := na
+    if not na(y) and not na(x1)
+        this.seg := line.new(x1, y, x2, y, xloc = xloc.bar_time, color = col, style = LV_STYLE, width = i_lvWidth)
+        if i_tags
+            string caption = i_tagPrice ? txt + "  " + str.tostring(y, format.mintick) : txt
+            this.tag := label.new(x2, y, caption, xloc = xloc.bar_time, style = label.style_label_left, color = color(na), textcolor = col, size = TEXT_SIZE)
+    true
+
+// ── Tracker ──────────────────────────────────────────────────────────────────────────────────────────────
+
+// @function Advances the state machine by one bar.
+// @param inside True when the current bar belongs to the window.
+method tick(Tracker this, bool inside) =>
+    this.started := inside and not this.active
+    this.ended   := not inside and this.active
+    if this.ended
+        this.lastHi     := this.hi
+        this.lastLo     := this.lo
+        this.lastHiTime := this.hiTime
+        this.lastLoTime := this.loTime
+        this.lastEnd    := this.endTime
+        this.spans.push(this.hi - this.lo)
+        if this.spans.size() > i_avgLen
+            this.spans.shift()
+    if this.started
+        this.startTime := time
+        this.openPrice := open
+        this.hi        := high
+        this.lo        := low
+        this.hiTime    := time
+        this.loTime    := time
+    else if inside
+        if high > this.hi
+            this.hi     := high
+            this.hiTime := time
+        if low < this.lo
+            this.lo     := low
+            this.loTime := time
+    if inside
+        this.endTime := barEnd
+    this.active := inside
+    true
+
+// ── Zone ─────────────────────────────────────────────────────────────────────────────────────────────────
+
+// @function Text of the caption above a zone.
+method captionOf(Zone this, ZoneView v) =>
+    Tracker t = this.trk
+    string span = fmtSpan(t.hi - t.lo, t.lo)
+    switch v.caption
+        Caption.nameOnly  => this.title
+        Caption.rangeOnly => span
+        => this.title + "  " + span
+
+// @function Time coordinate of the caption above a zone.
+method captionX(Zone this, ZoneView v) =>
+    Tracker t = this.trk
+    int middle = math.round((t.startTime + t.endTime) / 2.0)
+    switch v.align
+        Align.start  => t.startTime
+        Align.finish => t.endTime
+        => middle
+
+// @function Creates the drawings of a zone on its first bar and stretches them on every following bar.
+method draw(Zone this, ZoneView v, bool visible) =>
+    Tracker t = this.trk
+    bool boxed = v.style == ZoneStyle.boxed or v.style == ZoneStyle.boxedBand
+    if t.started
+        // The drawings of the previous window stay on the chart; the zone only lets go of them.
+        this.frame  := na
+        this.tag    := na
+        this.openLn := na
+        this.midLn  := na
+        if visible
+            if boxed
+                this.frame := box.new(t.startTime, t.hi, t.endTime, t.lo, xloc = xloc.bar_time, border_color = color.new(this.col, v.borderTransp), border_width = v.borderWidth, border_style = v.borderStyle, bgcolor = color.new(this.col, v.fillTransp))
+            if v.caption != Caption.hidden
+                this.tag := label.new(this.captionX(v), t.hi, this.captionOf(v), xloc = xloc.bar_time, style = tagStyleOf(v.align), color = color(na), textcolor = this.col, size = TEXT_SIZE)
+            if v.showOpen
+                this.openLn := line.new(t.startTime, t.openPrice, t.endTime, t.openPrice, xloc = xloc.bar_time, color = this.col, style = line.style_dotted, width = 1)
+            if v.showMid
+                float mid0 = (t.hi + t.lo) / 2
+                this.midLn := line.new(t.startTime, mid0, t.endTime, mid0, xloc = xloc.bar_time, color = this.col, style = line.style_dashed, width = 1)
+    else if t.active
+        float mid = (t.hi + t.lo) / 2
+        this.frame.set_top(t.hi)
+        this.frame.set_bottom(t.lo)
+        this.frame.set_right(t.endTime)
+        this.tag.set_xy(this.captionX(v), t.hi)
+        this.tag.set_text(this.captionOf(v))
+        this.openLn.set_x2(t.endTime)
+        this.midLn.set_xy1(t.startTime, mid)
+        this.midLn.set_xy2(t.endTime, mid)
+    true
+
+// @function Advances and draws every zone of a family.
+// @returns  [names of the zones that started on this bar, names of the zones that ended on this bar]
+runZones(array<Zone> zones, ZoneView v) =>
+    string startedNames = ""
+    string endedNames   = ""
+    for z in zones
+        bool inside = z.enabled and intradayOk and not na(time(timeframe.period, z.sess, TZ))
+        z.trk.tick(inside)
+        z.draw(v, inWindow)
+        if z.trk.started
+            startedNames := joinName(startedNames, z.title)
+        if z.trk.ended
+            endedNames := joinName(endedNames, z.title)
+    [startedNames, endedNames]
+
+// @function Background colour of one zone slot on the current bar.
+bandOf(array<Zone> zones, int index, ZoneView v) =>
+    Zone z = zones.get(index)
+    bool banded = v.style == ZoneStyle.band or v.style == ZoneStyle.boxedBand
+    banded and z.trk.active and inWindow ? color.new(z.col, v.bandTransp) : na
+
+// ── Level ────────────────────────────────────────────────────────────────────────────────────────────────
+
+// @function Puts a new session level on the chart and enforces the maximum number of levels.
+addLevel(array<Level> levels, float price, int fromTime, bool isHigh, string title, color col) =>
+    Level lv = Level.new(price, isHigh, title, col)
+    lv.seg := line.new(fromTime, price, barEnd, price, xloc = xloc.bar_time, color = col, style = LV_STYLE, width = i_lvWidth)
+    if i_tags
+        string caption = i_tagPrice ? title + "  " + str.tostring(price, format.mintick) : title
+        lv.tag := label.new(barEnd, price, caption, xloc = xloc.bar_time, style = label.style_label_left, color = color(na), textcolor = col, size = TEXT_SIZE)
+    levels.push(lv)
+    if levels.size() > i_lvMax
+        Level oldest = levels.shift()
+        oldest.seg.delete()
+        oldest.tag.delete()
+    true
+
+// @function Checks every live level against the current bar and retires the ones price has traded through.
+// @returns  [names of the highs broken on this bar, names of the lows broken on this bar]
+updateLevels(array<Level> levels) =>
+    string brokenHighs = ""
+    string brokenLows  = ""
+    int count = levels.size()
+    if count > 0
+        for i = count - 1 to 0
+            Level lv = levels.get(i)
+            if lv.live
+                bool hit = lv.isHigh ? high > lv.price : low < lv.price
+                if hit
+                    lv.live := false
+                    if lv.isHigh
+                        brokenHighs := joinName(brokenHighs, lv.title)
+                    else
+                        brokenLows := joinName(brokenLows, lv.title)
+                    lv.tag.delete()
+                    if i_lvMode == Broken.erased
+                        lv.seg.delete()
+                        levels.remove(i)
+                    else
+                        lv.seg.set_x2(time)
+                        lv.seg.set_style(line.style_dotted)
+                        lv.seg.set_color(color.new(lv.col, 55))
+                else if barstate.islast
+                    lv.seg.set_x2(rightEdge)
+                    lv.tag.set_x(rightEdge)
+    [brokenHighs, brokenLows]
+
+// ── Period ───────────────────────────────────────────────────────────────────────────────────────────────
+
+// @function Feeds the period with the higher-timeframe values of the current bar.
+// @param pStart  Start time of the current period.
+// @param pOpen   Open of the current period.
+// @param pHi     High of the previous period.
+// @param pLo     Low of the previous period.
+// @param visible False on chart timeframes that are not lower than the period.
+method tick(Period this, int pStart, float pOpen, float pHi, float pLo, bool visible) =>
+    this.visible := visible
+    bool rolled = not na(pStart) and (na(this.startTime) or pStart != this.startTime)
+    if rolled
+        if i_pHistory and inWindow and visible and not na(this.startTime)
+            // Freeze the lines of the period that has just ended.
+            if this.showHL and not na(this.prevHi)
+                line.new(this.startTime, this.prevHi, time, this.prevHi, xloc = xloc.bar_time, color = color.new(this.hlCol, 45), style = LV_STYLE, width = i_lvWidth)
+                line.new(this.startTime, this.prevLo, time, this.prevLo, xloc = xloc.bar_time, color = color.new(this.hlCol, 45), style = LV_STYLE, width = i_lvWidth)
+            if this.showOpen and not na(this.openPrice)
+                line.new(this.startTime, this.openPrice, time, this.openPrice, xloc = xloc.bar_time, color = color.new(this.openCol, 45), style = LV_STYLE, width = i_lvWidth)
+        this.startTime := pStart
+        this.openPrice := pOpen
+        this.prevHi    := pHi
+        this.prevLo    := pLo
+        this.curHi     := high
+        this.curLo     := low
+        this.hiTaken   := false
+        this.loTaken   := false
+    else
+        this.curHi := na(this.curHi) ? high : math.max(this.curHi, high)
+        this.curLo := na(this.curLo) ? low : math.min(this.curLo, low)
+    this.hiBreak := not this.hiTaken and not na(this.prevHi) and high > this.prevHi
+    this.loBreak := not this.loTaken and not na(this.prevLo) and low < this.prevLo
+    if this.hiBreak
+        this.hiTaken := true
+    if this.loBreak
+        this.loTaken := true
+    true
+
+// @function Redraws the lines of the current period. Called on the last bar only.
+method live(Period this) =>
+    bool hl = this.visible and this.showHL
+    bool op = this.visible and this.showOpen
+    this.hiMk.put(this.startTime, rightEdge, hl ? this.prevHi : na, "P" + this.code + "H", this.hlCol)
+    this.loMk.put(this.startTime, rightEdge, hl ? this.prevLo : na, "P" + this.code + "L", this.hlCol)
+    this.openMk.put(this.startTime, rightEdge, op ? this.openPrice : na, this.code + " Open", this.openCol)
+    true
+
+// ── Anchor ───────────────────────────────────────────────────────────────────────────────────────────────
+
+// @function Takes a new opening price when the trigger fires.
+method tick(Anchor this, bool trigger) =>
+    if this.enabled and trigger
+        if i_pHistory and inWindow and not na(this.price)
+            line.new(this.startTime, this.price, time, this.price, xloc = xloc.bar_time, color = color.new(this.col, 45), style = LV_STYLE, width = i_lvWidth)
+        this.startTime := time
+        this.price     := open
+    true
+
+// @function Redraws the line of the latest opening price. Called on the last bar only.
+method live(Anchor this) =>
+    this.mk.put(this.startTime, rightEdge, this.enabled and timeframe.isintraday ? this.price : na, this.title, this.col)
+    true
+
+// ── Opening range ────────────────────────────────────────────────────────────────────────────────────────
+
+// @function Adds one extended line of the opening range.
+method rail(OpeningRange this, float price, string style) =>
+    this.rails.push(line.new(this.trk.lastEnd, price, barEnd, price, xloc = xloc.bar_time, color = i_orCol, style = style, width = 1))
+    true
+
+// @function Advances the opening range by one bar: measures the window, extends its lines and detects the breakout.
+method tick(OpeningRange this, bool inside, bool visible) =>
+    Tracker t = this.trk
+    t.tick(inside)
+    this.upNow := false
+    this.dnNow := false
+    if t.started
+        this.armed  := false
+        this.upDone := false
+        this.dnDone := false
+        this.frame  := na
+        this.rails.clear()
+        if visible
+            this.frame := box.new(t.startTime, t.hi, t.endTime, t.lo, xloc = xloc.bar_time, border_color = color.new(i_orCol, 30), border_width = 1, bgcolor = color.new(i_orCol, 85))
+    else if t.active
+        this.frame.set_top(t.hi)
+        this.frame.set_bottom(t.lo)
+        this.frame.set_right(t.endTime)
+    if t.ended
+        this.armed := true
+        if visible
+            float span = t.lastHi - t.lastLo
+            this.rail(t.lastHi, line.style_solid)
+            this.rail(t.lastLo, line.style_solid)
+            if i_orMid
+                this.rail((t.lastHi + t.lastLo) / 2, line.style_dashed)
+            if i_orProj1 > 0
+                this.rail(t.lastHi + span * i_orProj1, line.style_dotted)
+                this.rail(t.lastLo - span * i_orProj1, line.style_dotted)
+            if i_orProj2 > 0
+                this.rail(t.lastHi + span * i_orProj2, line.style_dotted)
+                this.rail(t.lastLo - span * i_orProj2, line.style_dotted)
+    if this.armed
+        if time >= t.lastEnd + int(i_orHours * MS_HOUR)
+            this.armed := false
+        else
+            for ln in this.rails
+                ln.set_x2(barEnd)
+            // A breakout is a close outside the range, confirmed at the end of the bar.
+            if barstate.isconfirmed
+                if not this.upDone and close > t.lastHi
+                    this.upDone := true
+                    this.upNow  := true
+                    if visible and i_orSignals
+                        label.new(time, low, "", xloc = xloc.bar_time, yloc = yloc.belowbar, color = i_orCol, style = label.style_triangleup, size = size.tiny)
+                if not this.dnDone and close < t.lastLo
+                    this.dnDone := true
+                    this.dnNow  := true
+                    if visible and i_orSignals
+                        label.new(time, high, "", xloc = xloc.bar_time, yloc = yloc.abovebar, color = i_orCol, style = label.style_triangledown, size = size.tiny)
+    true
+
+//#endregion
+
+//#region ═════════════════════════════════════════ 8 · State ═════════════════════════════════════════════
+
+// @function A tracker with its history buffer ready.
+newTracker() =>
+    Tracker.new(spans = array.new<float>())
+
+// @function A zone slot built from its four inputs.
+newZone(bool enabled, string title, string sess, color col) =>
+    Zone.new(enabled, title, sess, col, newTracker())
+
+// @function A period with its three markers ready.
+newPeriod(string code, bool showHL, bool showOpen, color hlCol, color openCol) =>
+    Period.new(code, showHL, showOpen, hlCol, openCol, hiMk = Marker.new(), loMk = Marker.new(), openMk = Marker.new())
+
+var array<Zone>  sessions  = array.new<Zone>()
+var array<Zone>  killzones = array.new<Zone>()
+var array<Level> levels    = array.new<Level>()
+
+if barstate.isfirst
+    sessions.push(newZone(i_s1On, i_s1Name, i_s1Time, i_s1Col))
+    sessions.push(newZone(i_s2On, i_s2Name, i_s2Time, i_s2Col))
+    sessions.push(newZone(i_s3On, i_s3Name, i_s3Time, i_s3Col))
+    sessions.push(newZone(i_s4On, i_s4Name, i_s4Time, i_s4Col))
+    sessions.push(newZone(i_s5On, i_s5Name, i_s5Time, i_s5Col))
+    killzones.push(newZone(i_kzOn and i_k1On, i_k1Name, i_k1Time, i_k1Col))
+    killzones.push(newZone(i_kzOn and i_k2On, i_k2Name, i_k2Time, i_k2Col))
+    killzones.push(newZone(i_kzOn and i_k3On, i_k3Name, i_k3Time, i_k3Col))
+    killzones.push(newZone(i_kzOn and i_k4On, i_k4Name, i_k4Time, i_k4Col))
+    killzones.push(newZone(i_kzOn and i_k5On, i_k5Name, i_k5Time, i_k5Col))
+
+var ZoneView sessionView  = ZoneView.new(i_sStyle, i_sFill, i_sBand, i_sBorder, i_sWidth, strokeOf(i_sStroke), i_sCaption, i_sAlign, i_sOpen, i_sMid)
+var ZoneView killzoneView = ZoneView.new(i_kStyle, i_kFill, i_kBand, 55, 1, line.style_dotted, i_kCaption, i_kAlign, false, false)
+
+var Period dayPeriod   = newPeriod("D", i_pdOn, i_doOn, i_pdCol, i_doCol)
+var Period weekPeriod  = newPeriod("W", i_pwOn, i_woOn, i_pwCol, i_woCol)
+var Period monthPeriod = newPeriod("M", i_pmOn, i_moOn, i_pmCol, i_moCol)
+
+var Anchor midnightOpen = Anchor.new("00:00 Open", i_mnCol, i_mnOn, mk = Marker.new())
+var Anchor customOpen   = Anchor.new(str.tostring(i_coHour, "00") + ":" + str.tostring(i_coMin, "00") + " Open", i_coCol, i_coOn, mk = Marker.new())
+
+var OpeningRange openingRange = OpeningRange.new(newTracker(), rails = array.new<line>())
+
+var array<string> WEEKDAYS = array.from("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+
+//#endregion
+
+//#region ═════════════════════════════════════════ 9 · Pipeline ══════════════════════════════════════════
+
+// 1. Sessions and killzones.
+[sessionsStarted, sessionsEnded]   = runZones(sessions, sessionView)
+[killzonesStarted, killzonesEnded] = runZones(killzones, killzoneView)
+
+// 2. Session highs and lows that wait to be broken.
+if i_lvOn and inWindow
+    for z in sessions
+        if z.trk.ended
+            addLevel(levels, z.trk.lastHi, z.trk.lastHiTime, true, z.title + " High", z.col)
+            addLevel(levels, z.trk.lastLo, z.trk.lastLoTime, false, z.title + " Low", z.col)
+[brokenHighs, brokenLows] = updateLevels(levels)
+
+// 3. Previous day / week / month and the opening prices.
+dayPeriod.tick(dStart, dOpen, pdh, pdl, tfSec < timeframe.in_seconds("D"))
+weekPeriod.tick(wStart, wOpen, pwh, pwl, tfSec < timeframe.in_seconds("W"))
+monthPeriod.tick(mStart, mOpen, pmh, pml, tfSec < timeframe.in_seconds("M"))
+midnightOpen.tick(opensAt(0, 0))
+customOpen.tick(opensAt(i_coHour, i_coMin))
+
+if barstate.islast
+    dayPeriod.live()
+    weekPeriod.live()
+    monthPeriod.live()
+    midnightOpen.live()
+    customOpen.live()
+
+// 4. Opening range.
+bool inOpeningRange = i_orOn and intradayOk and not na(time(timeframe.period, i_orTime, TZ))
+openingRange.tick(inOpeningRange, inWindow)
+
+// 5. Session VWAP.
+bool vwapAnchor = switch i_vwAnchor
+    VwapAnchor.daily   => newDay
+    VwapAnchor.weekly  => newWeek
+    VwapAnchor.monthly => newMonth
+    => sessionsStarted != ""
+bool vwapUsable = i_vwOn and (i_vwAnchor != VwapAnchor.perSession or intradayOk)
+[vwapMid, vwapUpper, vwapLower] = ta.vwap(hlc3, vwapAnchor, i_vwBands > 0 ? i_vwBands : 1.0)
+
+// 6. Time tools.
+if dayRolled and inWindow and timeframe.isintraday
+    if i_sepOn
+        line.new(time, low, time, high + syminfo.mintick, xloc = xloc.bar_time, extend = extend.both, color = i_sepCol, style = line.style_dotted, width = 1)
+    if i_wdOn
+        label.new(time, low, WEEKDAYS.get(dayofweek(time, TZ) - 1), xloc = xloc.bar_time, yloc = yloc.belowbar, style = label.style_none, color = color(na), textcolor = color.new(chart.fg_color, 30), size = TEXT_SIZE)
+
+//#endregion
+
+//#region ═════════════════════════════════════════ 10 · Plots ════════════════════════════════════════════
+
+bgcolor(bandOf(sessions, 0, sessionView), title = "Session 1 background")
+bgcolor(bandOf(sessions, 1, sessionView), title = "Session 2 background")
+bgcolor(bandOf(sessions, 2, sessionView), title = "Session 3 background")
+bgcolor(bandOf(sessions, 3, sessionView), title = "Session 4 background")
+bgcolor(bandOf(sessions, 4, sessionView), title = "Session 5 background")
+bgcolor(bandOf(killzones, 0, killzoneView), title = "Killzone 1 background")
+bgcolor(bandOf(killzones, 1, killzoneView), title = "Killzone 2 background")
+bgcolor(bandOf(killzones, 2, killzoneView), title = "Killzone 3 background")
+bgcolor(bandOf(killzones, 3, killzoneView), title = "Killzone 4 background")
+bgcolor(bandOf(killzones, 4, killzoneView), title = "Killzone 5 background")
+
+plot(vwapUsable ? vwapMid : na, "VWAP", color = vwapAnchor ? na : i_vwCol, linewidth = i_vwWidth)
+plot(vwapUsable and i_vwBands > 0 ? vwapUpper : na, "VWAP upper band", color = vwapAnchor ? na : color.new(i_vwCol, 50))
+plot(vwapUsable and i_vwBands > 0 ? vwapLower : na, "VWAP lower band", color = vwapAnchor ? na : color.new(i_vwCol, 50))
+
+// Running high and low of every session slot, for the Data Window and for user-made alerts.
+plot(sessions.get(0).trk.active ? sessions.get(0).trk.hi : na, "Session 1 high", display = display.data_window, editable = false)
+plot(sessions.get(0).trk.active ? sessions.get(0).trk.lo : na, "Session 1 low", display = display.data_window, editable = false)
+plot(sessions.get(1).trk.active ? sessions.get(1).trk.hi : na, "Session 2 high", display = display.data_window, editable = false)
+plot(sessions.get(1).trk.active ? sessions.get(1).trk.lo : na, "Session 2 low", display = display.data_window, editable = false)
+plot(sessions.get(2).trk.active ? sessions.get(2).trk.hi : na, "Session 3 high", display = display.data_window, editable = false)
+plot(sessions.get(2).trk.active ? sessions.get(2).trk.lo : na, "Session 3 low", display = display.data_window, editable = false)
+plot(sessions.get(3).trk.active ? sessions.get(3).trk.hi : na, "Session 4 high", display = display.data_window, editable = false)
+plot(sessions.get(3).trk.active ? sessions.get(3).trk.lo : na, "Session 4 low", display = display.data_window, editable = false)
+plot(sessions.get(4).trk.active ? sessions.get(4).trk.hi : na, "Session 5 high", display = display.data_window, editable = false)
+plot(sessions.get(4).trk.active ? sessions.get(4).trk.lo : na, "Session 5 low", display = display.data_window, editable = false)
+
+//#endregion
+
+//#region ═════════════════════════════════════════ 11 · Dashboard ════════════════════════════════════════
+
+var table dashboard = i_dashOn ? table.new(positionOf(i_dashPos), 4, 9, bgcolor = color.new(chart.bg_color, 10), frame_color = color.new(chart.fg_color, 80), frame_width = 1, border_width = 0) : na
+
+// @function Writes one cell of the dashboard.
+dashCell(int column, int row, string txt, color col, string halign) =>
+    table.cell(dashboard, column, row, txt, text_color = col, text_halign = halign, text_size = sizeOf(i_dashSize))
+
+if i_dashOn and barstate.islast
+    color dim = color.new(DASH_TEXT, 45)
+    dashCell(0, 0, "Custom Sessions  ·  " + str.format_time(timenow, "HH:mm", TZ) + "  " + TZ, DASH_TEXT, text.align_left)
+    table.merge_cells(dashboard, 0, 0, 3, 0)
+    dashCell(0, 1, "Session", dim, text.align_left)
+    dashCell(1, 1, "Status", dim, text.align_left)
+    dashCell(2, 1, "Range", dim, text.align_right)
+    dashCell(3, 1, "Avg " + str.tostring(i_avgLen), dim, text.align_right)
+    int row = 2
+    for z in sessions
+        if z.enabled
+            Tracker t     = z.trk
+            int startMin  = clockMinutes(z.sess, 0)
+            int endMin    = clockMinutes(z.sess, 5)
+            bool isOpen   = clockInside(startMin, endMin)
+            string status = isOpen ? "Open · " + fmtDuration(nextClock(endMin) - timenow) + " left" : "Opens in " + fmtDuration(nextClock(startMin) - timenow)
+            float span    = t.active ? t.hi - t.lo : t.lastHi - t.lastLo
+            float base    = t.active ? t.lo : t.lastLo
+            dashCell(0, row, "● " + z.title, z.col, text.align_left)
+            dashCell(1, row, status, isOpen ? DASH_TEXT : dim, text.align_left)
+            dashCell(2, row, fmtSpan(span, base), DASH_TEXT, text.align_right)
+            dashCell(3, row, fmtSpan(t.spans.avg(), base), dim, text.align_right)
+            row += 1
+    if i_dashDay
+        float daySpan = dayPeriod.curHi - dayPeriod.curLo
+        string share  = na(adr) or na(daySpan) or adr == 0 ? NO_VALUE : str.tostring(daySpan / adr * 100, "0") + "% of ADR"
+        dashCell(0, row, "Day", DASH_TEXT, text.align_left)
+        dashCell(1, row, share, dim, text.align_left)
+        dashCell(2, row, fmtSpan(daySpan, dayPeriod.curLo), DASH_TEXT, text.align_right)
+        dashCell(3, row, fmtSpan(adr, dayPeriod.curLo), dim, text.align_right)
+
+//#endregion
+
+//#region ═════════════════════════════════════════ 12 · Alerts ═══════════════════════════════════════════
+
+// Fixed conditions, selectable one by one in the "Create alert" dialog.
+alertcondition(sessionsStarted != "", "Session started", "{{ticker}}: a session has started")
+alertcondition(sessionsEnded != "", "Session ended", "{{ticker}}: a session has ended")
+alertcondition(killzonesStarted != "", "Killzone started", "{{ticker}}: a killzone has started")
+alertcondition(brokenHighs != "", "Session high broken", "{{ticker}}: price traded above a session high at {{close}}")
+alertcondition(brokenLows != "", "Session low broken", "{{ticker}}: price traded below a session low at {{close}}")
+alertcondition(dayPeriod.hiBreak, "Previous day high broken", "{{ticker}}: price traded above the previous day high at {{close}}")
+alertcondition(dayPeriod.loBreak, "Previous day low broken", "{{ticker}}: price traded below the previous day low at {{close}}")
+alertcondition(openingRange.upNow, "Opening range breakout up", "{{ticker}}: closed above the opening range at {{close}}")
+alertcondition(openingRange.dnNow, "Opening range breakout down", "{{ticker}}: closed below the opening range at {{close}}")
+
+// @function Sends one dynamic alert.
+// @param atClose True to wait for the bar to close.
+notify(string message, bool atClose) =>
+    string body = syminfo.ticker + " · " + message
+    if atClose
+        alert(body, alert.freq_once_per_bar_close)
+    else
+        alert(body, alert.freq_once_per_bar)
+    true
+
+// @function Sends the break alerts of one period.
+notifyPeriod(Period p) =>
+    if p.visible and p.showHL and p.hiBreak
+        notify("Previous " + p.code + " high broken", i_alOnClose)
+    if p.visible and p.showHL and p.loBreak
+        notify("Previous " + p.code + " low broken", i_alOnClose)
+    true
+
+// Dynamic events, with the real session names. One TradingView alert on "Any alert() function call" receives them all.
+if i_alOn
+    if i_alStart and sessionsStarted != ""
+        notify("Session started: " + sessionsStarted, false)
+    if i_alEnd and sessionsEnded != ""
+        notify("Session ended: " + sessionsEnded, false)
+    if i_alKz and killzonesStarted != ""
+        notify("Killzone started: " + killzonesStarted, false)
+    if i_alLevels and brokenHighs != ""
+        notify("Broken above: " + brokenHighs, i_alOnClose)
+    if i_alLevels and brokenLows != ""
+        notify("Broken below: " + brokenLows, i_alOnClose)
+    if i_alPeriods
+        notifyPeriod(dayPeriod)
+        notifyPeriod(weekPeriod)
+        notifyPeriod(monthPeriod)
+    if i_alOr and openingRange.upNow
+        notify("Opening range breakout up", true)
+    if i_alOr and openingRange.dnNow
+        notify("Opening range breakout down", true)
+
+//#endregion

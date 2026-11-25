@@ -9,9 +9,9 @@ How a release goes from this repository to the TradingView community library.
 | Page | <https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/> |
 | Author | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
 | Access | Public, protected: everyone can add it to a chart, TradingView does not show the code. The code is open here. |
-| Code | Version 1.4.0 — the file at the tag `v1.4.0` |
+| Code | Version 2.0.0 — the file at the tag `v2.0.0` |
 | First published | 2026-11-25, from version 1.2.0 |
-| Latest update | 2026-11-25, version 1.4.0; the page carries the release notes of 1.3.0 and 1.4.0 |
+| Latest update | 2026-11-25, version 2.0.0; the page carries the release notes of 1.3.0, 1.4.0 and 2.0.0 |
 | Categories | Multi-timeframe · Pivot points and levels |
 | Tags | `sessions`, `killzones`, `forex` |
 | Picture | `OANDA:EURUSD`, 15 minutes, default settings |
@@ -84,7 +84,7 @@ This script is a charting tool, not financial advice.
 ```
 
 The text is final on TradingView and still lists the session VWAP. That module is parked on the `feature/vwap`
-branch; the release notes of the update that removes it have to say so.
+branch since version 2.0.0, and the release notes of that update say so.
 
 ### Category and tags
 

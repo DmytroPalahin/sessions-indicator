@@ -13,7 +13,9 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
-The next release is a major one. Taking the session VWAP out removes five inputs, and TradingView stores settings
+## [2.0.0] - 2026-11-25
+
+A major release. Taking the session VWAP out removes five inputs, and TradingView stores settings
 by input position: what you changed in *Time tools*, *Dashboard* or *Style* will not carry over. After updating,
 use *Settings → Defaults → Reset settings* and set those groups again. Sessions, levels, killzones, previous
 periods, opening prices and the opening range keep their settings.
@@ -156,7 +158,8 @@ of [docs/TESTING.md](docs/TESTING.md).
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.
 
-[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.4.0...v2.0.0
 [1.4.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.1.0...v1.2.0

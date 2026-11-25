@@ -32,7 +32,7 @@ indicator("Custom Sessions Indicator", "Sessions", overlay = true, max_boxes_cou
 
 //#region ═════════════════════════════════════════ 1 · Constants ═════════════════════════════════════════
 
-const string VERSION   = "1.4.0"
+const string VERSION   = "2.0.0"
 const int    MS_MINUTE = 60000
 const int    MS_HOUR   = 3600000
 const int    MS_DAY    = 86400000

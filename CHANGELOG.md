@@ -17,6 +17,11 @@ How versions are counted for an indicator:
 
 - The copyright line of the script names the TradingView account of the author, `dmitry_plhn`.
 
+### Added
+
+- The indicator is published on TradingView as a public, protected script:
+  https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/
+
 ## [1.2.0] - 2026-11-25
 
 A Frankfurt session and a cleaner default chart. The session rows changed places: values you typed into rows 2 to 5

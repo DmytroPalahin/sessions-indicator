@@ -5,7 +5,7 @@
 **Сессии, killzones, уровни ликвидности, цены открытия, opening range, сессионный VWAP и дашборд — один индикатор для TradingView, в котором настраивается всё.**
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
-[![Platform](https://img.shields.io/badge/platform-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/)
+[![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/)
 [![Version](https://img.shields.io/badge/version-1.2.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
 [![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
@@ -38,6 +38,11 @@ Asia, Frankfurt, London и New York мягкими цветными боксам
 | ⑫ | **Style** | Размер текста, стиль и толщина линий, подписи уровней, фильтр далёких уровней |
 
 ## Быстрый старт
+
+**Из TradingView.** Откройте [публикацию на TradingView](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) и нажмите **Use on chart**. Публикация
+сделана с закрытым кодом (protected): она работает как обычный индикатор, а её код — это файл из этого репозитория.
+
+**Из исходника.**
 
 1. Откройте [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) и скопируйте файл целиком.
 2. В TradingView откройте любой график, затем **Pine Editor**.

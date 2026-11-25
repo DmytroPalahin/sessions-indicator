@@ -5,7 +5,7 @@
 **Sessions, killzones, liquidity levels, opening prices, opening range, session VWAP and a dashboard — one TradingView overlay, every part of it configurable.**
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
-[![Platform](https://img.shields.io/badge/platform-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/)
+[![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/)
 [![Version](https://img.shields.io/badge/version-1.2.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
 [![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
@@ -41,6 +41,11 @@ so the chart stays clean until you ask for more.
 | ⑫ | **Style** | Text size, line style and width, label options, a filter for distant levels |
 
 ## Quick start
+
+**From TradingView.** Open the [publication on TradingView](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) and press **Use on chart**. The
+publication is a protected script: it works like any indicator, and its code is the file in this repository.
+
+**From the source.**
 
 1. Open [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) and copy the whole file.
 2. On TradingView open any chart, then the **Pine Editor**.

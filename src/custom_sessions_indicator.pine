@@ -55,7 +55,7 @@ const string G_TIME     = "⑩ Time tools"
 const string G_DASH     = "⑪ Dashboard"
 const string G_STYLE    = "⑫ Style"
 
-const string TT_TZ       = "Every time in this indicator is read in this timezone. 'Exchange' follows the symbol. Named zones follow daylight saving time automatically."
+const string TT_TZ       = "The timezone in which the session times below are written. It is not your own timezone and it does not change the chart clock. The default times are New York times, so keep America/New_York unless you retype every time for another zone. Named zones follow daylight saving time automatically; 'Exchange' follows the symbol."
 const string TT_TZ_CUST  = "Used only when Timezone is 'Custom'. Accepts an IANA name (Europe/Kyiv) or an offset (UTC+3)."
 const string TT_LOOKBACK = "Drawings older than this many days are skipped. 0 draws the whole loaded history (TradingView still keeps only the newest 500 objects of each kind)."
 const string TT_MAX_TF   = "Sessions, killzones and the opening range are hidden on chart timeframes above this many minutes, where they stop being meaningful."
@@ -137,7 +137,7 @@ enum VwapAnchor
 //#region ═════════════════════════════════════════ 3 · Inputs ════════════════════════════════════════════
 
 // ① General
-string i_tz       = input.string("America/New_York", "Timezone", options = [TZ_EXCHANGE, TZ_UTC, "America/New_York", "America/Chicago", "America/Los_Angeles", "America/Sao_Paulo", "Europe/London", "Europe/Berlin", "Europe/Athens", "Asia/Dubai", "Asia/Kolkata", "Asia/Shanghai", "Asia/Hong_Kong", "Asia/Singapore", "Asia/Tokyo", "Asia/Seoul", "Australia/Sydney", "Pacific/Auckland", TZ_CUSTOM], tooltip = TT_TZ, group = G_GENERAL)
+string i_tz       = input.string("America/New_York", "Timezone of session times", options = [TZ_EXCHANGE, TZ_UTC, "America/New_York", "America/Chicago", "America/Los_Angeles", "America/Sao_Paulo", "Europe/London", "Europe/Berlin", "Europe/Athens", "Asia/Dubai", "Asia/Kolkata", "Asia/Shanghai", "Asia/Hong_Kong", "Asia/Singapore", "Asia/Tokyo", "Asia/Seoul", "Australia/Sydney", "Pacific/Auckland", TZ_CUSTOM], tooltip = TT_TZ, group = G_GENERAL)
 string i_tzCustom = input.string("UTC+3", "Custom timezone", tooltip = TT_TZ_CUST, group = G_GENERAL)
 int    i_lookback = input.int(20, "History, days (0 = all)", minval = 0, tooltip = TT_LOOKBACK, group = G_GENERAL)
 int    i_maxTf    = input.int(60, "Hide sessions above, minutes", minval = 1, maxval = 1440, tooltip = TT_MAX_TF, group = G_GENERAL)
@@ -173,7 +173,7 @@ int       i_sBand    = input.int(92, "Background transparency", minval = 0, maxv
 int       i_sBorder  = input.int(100, "Border transparency", minval = 0, maxval = 100, group = G_SVIEW)
 Stroke    i_sStroke  = input.enum(Stroke.solid, "Border", inline = "sb", group = G_SVIEW)
 int       i_sWidth   = input.int(1, "", minval = 1, maxval = 4, inline = "sb", group = G_SVIEW)
-Caption   i_sCaption = input.enum(Caption.nameRange, "Label", inline = "sl", group = G_SVIEW)
+Caption   i_sCaption = input.enum(Caption.hidden, "Label", inline = "sl", group = G_SVIEW)
 Align     i_sAlign   = input.enum(Align.start, "", inline = "sl", group = G_SVIEW)
 RangeUnit i_unit     = input.enum(RangeUnit.automatic, "Range unit", tooltip = TT_UNIT, group = G_SVIEW)
 bool      i_sOpen    = input.bool(false, "Open line", group = G_SVIEW)

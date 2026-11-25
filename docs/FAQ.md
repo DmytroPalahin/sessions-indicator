@@ -11,9 +11,21 @@ Check these in order.
 4. **The market does not trade then.** A stock chart without extended hours has no bars at 03:00, so there is no
    London session to draw.
 
+## I set the timezone to my own and every session moved
+
+*① General → Timezone of session times* is the timezone in which the session times are **written**, not the timezone
+you live in. The default times (`1800-0200`, `0300-1100`, `0800-1600`) are New York times. Select Berlin and the same
+numbers are read as Berlin times, six hours away from where they should be.
+
+Two ways to fix it:
+
+- set the timezone back to `America/New_York` — recommended, the chart still shows your own clock;
+- or keep your timezone and retype the windows in it. For Central European winter time: Asia `0000-0800`, London
+  `0900-1700`, New York `1400-2200`.
+
 ## Sessions are shifted by an hour
 
-The session times are read in the timezone from *① General → Timezone*. Two common causes:
+The session times are read in the timezone from *① General → Timezone of session times*. Two common causes:
 
 - You entered times for one timezone while another is selected.
 - You use a fixed offset such as `UTC+3`. Offsets do not follow daylight saving time. Use a named zone instead.

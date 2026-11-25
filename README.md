@@ -22,7 +22,7 @@
 ## What it is
 
 A single Pine Script v6 indicator that maps the trading day on your chart. Out of the box it draws the Asia, London
-and New York sessions as boxes with their names and ranges. Everything else is one checkbox away and off by default,
+and New York sessions as soft colour boxes. Everything else is one checkbox away and off by default,
 so the chart stays clean until you ask for more.
 
 | # | Module | What you get |
@@ -45,13 +45,15 @@ so the chart stays clean until you ask for more.
 1. Open [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) and copy the whole file.
 2. On TradingView open any chart, then the **Pine Editor**.
 3. Replace the editor content with the copied code and press **Add to chart**.
-4. Open the indicator **Settings** to switch modules on. Start with *① General → Timezone*.
+4. Open the indicator **Settings** to switch modules on. Labels with the session name and range are in
+   *③ Session display → Label*.
 
 The indicator needs an intraday chart for sessions (60 minutes or lower by default).
 
 ## Default sessions
 
-All times are in the timezone selected in *① General* — `America/New_York` by default.
+All times are written in the timezone selected in *① General* — `America/New_York` by default. That setting says how
+to read the numbers below; it is not your own timezone, and the chart keeps showing your clock.
 
 | Slot | Name | Window | On |
 |------|------|--------|----|

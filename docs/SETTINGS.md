@@ -9,8 +9,8 @@ as the titled input before them.
 
 | Input | Default | What it does |
 |-------|---------|--------------|
-| Timezone | `America/New_York` | The timezone in which every time of this indicator is read. `Exchange` follows the symbol. Named zones follow daylight saving time automatically. |
-| Custom timezone | `UTC+3` | Used only when *Timezone* is `Custom`. Accepts an IANA name (`Europe/Kyiv`) or an offset (`UTC+3`). An offset does not follow daylight saving time. |
+| Timezone of session times | `America/New_York` | The timezone in which the times of this indicator are **written**. It is not your own timezone and it does not change the chart clock. The default session times are New York times, so keep `America/New_York` unless you retype every time for another zone. `Exchange` follows the symbol. Named zones follow daylight saving time automatically. |
+| Custom timezone | `UTC+3` | Used only when *Timezone of session times* is `Custom`. Accepts an IANA name (`Europe/Kyiv`) or an offset (`UTC+3`). An offset does not follow daylight saving time. |
 | History, days (0 = all) | `20` | Drawings older than this many days are skipped. `0` draws the whole loaded history. |
 | Hide sessions above, minutes | `60` | Sessions, killzones and the opening range are hidden on chart timeframes above this value. |
 | Level labels offset, bars | `8` | How far to the right of the last bar the level lines and their labels end. |
@@ -43,7 +43,7 @@ A window may cross midnight and may be up to 24 hours long (`1800-1800` restarts
 | Background transparency | `92` | Same scale, for the `Background` style. |
 | Border transparency | `100` | Same scale, for the box border. The default draws no border; lower it to get one. |
 | Border | `Solid`, `1` | Line style and width of the box border. |
-| Label | `Name + range`, `Left` | What the caption above the session says, and where it sits. `Hidden` removes it. |
+| Label | `Hidden`, `Left` | The caption above the session: `Name + range`, `Name`, `Range` or `Hidden`, and where it sits. Off by default, so a fresh chart shows only the boxes. |
 | Range unit | `Auto` | Unit of every range in labels and in the dashboard: `Price`, `Ticks`, `Pips` or `Percent`. `Auto` uses pips on forex and price elsewhere. |
 | Open line | off | A dotted line at the opening price of the session. |
 | Midline (50%) | off | A dashed line at the middle of the session range. It moves while the range grows. |

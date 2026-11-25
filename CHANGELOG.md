@@ -13,7 +13,11 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
-Nothing yet.
+### Changed
+
+- Session labels are hidden by default. Switch them on in *③ Session display → Label*.
+- The *Timezone* setting is now called *Timezone of session times*, and its tooltip says that it is the timezone the
+  times are written in, not the timezone of the user.
 
 ## [1.1.0] - 2026-11-25
 

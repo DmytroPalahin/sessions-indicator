@@ -1,0 +1,40 @@
+name: Feature request
+description: Propose a new module, setting or improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What do you want to see on the chart, and why?
+      description: Describe the trading need first. A sketch or a screenshot of another tool helps.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: How could it work?
+      description: Settings you would expect, defaults, how it should look.
+  - type: dropdown
+    id: module
+    attributes:
+      label: Related module
+      options:
+        - Sessions
+        - Session high / low levels
+        - Killzones
+        - Previous day / week / month
+        - Opening prices
+        - Opening range
+        - Session VWAP
+        - Time tools
+        - Dashboard
+        - Alerts
+        - Something new
+    validations:
+      required: true
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Would you like to build it?
+      options:
+        - label: I can send a pull request

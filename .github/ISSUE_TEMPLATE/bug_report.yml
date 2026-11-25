@@ -1,0 +1,55 @@
+name: Bug report
+description: Something is drawn wrong, missing, or the script shows an error
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for the report. Please check [docs/FAQ.md](https://github.com/DmytroPalahin/sessions-indicator/blob/main/docs/FAQ.md) first — the most common problems are answered there.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you saw, and what you expected to see instead.
+    validations:
+      required: true
+  - type: input
+    id: symbol
+    attributes:
+      label: Symbol
+      description: With the exchange prefix.
+      placeholder: FX:EURUSD
+    validations:
+      required: true
+  - type: input
+    id: timeframe
+    attributes:
+      label: Chart timeframe
+      placeholder: 15 minutes
+    validations:
+      required: true
+  - type: input
+    id: timezone
+    attributes:
+      label: Timezone selected in "① General"
+      placeholder: America/New_York
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Indicator version
+      description: The VERSION line at the top of the script.
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: settings
+    attributes:
+      label: Settings changed from the defaults
+      description: Which modules are on, and any session time you edited.
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: Drag an image here. For errors, include the exact text of the message.

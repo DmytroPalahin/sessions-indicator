@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and troubleshooting
+    url: https://github.com/DmytroPalahin/sessions-indicator/blob/main/docs/FAQ.md
+    about: Nothing is drawn, sessions are an hour off, alerts do not fire — start here.
+  - name: Security problem
+    url: https://github.com/DmytroPalahin/sessions-indicator/blob/main/SECURITY.md
+    about: Please report security problems privately.

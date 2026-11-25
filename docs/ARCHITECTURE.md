@@ -43,13 +43,13 @@ flowchart TD
     A --> C[runZones: killzones]
     B --> D[addLevel<br/>on every session end]
     D --> E[updateLevels<br/>retire broken levels]
-    A --> F[Period.tick × 3<br/>day, week, month]
-    A --> G[Anchor.tick × 2<br/>midnight, custom time]
-    A --> H[OpeningRange.tick]
+    A --> F[Period.feed × 3<br/>day, week, month]
+    A --> G[Anchor.capture × 2<br/>midnight, custom time]
+    A --> H[OpeningRange.run]
     B --> I[ta.vwap<br/>anchor = session start]
     F --> J{last bar?}
     G --> J
-    J -- yes --> K[Period.live / Anchor.live<br/>redraw current levels]
+    J -- yes --> K[Period.redraw / Anchor.refresh<br/>redraw current levels]
     B --> L[Plots]
     C --> L
     I --> L
@@ -79,9 +79,16 @@ flowchart TD
 
 ### 1. State and drawing are separate
 
-`Tracker` knows what a window is doing and never touches the chart. `Zone.draw`, `OpeningRange.tick` and the others
+`Tracker` knows what a window is doing and never touches the chart. `Zone.draw`, `OpeningRange.run` and the others
 read a tracker and draw. Sessions, killzones and the opening range therefore share one implementation of "what is a
 time window", and a display bug cannot corrupt statistics.
+
+### 1a. A window run has an identity
+
+A tracker cannot rely on seeing a bar *outside* the window between two runs. On a regular-hours chart the 16:00 bar
+is followed directly by the next day's 09:30 bar, and both are inside a 08:00–17:00 session. `windowKey` gives every
+bar the calendar date on which its run started; when the key changes while the window is active, the tracker ends the
+old run and starts the new one on the same bar. This also makes 24-hour windows work.
 
 ### 2. One engine for sessions and killzones
 
@@ -91,7 +98,7 @@ A killzone is a session with a different look. Both are `Zone` objects in an arr
 ### 3. Live levels are redrawn, history is frozen
 
 Lines that must be visible *now* — previous highs and lows, opening prices — are deleted and recreated on the last bar
-(`Marker.put`). A freshly created object is always the newest, so the 500-object garbage collector can never remove it.
+(`Marker.place`). A freshly created object is always the newest, so the 500-object garbage collector can never remove it.
 Everything historical is created once and left alone.
 
 ### 4. Higher-timeframe data without look-ahead
@@ -125,7 +132,14 @@ Alerts, markers and line styles all read the same flags, so they cannot disagree
 
 Dropdowns are `enum` inputs, not strings. A typo in a comparison is a compile error instead of a silent bug.
 
-### 9. No wrapped lines
+### 9. Every function has its own name
+
+Pine does not let an overloaded function read global variables (compile error `CE10182`), and a user method that
+shares its name with a built-in method counts as an overload. Methods here read inputs and environment values
+directly, so each one has a unique name: `Tracker.advance`, `Period.feed`, `Anchor.capture`, `OpeningRange.run`,
+`Marker.place`. `tools/check.py` enforces this.
+
+### 10. No wrapped lines
 
 Pine reserves multiples of four spaces for blocks and requires other indentations for wrapped lines. To keep that rule
 out of everyone's way the source does not wrap lines at all; long calls stay on one line.
@@ -147,8 +161,13 @@ On the realtime bar Pine re-runs the script on every tick and rolls `var` state 
 The design relies on that: a level broken intrabar is "re-broken" on each tick and stays broken at the close, because
 a bar's high and low only ever widen.
 
+## Scale and distant levels
+
+TradingView includes script drawings in the automatic price scale. A level far from price would squeeze the candles,
+so `tooFar` lets the user cap the distance (in average daily ranges): markers beyond it are not drawn and session
+levels fold back to their first bar.
+
 ## Known limits
 
-- A window that restarts without a gap (a full 24 hours) is seen as one endless window.
 - Session averages and the running day range depend on the bars loaded on the chart.
 - The dashboard status uses the wall clock; it does not know the exchange calendar.

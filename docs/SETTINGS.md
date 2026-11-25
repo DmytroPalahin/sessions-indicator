@@ -27,7 +27,7 @@ Five rows. Each row is: checkbox · name · time window · colour.
 | 4 | Sydney | `1700-0200` | no |
 | 5 | Custom | `0930-1600` | no |
 
-A window may cross midnight. It must be shorter than 24 hours.
+A window may cross midnight and may be up to 24 hours long (`1800-1800` restarts every day at 18:00).
 
 ## ③ Session display
 
@@ -70,7 +70,7 @@ A window may cross midnight. It must be shorter than 24 hours.
 | Style | `Background` | Same choices as for sessions. |
 | Box fill transparency | `88` | Used by the `Box` styles. |
 | Background transparency | `90` | Used by the `Background` styles. |
-| Label | `Name`, `Left` | Caption content and position. |
+| Label | `Name`, `Left` | Caption content and position. Killzone captions sit below the zone, so they do not collide with session captions above it. |
 
 ## ⑥ Previous day / week / month
 
@@ -163,3 +163,4 @@ Nothing is sent until you create a TradingView alert. See [ALERTS.md](ALERTS.md)
 | Level lines | `Solid`, `1` | Style and width of session levels, previous highs and lows, and opening prices. |
 | Level labels | on | Text at the right end of each level line. |
 | Price in level labels | off | Appends the price to the label. |
+| Hide levels farther than, × ADR (0 = never) | `0.0` | Levels farther from the last price than this many average daily ranges are not drawn. Use it when a distant weekly or monthly level squeezes the candles. Session levels fold back to the bar where they formed. |

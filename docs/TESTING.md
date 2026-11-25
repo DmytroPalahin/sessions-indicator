@@ -17,16 +17,19 @@ The script needs only the Python standard library. CI runs it on every push and 
 - indentation in multiples of four (the source does not wrap lines);
 - balanced brackets on every line and balanced `//#region` markers;
 - inline input rows with a title on their first input only (TradingView warning `CW10026`);
+- every function and method has its own name (an overload cannot read globals, error `CE10182`);
 - the number of plot-like calls against the limit of 64;
 - the version in the script, the README badge and the changelog agree.
 
 ## 2. Compile check
 
 1. Paste the script into the Pine Editor.
-2. Wait a few seconds for the editor to analyse it.
-3. Press **F8** ("go to next problem"). No problem list means no errors and no warnings.
+2. Wait a few seconds for the editor to analyse it, then press **F8** ("go to next problem"). No problem list means
+   the editor found no errors and no warnings.
+3. Press **Add to chart**. This runs the full compiler, which catches errors the editor's own analysis misses — for
+   example an overloaded function that reads a global variable (`CE10182`).
 
-A release must have zero errors and zero warnings.
+A release must pass both steps with zero errors and zero warnings.
 
 ## 3. Chart matrix
 
@@ -70,11 +73,16 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 18 | Alerts: *Any alert() function call* on a 1-minute chart | One message per event, with the session name |
 | 19 | History = `0` on a 1-minute chart | The script loads without a runtime error |
 | 20 | Light and dark chart themes | All text is readable |
+| 21 | Regular-hours chart (stock or futures, RTH) | The New York session is drawn every day, although no bar separates two days |
+| 22 | *Hide levels farther than* = `2` with weekly and monthly levels on | Distant levels disappear and the price scale stops being stretched |
 
 ## Verification log
 
 | Date | Version | What was verified | Result |
 |------|---------|-------------------|--------|
 | 2026-11-25 | 1.0.0 | Static checks (`tools/check.py`) | pass |
-| 2026-11-25 | 1.0.0 | Compile check in the TradingView Pine Editor (Pine v6) | 0 errors, 0 warnings |
-| — | 1.0.0 | Chart matrix | pending |
+| 2026-11-25 | 1.0.0 | Editor analysis in the Pine Editor (Pine v6) | 0 errors, 0 warnings |
+| 2026-11-25 | 1.0.0 | Full compile with **Add to chart** | pass, after fixing `CE10182` (overloaded methods read globals) |
+| 2026-11-25 | 1.0.0 | Chart matrix rows 1, 5, 7, 9, 11, 13, 14, 15, 16, 21, 22 | pass — `OANDA:GBPUSD` on 30s, 5m, 15m, 30m, 1h, 4h, D; `BINANCE:BTCUSDT`, `CME_MINI:ES1!` and `NASDAQ:AAPL` on 15m. Row 21 failed first and was fixed (`windowKey`). |
+| 2026-11-25 | 1.0.0 | Chart matrix rows 8, 10, 12 | drawn and plausible; values not cross-checked against the candles |
+| — | 1.0.0 | Chart matrix rows 2, 3, 4, 6, 17, 18, 19, 20 | pending |

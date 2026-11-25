@@ -34,6 +34,14 @@ other city's time shifts for those weeks. This is real: the markets do open at a
 A session starts on the first bar that opens inside the window. On a 1-hour chart a 09:30 start can only be shown
 from the 10:00 bar. Use a timeframe that divides the session time evenly.
 
+## The candles got squeezed after I switched on weekly or monthly levels
+
+TradingView fits every line an indicator draws into the price scale. A monthly high far above price therefore
+compresses the candles. Two ways out:
+
+- *⑬ Style → Hide levels farther than, × ADR* — set it to `2` or `3` and distant levels are not drawn;
+- right-click the price scale and tick **Scale price chart only** — the scale then ignores all indicators.
+
 ## Some old sessions are missing
 
 TradingView keeps the newest 500 boxes, 500 lines and 500 labels of a script and deletes the oldest. Lower
@@ -61,8 +69,9 @@ sessions to average.
 
 ## Can I use a 24-hour session?
 
-No. Two runs of the same window must be separated by a gap, otherwise the indicator sees one endless window. Use
-`1800-1700` rather than `1800-1800`.
+Yes. A window such as `1800-1800` restarts every day at its start time. The same logic keeps sessions correct on
+charts with regular trading hours only, where the last bar of one day is followed directly by the first bar of the
+next.
 
 ## Does it repaint?
 

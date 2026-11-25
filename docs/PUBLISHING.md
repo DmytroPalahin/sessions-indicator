@@ -61,7 +61,8 @@ Tick the events you want in "Alerts", then create one alert with the condition "
 Nine fixed conditions are also available.
 
 LIMITATIONS
-Sessions need an intraday chart. A session window must be shorter than 24 hours. VWAP needs volume. The dashboard
+Sessions need an intraday chart. VWAP needs volume. Levels far from price can squeeze the price scale; the
+"Hide levels farther than" setting removes them. The dashboard
 follows the clock and does not know about weekends and holidays.
 
 This script is a charting tool, not financial advice.

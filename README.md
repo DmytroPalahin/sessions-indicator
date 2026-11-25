@@ -91,7 +91,8 @@ NY PM 13:30 – 16:00. These are conventions, not rules: every window is editabl
 These come from how Pine Script and TradingView work. They are listed so that nothing surprises you.
 
 - Sessions, killzones and the opening range are intraday tools. They hide above the timeframe set in *① General*.
-- A window must be shorter than 24 hours and two runs of the same window need a gap between them.
+- Levels far from price squeeze the candles, because TradingView fits every level of an indicator into the price
+  scale. *⑬ Style → Hide levels farther than* removes them; so does *Scale price chart only* in the price-scale menu.
 - Session VWAP needs volume. On symbols without volume nothing is plotted.
 - The dashboard clock follows the schedule, not the exchange calendar: it does not know about weekends and holidays.
   Like every script, it refreshes when the chart receives a tick.
@@ -100,8 +101,9 @@ These come from how Pine Script and TradingView work. They are listed so that no
 
 ## Project status
 
-Version 1.0.0 compiles with no errors and no warnings in the TradingView Pine Editor. The chart test matrix in
-[docs/TESTING.md](docs/TESTING.md) records what has been checked on live charts.
+Version 1.0.0 compiles and runs on TradingView with no errors and no warnings. It has been run on forex, crypto,
+futures and stock charts from 30 seconds to daily. The verification log in [docs/TESTING.md](docs/TESTING.md) lists
+what has been checked and what is still open.
 
 ## Roadmap
 

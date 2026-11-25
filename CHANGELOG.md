@@ -19,6 +19,7 @@ Planned as **1.0.0**, the first release. It will be tagged once the chart test m
 ### Added
 
 - **Sessions** — five slots (Asia, London, New York, Sydney, Custom) with editable name, time window and colour.
+  A window may cross midnight, may last up to 24 hours and works on regular-hours charts.
 - **Session display** — box, background, both or hidden; label with name and range; open line; 50% midline;
   range in price, ticks, pips or percent.
 - **Session high / low levels** — highs and lows that stay on the chart until price trades through them, with a
@@ -31,6 +32,8 @@ Planned as **1.0.0**, the first release. It will be tagged once the chart test m
 - **Time tools** — day separators and weekday labels.
 - **Dashboard** — open / closed status with countdown, current range, average range and day range against ADR.
 - **Alerts** — nine `alertcondition()` entries and dynamic `alert()` events that carry the session names.
+- **Style** — text size, level line style, level labels and a distance filter that hides levels far from price so
+  they do not squeeze the price scale.
 - **Data Window values** — running high and low of every session slot, usable in user-made alerts.
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.

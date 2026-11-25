@@ -13,6 +13,14 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [1.1.0] - 2026-11-25
+
+A new default look. Charts that use the default settings change with this update; anyone who prefers the previous
+look can set the old values by hand: windows `1900-0400`, `0300-1200`, `0800-1700`, fill transparency 90, border
+transparency 40.
+
 ### Changed
 
 - Default sessions are now the 08:00 – 16:00 working day of each city in New York time: Asia `1800-0200`,
@@ -46,5 +54,6 @@ of [docs/TESTING.md](docs/TESTING.md).
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.
 
-[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/DmytroPalahin/sessions-indicator/releases/tag/v1.0.0

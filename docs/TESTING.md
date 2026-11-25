@@ -88,5 +88,6 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 2026-11-25 | 1.0.0 | Chart matrix rows 2, 4, 19 | pass — `OANDA:GBPUSD` 1m with History = 0, Timezone = UTC, Style = Box + background |
 | 2026-11-25 | `feature/alerts` | Alerts on `OANDA:GBPUSD` 1m with *Any alert() function call* | Session start and killzone start were delivered on the first tick of their bar, and a broken session level at the close of its bar, each with the session name. The module was then parked. |
 | 2026-11-25 | 1.0.0 | Full compile and chart run after removing the alerts module | pass — `TVC:DXY` on the daily and the 15-minute timeframe, all modules on |
-| 2026-11-25 | unreleased | New default sessions, colours and box style | pass — `OANDA:EURUSD` 15m: full compile, and the boxes coincide edge to edge with an 08:00 – 16:00 per-city reference indicator |
-| — | 1.0.0 | Chart matrix rows 3, 6, 17, 20 | pending (clock-change week, removed levels, Bar Replay, dark theme) |
+| 2026-11-25 | 1.1.0 | New default sessions, colours and box style | pass — `OANDA:EURUSD` 15m: full compile, and the boxes coincide edge to edge with an 08:00 – 16:00 per-city reference indicator |
+| 2026-11-25 | 1.1.0 | Release build | The tagged file differs from the build run on the chart only in the `VERSION` string; static checks pass, it was not run on a chart again |
+| — | 1.1.0 | Chart matrix rows 3, 6, 17, 20 | pending (clock-change week, removed levels, Bar Replay, dark theme) |

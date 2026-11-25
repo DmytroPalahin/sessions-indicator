@@ -6,7 +6,7 @@
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
 [![Platform](https://img.shields.io/badge/platform-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
 [![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
 
@@ -101,7 +101,7 @@ NY PM 13:30 – 16:00. Это общепринятые значения, а не
 
 ## Статус проекта
 
-Версия 1.0.0 компилируется и работает на TradingView без ошибок и предупреждений. Она запускалась на графиках
+Версия 1.1.0 компилируется и работает на TradingView без ошибок и предупреждений. Она запускалась на графиках
 форекса, крипты, фьючерсов и акций на таймфреймах от 30 секунд до дня. Что проверено и что ещё осталось, записано в
 журнале проверок в [docs/TESTING.md](docs/TESTING.md).
 

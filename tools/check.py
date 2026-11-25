@@ -7,6 +7,7 @@ reports as errors or warnings, plus the conventions of this repository.
 
 Usage:
     python3 tools/check.py
+    uv run tools/check.py
 
 Exit code 0 means every check passed. Only the Python standard library is used.
 """
@@ -32,6 +33,7 @@ LICENSE_LINE = (
 )
 SHORT_TITLE_MAX = 10  # TradingView warns above this (SHORT_TITLE_TOO_LONG)
 PLOT_LIMIT = 64  # maximum number of plot-like outputs of one script
+PROBLEMS_SHOWN = 20  # a failed check prints this many problems, then a count
 PLOT_CALLS = (
     "plot",
     "bgcolor",
@@ -108,10 +110,10 @@ class Report:
     def check(self, name: str, problems: list[str]) -> None:
         if problems:
             print(f"FAIL  {name}")
-            for problem in problems[:20]:
+            for problem in problems[:PROBLEMS_SHOWN]:
                 print(f"        {problem}")
-            if len(problems) > 20:
-                print(f"        ... and {len(problems) - 20} more")
+            if len(problems) > PROBLEMS_SHOWN:
+                print(f"        ... and {len(problems) - PROBLEMS_SHOWN} more")
             self.failures.append(name)
         else:
             print(f"ok    {name}")
@@ -150,7 +152,7 @@ def check_header(lines: list[str]) -> list[str]:
     problems = []
     if not lines or lines[0] != LICENSE_LINE:
         problems.append("line 1 must be the MPL-2.0 license notice")
-    if len(lines) < 2 or not lines[1].startswith("// ©"):
+    if not lines[1:] or not lines[1].startswith("// ©"):
         problems.append("line 2 must be the copyright notice (// © ...)")
     version_at = next(
         (n for n, text in enumerate(lines) if text.startswith("//@version=")), None
@@ -171,11 +173,12 @@ def check_titles(lines: list[str]) -> list[str]:
     problems = []
     call = next((text for text in lines if text.startswith("indicator(")), "")
     strings = re.findall(r'"([^"]*)"', call)
-    if len(strings) < 2:
+    if not strings[1:]:
         return ["indicator() must have a title and a short title"]
-    if len(strings[1]) > SHORT_TITLE_MAX:
+    short_title = strings[1]
+    if len(short_title) > SHORT_TITLE_MAX:
         problems.append(
-            f'short title "{strings[1]}" is {len(strings[1])} characters, the limit is {SHORT_TITLE_MAX}'
+            f'short title "{short_title}" is {len(short_title)} characters, the limit is {SHORT_TITLE_MAX}'
         )
     return problems
 
@@ -214,11 +217,10 @@ def check_brackets(lines: list[str]) -> list[str]:
         for ch in strip_code(text):
             if ch in BRACKETS:
                 stack.append(BRACKETS[ch])
-            elif ch in BRACKETS.values():
-                if not stack or stack.pop() != ch:
-                    problems.append(f"line {number}: unexpected '{ch}'")
-                    stack = []
-                    break
+            elif ch in BRACKETS.values() and (not stack or stack.pop() != ch):
+                problems.append(f"line {number}: unexpected '{ch}'")
+                stack = []
+                break
         if stack:
             problems.append(
                 f"line {number}: missing '{stack[-1]}' (lines are not wrapped in this project)"
@@ -259,7 +261,7 @@ def check_inline_inputs(lines: list[str]) -> list[str]:
                 (number, match.group(1))
             )
     problems = []
-    for (group, inline), members in rows.items():
+    for (_group, inline), members in rows.items():
         for number, title in members[1:]:
             if title:
                 problems.append(
@@ -313,11 +315,12 @@ def check_version(lines: list[str]) -> list[str]:
     if not declared:
         return ['the script must declare: const string VERSION = "X.Y.Z"']
     version = declared.group(1)
-    for readme in README_FILES:
-        if readme.exists() and f"version-{version}-" not in readme.read_text(
-            encoding="utf-8"
-        ):
-            problems.append(f"{readme.name}: the version badge does not show {version}")
+    problems.extend(
+        f"{readme.name}: the version badge does not show {version}"
+        for readme in README_FILES
+        if readme.exists()
+        and f"version-{version}-" not in readme.read_text(encoding="utf-8")
+    )
     if CHANGELOG.exists():
         headings = re.findall(
             r"^## \[([^\]]+)\]",

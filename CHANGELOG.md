@@ -13,7 +13,9 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
-Nothing yet.
+### Changed
+
+- The copyright line of the script names the TradingView account of the author, `dmitry_plhn`.
 
 ## [1.2.0] - 2026-11-25
 

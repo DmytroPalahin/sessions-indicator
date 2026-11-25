@@ -91,6 +91,13 @@ Previous day, week and month values do not: they are read with a one-bar offset.
 that is *still running* move while the session makes new extremes — that is what a running range is. Opening range
 breakout markers appear only after a bar has closed.
 
+## I updated the script but the chart still shows the old version
+
+An indicator that is already on a chart keeps the version it was added with. After saving a new version in the Pine
+Editor, either press **Update on chart** in the editor (the button next to the script name), or remove the
+indicator from the chart and add it again from *Indicators → My scripts*. Settings you changed by hand stay as you
+set them; *Settings → Defaults → Reset settings* brings back the defaults of the new version.
+
 ## Can I rename "Asia" to something else?
 
 Yes. The name field in each row is free text, and the new name is used in labels and in the dashboard.

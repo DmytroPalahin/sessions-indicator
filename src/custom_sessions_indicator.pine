@@ -958,9 +958,10 @@ bgcolor(bandOf(killzones, 2, killzoneView), title = "Killzone 3 background")
 bgcolor(bandOf(killzones, 3, killzoneView), title = "Killzone 4 background")
 bgcolor(bandOf(killzones, 4, killzoneView), title = "Killzone 5 background")
 
-plot(vwapUsable ? vwapMid : na, "VWAP", color = vwapAnchor ? na : i_vwCol, linewidth = i_vwWidth)
-plot(vwapUsable and i_vwBands > 0 ? vwapUpper : na, "VWAP upper band", color = vwapAnchor ? na : color.new(i_vwCol, 50))
-plot(vwapUsable and i_vwBands > 0 ? vwapLower : na, "VWAP lower band", color = vwapAnchor ? na : color.new(i_vwCol, 50))
+// A switched-off plot is taken out of the status line too; otherwise the legend shows an empty value for it.
+plot(vwapUsable ? vwapMid : na, "VWAP", color = vwapAnchor ? na : i_vwCol, linewidth = i_vwWidth, display = i_vwOn ? display.all : display.none)
+plot(vwapUsable and i_vwBands > 0 ? vwapUpper : na, "VWAP upper band", color = vwapAnchor ? na : color.new(i_vwCol, 50), display = i_vwOn and i_vwBands > 0 ? display.all : display.none)
+plot(vwapUsable and i_vwBands > 0 ? vwapLower : na, "VWAP lower band", color = vwapAnchor ? na : color.new(i_vwCol, 50), display = i_vwOn and i_vwBands > 0 ? display.all : display.none)
 
 // Running high and low of every session slot, for the Data Window and for user-made alerts.
 plot(sessions.get(0).trk.active ? sessions.get(0).trk.hi : na, "Session 1 high", display = display.data_window, editable = false)

@@ -13,8 +13,12 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
-Planned as **1.0.0**, the first release. It will be tagged once the chart test matrix in
-[docs/TESTING.md](docs/TESTING.md) is complete.
+Nothing yet.
+
+## [1.0.0] - 2026-11-25
+
+The first release. What was checked on live charts before it, and what was not, is recorded in the verification log
+of [docs/TESTING.md](docs/TESTING.md).
 
 ### Added
 
@@ -37,4 +41,5 @@ Planned as **1.0.0**, the first release. It will be tagged once the chart test m
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.
 
-[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/commits/main
+[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/DmytroPalahin/sessions-indicator/releases/tag/v1.0.0

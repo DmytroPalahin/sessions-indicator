@@ -56,7 +56,7 @@ and *① General → Level labels offset, bars* to `8`.
 
 - *⑫ Style → Level labels position*: `At the line end` (the new default) or `After the line` (the placement of 1.2.0).
 - The indicator is published on TradingView as a public, protected script:
-  https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/
+  <https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/>
 - Screenshots of the default look and of the modules in both READMEs and in the settings reference
   (`docs/images`).
 - A links section in both READMEs, and the roadmap in the Russian README.

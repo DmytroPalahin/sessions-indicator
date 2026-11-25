@@ -5,7 +5,7 @@ Thank you for helping. This guide tells you how to report a problem, propose an 
 ## Ways to contribute
 
 | You want to | Do this |
-|-------------|---------|
+| ------------- | --------- |
 | Report a bug | [Open a bug report](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose). Include the symbol, the timeframe and a screenshot. |
 | Propose a feature | [Open a feature request](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose). Describe the trading need first, the solution second. |
 | Fix or build something | Open an issue first if the change is larger than a small fix, then send a pull request. |
@@ -45,7 +45,7 @@ with these project rules.
 **Naming**
 
 | Thing | Style | Example |
-|-------|-------|---------|
+| ------- | ------- | --------- |
 | Constants | `UPPER_SNAKE` | `MS_DAY`, `G_SESSIONS` |
 | Inputs | `i_` + camelCase | `i_lookback` |
 | Types and enums | `PascalCase` | `Tracker`, `ZoneStyle` |
@@ -99,7 +99,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 ```
 
 | Type | Use it for |
-|------|-----------|
+| ------ | ----------- |
 | `feat` | a new module or setting |
 | `fix` | a bug fix |
 | `docs` | documentation only |

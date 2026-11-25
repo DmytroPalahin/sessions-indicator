@@ -21,7 +21,7 @@ Pine Script is not a general-purpose language, and four of its rules shape every
 only uses what the regions above it define.
 
 | # | Region | Contains | Rule |
-|---|--------|----------|------|
+| --- | -------- | ---------- | ------ |
 | 1 | Constants | compile-time values, group names, tooltips | no logic |
 | 2 | Enums | every dropdown of the settings panel | one enum per dropdown |
 | 3 | Inputs | the settings panel | one block per module, prefixed `i_` |
@@ -59,7 +59,7 @@ flowchart TD
 ## Types
 
 | Type | Role | Draws? |
-|------|------|--------|
+| ------ | ------ | -------- |
 | `Tracker` | State machine of one recurring time window: active / started / ended, open, high, low, the times of the extremes, the last completed window and a buffer of past ranges. | never |
 | `ZoneView` | How a family of zones looks: style, transparencies, border, caption. One instance for sessions, one for killzones. | — |
 | `Zone` | One slot of the settings panel: its configuration, its `Tracker` and the drawings of the running window. | yes |
@@ -164,7 +164,7 @@ the dashboard. Lines, boxes and backgrounds use the colour as it is, because the
 ## Object budget
 
 | Drawing | Per day, defaults | Per day, everything on |
-|---------|-------------------|------------------------|
+| --------- | ------------------- | ------------------------ |
 | Boxes | 4 | 10 |
 | Labels | 0 | about 23 |
 | Lines | 0 | about 30 |

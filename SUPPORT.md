@@ -10,7 +10,7 @@ Most questions are answered in one of these:
 ## Where to ask
 
 | You have | Go to |
-|----------|-------|
+| ---------- | ------- |
 | A bug | [New issue → Bug report](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose) |
 | An idea | [New issue → Feature request](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose) |
 | A short question about using the indicator | The comments under the [TradingView publication](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) |

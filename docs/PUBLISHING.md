@@ -5,8 +5,8 @@ How a release goes from this repository to the TradingView community library.
 ## What is published now
 
 | | |
-|---|---|
-| Page | https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/ |
+| --- | --- |
+| Page | <https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/> |
 | Author | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
 | Access | Public, protected: everyone can add it to a chart, TradingView does not show the code. The code is open here. |
 | Code | Version 1.4.0 — the file at the tag `v1.4.0` |

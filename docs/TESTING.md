@@ -39,7 +39,7 @@ Run before every release. Add the indicator to the chart and walk through the ro
 ### Symbols
 
 | Symbol | Why |
-|--------|-----|
+| -------- | ----- |
 | `FX:EURUSD` | 24/5 market, pips, sessions crossing midnight |
 | `FX:USDJPY` | JPY pip size |
 | `BINANCE:BTCUSDT` | 24/7 market, weekends |
@@ -53,7 +53,7 @@ Run before every release. Add the indicator to the chart and walk through the ro
 ### Checks
 
 | # | Check | Expected |
-|---|-------|----------|
+| --- | ------- | ---------- |
 | 1 | Defaults on a 15-minute chart | Four session boxes per day (Asia, Frankfurt, London, New York), no labels, nothing else |
 | 2 | Change *Timezone of session times* to `UTC` | Boxes move; their width stays the same |
 | 3 | A week with a US clock change (March, November) | Sessions keep their New York times |
@@ -81,7 +81,7 @@ Run before every release. Add the indicator to the chart and walk through the ro
 ## Verification log
 
 | Date | Version | What was verified | Result |
-|------|---------|-------------------|--------|
+| ------ | --------- | ------------------- | -------- |
 | 2026-11-25 | 1.0.0 | Static checks (`tools/check.py`) | pass |
 | 2026-11-25 | 1.0.0 | Editor analysis in the Pine Editor (Pine v6) | 0 errors, 0 warnings |
 | 2026-11-25 | 1.0.0 | Full compile with **Add to chart** | pass, after fixing `CE10182` (overloaded methods read globals) |

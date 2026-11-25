@@ -12,7 +12,7 @@ With every input at its default the chart shows the four main sessions and nothi
 ## ① General
 
 | Input | Default | What it does |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | Timezone of session times | `America/New_York` | The timezone in which the times of this indicator are **written**. It is not your own timezone and it does not change the chart clock. The default session times are New York times, so keep `America/New_York` unless you retype every time for another zone. `Exchange` follows the symbol. Named zones follow daylight saving time automatically. |
 | Custom timezone | `UTC+3` | Used only when *Timezone of session times* is `Custom`. Accepts an IANA name (`Europe/Kyiv`) or an offset (`UTC+3`). An offset does not follow daylight saving time. |
 | History, days (0 = all) | `20` | Drawings older than this many days are skipped. `0` draws the whole loaded history. |
@@ -24,7 +24,7 @@ With every input at its default the chart shows the four main sessions and nothi
 Five rows. Each row is: checkbox · name · time window · colour.
 
 | Slot | Name | Window | On |
-|------|------|--------|----|
+| ------ | ------ | -------- | ---- |
 | 1 | Asia | `1800-0200` | yes |
 | 2 | Frankfurt | `0200-0300` | yes |
 | 3 | London | `0300-1100` | yes |
@@ -42,7 +42,7 @@ A window may cross midnight and may be up to 24 hours long (`1800-1800` restarts
 ## ③ Session display
 
 | Input | Default | What it does |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | Style | `Box` | `Box` frames the session range. `Background` shades the whole height of the chart. `Box + background` does both. `Hidden` keeps the session active for levels and the dashboard without drawing it. |
 | Box fill transparency | `95` | 0 is solid, 100 is invisible. |
 | Background transparency | `92` | Same scale, for the `Background` style. |
@@ -56,7 +56,7 @@ A window may cross midnight and may be up to 24 hours long (`1800-1800` restarts
 ## ④ Session high / low levels
 
 | Input | Default | What it does |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | Extend session high / low until broken | off | When a session ends, its high and low stay as lines. A high is broken by a higher high, a low by a lower low. |
 | Broken levels | `Keep, faded` | `Keep, faded` stops the line at the breaking bar and dims it. `Remove` deletes it. |
 | Max levels on chart | `12` | The oldest level is removed when this number is exceeded. |
@@ -73,7 +73,7 @@ are levels that price has already traded through.*
 | Show killzones | off | Master switch for all five rows. |
 
 | Slot | Name | Window |
-|------|------|--------|
+| ------ | ------ | -------- |
 | 1 | Asia KZ | `2000-0000` |
 | 2 | London KZ | `0200-0500` |
 | 3 | NY AM KZ | `0700-1000` |
@@ -81,7 +81,7 @@ are levels that price has already traded through.*
 | 5 | NY PM KZ | `1330-1600` |
 
 | Input | Default | What it does |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | Style | `Background` | Same choices as for sessions. |
 | Box fill transparency | `88` | Used by the `Box` styles. |
 | Background transparency | `90` | Used by the `Background` styles. |
@@ -90,7 +90,7 @@ are levels that price has already traded through.*
 ## ⑥ Previous day / week / month
 
 | Input | Default | What it does |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | Previous day high / low | off | Lines labelled `PDH` and `PDL`. |
 | Previous week high / low | off | Lines labelled `PWH` and `PWL`. |
 | Previous month high / low | off | Lines labelled `PMH` and `PML`. |
@@ -101,7 +101,7 @@ A period is shown only on chart timeframes lower than the period itself.
 ## ⑦ Opening prices
 
 | Input | Default | Label on the chart |
-|-------|---------|--------------------|
+| ------- | --------- | -------------------- |
 | Day open | off | `D Open` |
 | Week open | off | `W Open` |
 | Month open | off | `M Open` |
@@ -118,7 +118,7 @@ timezone.
 ## ⑧ Opening range
 
 | Input | Default | What it does |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | Show opening range | off | Master switch. |
 | Window | `0930-1000` | The window in which the range is measured. |
 | Colour | cyan | Colour of the box, the lines and the markers. |
@@ -131,7 +131,7 @@ timezone.
 ## ⑨ Session VWAP
 
 | Input | Default | What it does |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | Show VWAP | off | Master switch. Needs a symbol with volume. |
 | Anchor | `Each session start` | Where the calculation restarts: every enabled session, or each day, week or month. |
 | Colour, width | yellow, `1` | Look of the line. Yellow is chosen for dark charts; on a light chart pick a darker colour. |
@@ -151,7 +151,7 @@ timezone.
 ## ⑪ Dashboard
 
 | Input | Default | What it does |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | Show dashboard | off | Master switch. |
 | Position | `Top right` | Corner or side of the chart. |
 | Text size | `Small` | Size of the table text. |
@@ -168,7 +168,7 @@ range.
 ## ⑫ Style
 
 | Input | Default | What it does |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | Text size | `Small` | Size of every label on the chart. |
 | Dashboard text follows the chart theme | on | Dark text on light charts, light text on dark charts. |
 | Dashboard text colour | light grey | Used when the option above is off. |

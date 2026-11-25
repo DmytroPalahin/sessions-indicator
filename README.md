@@ -32,7 +32,7 @@ Frankfurt, London and New York sessions as soft colour boxes. Everything else is
 so the chart stays clean until you ask for more.
 
 | # | Module | What you get |
-|---|--------|--------------|
+| --- | -------- | -------------- |
 | ① | **General** | One timezone for the whole indicator (DST-aware), history depth, timeframe limit |
 | ② | **Sessions** | 5 slots: Asia, Frankfurt, London, New York and one spare. Name, time window and colour are yours to change |
 | ③ | **Session display** | Box, background, both or hidden · label with name and range · open line · 50% midline |
@@ -100,7 +100,7 @@ All times are written in the timezone selected in *① General* — `America/New
 to read the numbers below; it is not your own timezone, and the chart keeps showing your clock.
 
 | Slot | Name | Window | On |
-|------|------|--------|----|
+| ------ | ------ | -------- | ---- |
 | 1 | Asia | 18:00 – 02:00 | yes |
 | 2 | Frankfurt | 02:00 – 03:00 | yes |
 | 3 | London | 03:00 – 11:00 | yes |
@@ -117,7 +117,7 @@ NY PM 13:30 – 16:00. These are conventions, not rules: every window is editabl
 ## Documentation
 
 | Document | Read it when you want to |
-|----------|--------------------------|
+| ---------- | -------------------------- |
 | [docs/SETTINGS.md](docs/SETTINGS.md) | know what every input does and what its default is |
 | [docs/FAQ.md](docs/FAQ.md) | fix "nothing is drawn" or "sessions are an hour off" |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | understand or change the code |
@@ -170,7 +170,7 @@ Have an idea? [Open a feature request](https://github.com/DmytroPalahin/sessions
 ## Links
 
 | | |
-|---|---|
+| --- | --- |
 | Indicator on TradingView | [Custom Sessions Indicator](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) |
 | Author on TradingView | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
 | Source code | [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) |

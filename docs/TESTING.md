@@ -85,4 +85,5 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 2026-11-25 | 1.0.0 | Full compile with **Add to chart** | pass, after fixing `CE10182` (overloaded methods read globals) |
 | 2026-11-25 | 1.0.0 | Chart matrix rows 1, 5, 7, 9, 11, 13, 14, 15, 16, 21, 22 | pass — `OANDA:GBPUSD` on 30s, 5m, 15m, 30m, 1h, 4h, D; `BINANCE:BTCUSDT`, `CME_MINI:ES1!` and `NASDAQ:AAPL` on 15m. Row 21 failed first and was fixed (`windowKey`). |
 | 2026-11-25 | 1.0.0 | Chart matrix rows 8, 10, 12 | drawn and plausible; values not cross-checked against the candles |
-| — | 1.0.0 | Chart matrix rows 2, 3, 4, 6, 17, 18, 19, 20 | pending |
+| 2026-11-25 | 1.0.0 | Chart matrix rows 2, 4, 19 | pass — `OANDA:GBPUSD` 1m with History = 0, Timezone = UTC, Style = Box + background |
+| — | 1.0.0 | Chart matrix rows 3, 6, 17, 18, 20 | pending (clock-change week, removed levels, Bar Replay, alerts, dark theme) |

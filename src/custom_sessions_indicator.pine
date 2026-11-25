@@ -312,6 +312,9 @@ string TZ = switch i_tz
     TZ_CUSTOM   => i_tzCustom
     => i_tz
 
+// The timezone as the dashboard shows it: the name the user picked, not the identifier Pine needs for it.
+string TZ_LABEL = i_tz == TZ_UTC ? TZ_UTC : TZ
+
 int    tfSec      = timeframe.in_seconds()
 int    tfMs       = tfSec * 1000
 bool   intradayOk = timeframe.isintraday and tfSec <= i_maxTf * 60
@@ -991,7 +994,7 @@ dashCell(int column, int row, string txt, color col, string halign) =>
 
 if i_dashOn and barstate.islast
     color dim = color.new(DASH_TEXT, 45)
-    dashCell(0, 0, "Custom Sessions  ·  " + str.format_time(timenow, "HH:mm", TZ) + "  " + TZ, DASH_TEXT, text.align_left)
+    dashCell(0, 0, "Custom Sessions  ·  " + str.format_time(timenow, "HH:mm", TZ) + "  " + TZ_LABEL, DASH_TEXT, text.align_left)
     table.merge_cells(dashboard, 0, 0, 3, 0)
     dashCell(0, 1, "Session", dim, text.align_left)
     dashCell(1, 1, "Status", dim, text.align_left)

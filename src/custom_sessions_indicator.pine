@@ -37,6 +37,8 @@ const int    MS_MINUTE = 60000
 const int    MS_HOUR   = 3600000
 const int    MS_DAY    = 86400000
 const string NO_VALUE  = "—"
+// Contrast that label text must reach against the chart background (WCAG AA for normal text).
+const float  INK_CONTRAST = 4.5
 
 const string TZ_EXCHANGE = "Exchange"
 const string TZ_UTC      = "UTC"
@@ -73,6 +75,7 @@ const string TT_VW_BANDS = "Standard-deviation multiplier of the bands. 0 hides 
 const string TT_AVG      = "Number of completed sessions (and days) used for the 'Avg' column."
 const string TT_MAX_DIST = "TradingView fits every level of an indicator into the price scale, so a level far from price squeezes the candles. Levels farther from the last price than this many average daily ranges are not drawn. 0 draws all of them."
 const string TT_TAG_SPOT = "'At the line end' prints the text over the right end of the line (under it for lows), inside the chart, where the price scale cannot cut it off. 'After the line' prints it to the right of the line and needs a right margin wide enough for the text."
+const string TT_INK      = "A label takes the colour of its line or zone. When this is on, a colour that would be hard to read on the chart background is darkened on a light chart and lightened on a dark one, for the text only. Lines and zones keep their colour."
 
 //#endregion
 
@@ -281,6 +284,7 @@ bool     i_tagPrice = input.bool(false, "Price in level labels", group = G_STYLE
 float    i_maxDist  = input.float(0.0, "Hide levels farther than, × ADR (0 = never)", minval = 0.0, step = 0.5, tooltip = TT_MAX_DIST, group = G_STYLE)
 // Declared last on purpose: an input added in the middle would shift the saved settings of every input after it.
 TagSpot  i_tagSpot  = input.enum(TagSpot.atEnd, "Level labels position", tooltip = TT_TAG_SPOT, group = G_STYLE)
+bool     i_inkAuto  = input.bool(true, "Label text adapts to the chart background", tooltip = TT_INK, group = G_STYLE)
 
 //#endregion
 
@@ -485,6 +489,35 @@ tagStyleOf(Align a, bool below) =>
         Align.finish => below ? label.style_label_upper_right : label.style_label_lower_right
         => below ? label.style_label_up : label.style_label_down
 
+// @function Linear value of one sRGB channel (0 to 255), as the contrast formula needs it.
+linearOf(float channel) =>
+    float v = channel / 255
+    v <= 0.03928 ? v / 12.92 : math.pow((v + 0.055) / 1.055, 2.4)
+
+// @function Relative luminance of a colour: 0 is black, 1 is white. Transparency is ignored.
+luminanceOf(color c) =>
+    0.2126 * linearOf(color.r(c)) + 0.7152 * linearOf(color.g(c)) + 0.0722 * linearOf(color.b(c))
+
+// @function Contrast ratio of two luminances, from 1 (the same) to 21 (black on white).
+contrastOf(float a, float b) =>
+    (math.max(a, b) + 0.05) / (math.min(a, b) + 0.05)
+
+// @function Colour for text on the chart background. The given colour is moved, in steps of a tenth, towards black on
+//           a light chart or towards white on a dark one until it reaches INK_CONTRAST. A colour that already
+//           reads well comes back unchanged.
+inkOf(color c) =>
+    color ink = c
+    if i_inkAuto and not na(c)
+        float ground = luminanceOf(chart.bg_color)
+        // Below a luminance of 0.179 white gives more contrast than black.
+        float pole = ground > 0.179 ? 0 : 255
+        for step = 0 to 10
+            float share = step * 0.1
+            ink := color.rgb(color.r(c) + (pole - color.r(c)) * share, color.g(c) + (pole - color.g(c)) * share, color.b(c) + (pole - color.b(c)) * share, color.t(c))
+            if contrastOf(luminanceOf(ink), ground) >= INK_CONTRAST
+                break
+    ink
+
 // @function Label style of a level label at the right end of its line.
 // @param below True puts the text under the line (lows), false over it. Ignored when the text follows the line.
 levelTagStyle(bool below) =>
@@ -574,7 +607,7 @@ method place(Marker this, int x1, int x2, float y, string txt, color col, bool b
         this.seg := line.new(x1, y, x2, y, xloc = xloc.bar_time, color = col, style = LV_STYLE, width = i_lvWidth)
         if i_tags
             string caption = i_tagPrice ? txt + "  " + str.tostring(y, format.mintick) : txt
-            this.tag := label.new(x2, y, caption, xloc = xloc.bar_time, style = levelTagStyle(below), color = color(na), textcolor = col, size = TEXT_SIZE)
+            this.tag := label.new(x2, y, caption, xloc = xloc.bar_time, style = levelTagStyle(below), color = color(na), textcolor = inkOf(col), size = TEXT_SIZE)
     true
 
 // ── Tracker ──────────────────────────────────────────────────────────────────────────────────────────────
@@ -650,7 +683,7 @@ method draw(Zone this, ZoneView v, bool visible) =>
             if boxed
                 this.frame := box.new(t.startTime, t.hi, t.endTime, t.lo, xloc = xloc.bar_time, border_color = color.new(this.col, v.borderTransp), border_width = v.borderWidth, border_style = v.borderStyle, bgcolor = color.new(this.col, v.fillTransp))
             if v.caption != Caption.hidden
-                this.tag := label.new(this.captionX(v), v.captionBelow ? t.lo : t.hi, this.captionOf(v), xloc = xloc.bar_time, style = tagStyleOf(v.align, v.captionBelow), color = color(na), textcolor = this.col, size = TEXT_SIZE)
+                this.tag := label.new(this.captionX(v), v.captionBelow ? t.lo : t.hi, this.captionOf(v), xloc = xloc.bar_time, style = tagStyleOf(v.align, v.captionBelow), color = color(na), textcolor = inkOf(this.col), size = TEXT_SIZE)
             if v.showOpen
                 this.openLn := line.new(t.startTime, t.openPrice, t.endTime, t.openPrice, xloc = xloc.bar_time, color = this.col, style = line.style_dotted, width = 1)
             if v.showMid
@@ -697,7 +730,7 @@ addLevel(array<Level> levels, float price, int fromTime, bool isHigh, string tit
     lv.seg := line.new(fromTime, price, barEnd, price, xloc = xloc.bar_time, color = col, style = LV_STYLE, width = i_lvWidth)
     if i_tags
         string caption = i_tagPrice ? title + "  " + str.tostring(price, format.mintick) : title
-        lv.tag := label.new(barEnd, price, caption, xloc = xloc.bar_time, style = levelTagStyle(not isHigh), color = color(na), textcolor = col, size = TEXT_SIZE)
+        lv.tag := label.new(barEnd, price, caption, xloc = xloc.bar_time, style = levelTagStyle(not isHigh), color = color(na), textcolor = inkOf(col), size = TEXT_SIZE)
     levels.push(lv)
     if levels.size() > i_lvMax
         Level oldest = levels.shift()
@@ -1017,7 +1050,7 @@ if i_dashOn and barstate.islast
             string status = isOpen ? "Open · " + fmtDuration(nextClock(z.endMin) - timenow) + " left" : "Opens in " + fmtDuration(nextClock(z.startMin) - timenow)
             float span    = t.active ? t.hi - t.lo : t.lastHi - t.lastLo
             float base    = t.active ? t.lo : t.lastLo
-            dashCell(0, row, "● " + z.title, z.col, text.align_left)
+            dashCell(0, row, "● " + z.title, inkOf(z.col), text.align_left)
             dashCell(1, row, status, isOpen ? DASH_TEXT : dim, text.align_left)
             dashCell(2, row, fmtSpan(span, base), DASH_TEXT, text.align_right)
             dashCell(3, row, fmtSpan(t.spans.avg(), base), dim, text.align_right)

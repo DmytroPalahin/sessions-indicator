@@ -6,7 +6,7 @@ indicator("Custom Sessions Indicator", "Sessions", overlay = true, max_boxes_cou
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 //  Custom Sessions Indicator
-//  Sessions, killzones, liquidity levels, opening prices, opening range, session VWAP and a dashboard in one overlay.
+//  Sessions, killzones, liquidity levels, opening prices, opening range and a dashboard in one overlay.
 //
 //  Source, documentation and issue tracker: https://github.com/DmytroPalahin/sessions-indicator
 //
@@ -52,10 +52,9 @@ const string G_KZ       = "⑤ Killzones"
 const string G_PERIODS  = "⑥ Previous day / week / month"
 const string G_OPENS    = "⑦ Opening prices"
 const string G_OR       = "⑧ Opening range"
-const string G_VWAP     = "⑨ Session VWAP"
-const string G_TIME     = "⑩ Time tools"
-const string G_DASH     = "⑪ Dashboard"
-const string G_STYLE    = "⑫ Style"
+const string G_TIME     = "⑨ Time tools"
+const string G_DASH     = "⑩ Dashboard"
+const string G_STYLE    = "⑪ Style"
 
 const string TT_TZ       = "The timezone in which the session times below are written. It is not your own timezone and it does not change the chart clock. The default times are New York times, so keep America/New_York unless you retype every time for another zone. Named zones follow daylight saving time automatically; 'Exchange' follows the symbol."
 const string TT_TZ_CUST  = "Used only when Timezone is 'Custom'. Accepts an IANA name (Europe/Kyiv) or an offset (UTC+3)."
@@ -71,7 +70,6 @@ const string TT_CUSTOM_O = "Opening price of the bar that starts at this time of
 const string TT_OR_TIME  = "The window in which the opening range is measured."
 const string TT_OR_EXT   = "How long the range lines keep extending after the window closes."
 const string TT_OR_PROJ  = "Projection of the range above its high and below its low, as a multiple of the range. 0 turns a projection off."
-const string TT_VW_BANDS = "Standard-deviation multiplier of the bands. 0 hides the bands."
 const string TT_AVG      = "Number of completed sessions (and days) used for the 'Avg' column."
 const string TT_MAX_DIST = "TradingView fits every level of an indicator into the price scale, so a level far from price squeezes the candles. Levels farther from the last price than this many average daily ranges are not drawn. 0 draws all of them."
 const string TT_TAG_SPOT = "'At the line end' prints the text over the right end of the line (under it for lows), inside the chart, where the price scale cannot cut it off. 'After the line' prints it to the right of the line and needs a right margin wide enough for the text."
@@ -129,12 +127,6 @@ enum Corner
 enum Broken
     faded  = "Keep, faded"
     erased = "Remove"
-
-enum VwapAnchor
-    perSession = "Each session start"
-    daily      = "Day"
-    weekly     = "Week"
-    monthly    = "Month"
 
 enum TagSpot
     atEnd = "At the line end"
@@ -254,26 +246,19 @@ float  i_orProj1   = input.float(1.0, "Projection 1 ×", minval = 0.0, step = 0.
 float  i_orProj2   = input.float(0.0, "Projection 2 ×", minval = 0.0, step = 0.5, tooltip = TT_OR_PROJ, group = G_OR)
 bool   i_orSignals = input.bool(true, "Breakout markers", group = G_OR)
 
-// ⑨ Session VWAP
-bool       i_vwOn     = input.bool(false, "Show VWAP", group = G_VWAP)
-VwapAnchor i_vwAnchor = input.enum(VwapAnchor.perSession, "Anchor", group = G_VWAP)
-color      i_vwCol    = input.color(#FFEB3B, "Colour", inline = "vw", group = G_VWAP)
-int        i_vwWidth  = input.int(1, "", minval = 1, maxval = 4, inline = "vw", group = G_VWAP)
-float      i_vwBands  = input.float(0.0, "Bands ×", minval = 0.0, step = 0.5, tooltip = TT_VW_BANDS, group = G_VWAP)
-
-// ⑩ Time tools
+// ⑨ Time tools
 bool  i_sepOn  = input.bool(false, "Day separators", inline = "sep", group = G_TIME)
 color i_sepCol = input.color(color.new(#787B86, 50), "", inline = "sep", group = G_TIME)
 bool  i_wdOn   = input.bool(false, "Weekday labels", group = G_TIME)
 
-// ⑪ Dashboard
+// ⑩ Dashboard
 bool     i_dashOn   = input.bool(false, "Show dashboard", group = G_DASH)
 Corner   i_dashPos  = input.enum(Corner.topRight, "Position", group = G_DASH)
 TextSize i_dashSize = input.enum(TextSize.small, "Text size", group = G_DASH)
 int      i_avgLen   = input.int(20, "Average length", minval = 1, maxval = 200, tooltip = TT_AVG, group = G_DASH)
 bool     i_dashDay  = input.bool(true, "Day range row", group = G_DASH)
 
-// ⑫ Style
+// ⑪ Style
 TextSize i_textSize = input.enum(TextSize.small, "Text size", group = G_STYLE)
 bool     i_textAuto = input.bool(true, "Dashboard text follows the chart theme", group = G_STYLE)
 color    i_textCol  = input.color(#D1D4DC, "Dashboard text colour", group = G_STYLE)
@@ -332,10 +317,6 @@ color  DASH_TEXT  = i_textAuto ? chart.fg_color : i_textCol
 [dStart, dOpen, pdh, pdl, adr] = request.security(syminfo.tickerid, "D", [time, open, high[1], low[1], ta.sma(high - low, i_avgLen)[1]], lookahead = barmerge.lookahead_on)
 [wStart, wOpen, pwh, pwl]      = request.security(syminfo.tickerid, "W", [time, open, high[1], low[1]], lookahead = barmerge.lookahead_on)
 [mStart, mOpen, pmh, pml]      = request.security(syminfo.tickerid, "M", [time, open, high[1], low[1]], lookahead = barmerge.lookahead_on)
-
-bool newDay   = timeframe.change("D")
-bool newWeek  = timeframe.change("W")
-bool newMonth = timeframe.change("M")
 
 //#endregion
 
@@ -943,8 +924,8 @@ var array<string> WEEKDAYS = array.from("Sun", "Mon", "Tue", "Wed", "Thu", "Fri"
 //#region ═════════════════════════════════════════ 9 · Pipeline ══════════════════════════════════════════
 
 // The engine reports events as it goes: zones that started or ended, levels that broke, range breakouts.
-// Only the session starts are consumed today (they anchor the VWAP); the alerts module that turns the rest into
-// notifications is parked on the feature/alerts branch.
+// Nothing consumes them on main today: the alerts module that turns them into notifications is parked on the
+// feature/alerts branch, and the session VWAP that restarts at a session start on feature/vwap.
 
 // 1. Sessions and killzones.
 [sessionsStarted, sessionsEnded]   = runZones(sessions, sessionView)
@@ -976,16 +957,7 @@ if barstate.islast
 bool inOpeningRange = i_orOn and intradayOk and not na(time(timeframe.period, i_orTime, TZ))
 openingRange.run(inOpeningRange, windowKey(clockMinutes(i_orTime, 0), clockMinutes(i_orTime, 5)), inWindow)
 
-// 5. Session VWAP.
-bool vwapAnchor = switch i_vwAnchor
-    VwapAnchor.daily   => newDay
-    VwapAnchor.weekly  => newWeek
-    VwapAnchor.monthly => newMonth
-    => sessionsStarted != ""
-bool vwapUsable = i_vwOn and (i_vwAnchor != VwapAnchor.perSession or intradayOk)
-[vwapMid, vwapUpper, vwapLower] = ta.vwap(hlc3, vwapAnchor, i_vwBands > 0 ? i_vwBands : 1.0)
-
-// 6. Time tools.
+// 5. Time tools.
 if dayRolled and inWindow and timeframe.isintraday
     if i_sepOn
         line.new(time, low, time, high + syminfo.mintick, xloc = xloc.bar_time, extend = extend.both, color = i_sepCol, style = line.style_dotted, width = 1)
@@ -1006,11 +978,6 @@ bgcolor(bandOf(killzones, 1, killzoneView), title = "Killzone 2 background")
 bgcolor(bandOf(killzones, 2, killzoneView), title = "Killzone 3 background")
 bgcolor(bandOf(killzones, 3, killzoneView), title = "Killzone 4 background")
 bgcolor(bandOf(killzones, 4, killzoneView), title = "Killzone 5 background")
-
-// A switched-off plot is taken out of the status line too; otherwise the legend shows an empty value for it.
-plot(vwapUsable ? vwapMid : na, "VWAP", color = vwapAnchor ? na : i_vwCol, linewidth = i_vwWidth, display = i_vwOn ? display.all : display.none)
-plot(vwapUsable and i_vwBands > 0 ? vwapUpper : na, "VWAP upper band", color = vwapAnchor ? na : color.new(i_vwCol, 50), display = i_vwOn and i_vwBands > 0 ? display.all : display.none)
-plot(vwapUsable and i_vwBands > 0 ? vwapLower : na, "VWAP lower band", color = vwapAnchor ? na : color.new(i_vwCol, 50), display = i_vwOn and i_vwBands > 0 ? display.all : display.none)
 
 // Running high and low of every session slot, for the Data Window and for user-made alerts.
 plot(sessions.get(0).trk.active ? sessions.get(0).trk.hi : na, "Session 1 high", display = display.data_window, editable = false)

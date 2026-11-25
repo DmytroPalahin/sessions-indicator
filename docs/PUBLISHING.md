@@ -9,13 +9,15 @@ How a release goes from this repository to the TradingView community library.
 | Page | https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/ |
 | Author | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
 | Access | Public, protected: everyone can add it to a chart, TradingView does not show the code. The code is open here. |
-| Code | Version 1.2.0 — the file on `main`, which differs from the tag `v1.2.0` only in the copyright line |
-| First published | 2026-11-25 |
+| Code | Version 1.3.0 — the file at the tag `v1.3.0` |
+| First published | 2026-11-25, from version 1.2.0 |
+| Latest update | 2026-11-25, version 1.3.0, with release notes |
 | Categories | Multi-timeframe · Pivot points and levels |
 | Tags | `sessions`, `killzones`, `forex` |
 | Picture | `OANDA:EURUSD`, 15 minutes, default settings |
 
-The description on that page is the text in [Description](#description) below.
+The description on that page is the text in [Description](#description) below; the release notes of each update
+follow it there.
 
 ## Before you publish
 
@@ -92,7 +94,10 @@ This script is a charting tool, not financial advice.
 2. Replace its code with the new version and **Save**.
 3. Open the prepared chart, so the update gets a clean picture.
 4. Press **Publish script → Update existing script**.
-5. Paste the changelog section of the release as the release notes.
+5. Choose `Custom Sessions Indicator` in the list of published scripts and leave *Don't update the chart*
+   unticked.
+6. Write the release notes: the version, then the changes of the matching `CHANGELOG.md` section in plain text.
+7. On the next page keep **Public** and **Protected**, tick the House Rules box and press **Publish new version**.
 
 An update must describe what changed; the matching `CHANGELOG.md` section does that. Publish an update when the code
 changes, not to edit the page: the release notes are added under the first description, which stays as it is.

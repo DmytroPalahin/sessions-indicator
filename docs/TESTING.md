@@ -6,10 +6,11 @@ manual matrix on real charts.
 ## 1. Static checks
 
 ```bash
-python3 tools/check.py
+uv run tools/check.py
 ```
 
-The script needs only the Python standard library. CI runs it on every push and pull request. It checks:
+The script needs only the Python standard library, so `python3 tools/check.py` works too. CI runs it on every push
+and pull request. It checks:
 
 - the license header, `//@version=6` and the `indicator()` call;
 - the short title length (TradingView allows 10 characters);
@@ -21,6 +22,13 @@ The script needs only the Python standard library. CI runs it on every push and 
 - the number of plot-like calls against the limit of 64;
 - the version in the script, the README badge and the changelog agree;
 - every local link and picture in the documentation points at a file that exists.
+
+The check script has tests of its own in `tests/test_check.py`: every check is run on input that passes and on
+input for each problem it can report, and the whole script is run on this repository and on a broken copy.
+
+```bash
+uv run pytest
+```
 
 ## 2. Compile check
 

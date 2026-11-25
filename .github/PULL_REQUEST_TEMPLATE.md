@@ -8,7 +8,8 @@
 
 ## How it was tested
 
-- [ ] `python3 tools/check.py` passes
+- [ ] `uv run tools/check.py` passes
+- [ ] `uv run ruff check` and `uv run pytest` pass, if `tools/` or `tests/` changed
 - [ ] The Pine Editor shows no errors and no warnings
 - [ ] Rows of `docs/TESTING.md` I ran: <!-- for example 1, 5, 6, 17 -->
 - Symbols and timeframes: <!-- for example FX:EURUSD 15m, BINANCE:BTCUSDT 1m -->

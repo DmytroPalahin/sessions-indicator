@@ -13,7 +13,7 @@ Thank you for helping. This guide tells you how to report a problem, propose an 
 
 ## Development setup
 
-You need a TradingView account (the free plan is enough) and Python 3.9 or newer for the static checks.
+You need a TradingView account (the free plan is enough) and [uv](https://docs.astral.sh/uv/) for the tools.
 
 ```bash
 git clone https://github.com/DmytroPalahin/sessions-indicator.git
@@ -24,13 +24,22 @@ cd sessions-indicator
 ```
 
 ```bash
-python3 tools/check.py
+uv sync
 ```
+
+`uv sync` installs the Python version named in `pyproject.toml` and the tools pinned in `uv.lock` into `.venv`.
+Then:
+
+```bash
+uv run tools/check.py
+```
+
+The check script uses the standard library only, so `python3 tools/check.py` works without uv as well.
 
 The loop while developing:
 
 1. Edit [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) in your editor.
-2. Run `python3 tools/check.py`.
+2. Run `uv run tools/check.py`.
 3. Paste the file into the TradingView Pine Editor and press **Add to chart**.
 4. Walk through the relevant rows of [docs/TESTING.md](docs/TESTING.md).
 
@@ -76,6 +85,26 @@ with these project rules.
 - Respect the timeframe gates: if a module cannot be right on a timeframe, it must draw nothing.
 - Count your drawings. The budget is 500 lines, 500 labels and 500 boxes for the whole script.
 - Print text in `inkOf(colour)`, not in the colour itself, so it stays readable on light and dark charts.
+
+## Python tools
+
+The only Python in the repository is [tools/check.py](tools/check.py) and its tests in
+[tests/test_check.py](tests/test_check.py). When you change either, run:
+
+```bash
+uv run ruff check
+```
+
+```bash
+uv run ruff format
+```
+
+```bash
+uv run pytest
+```
+
+The settings of ruff, pytest and coverage are in `pyproject.toml`. A new check comes with tests: one input that
+passes and one for every problem it can report. CI runs the same commands on every push and pull request.
 
 ## Screenshots
 

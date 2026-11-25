@@ -15,8 +15,16 @@ How versions are counted for an indicator:
 
 ### Added
 
+- Tests for `tools/check.py` (`tests/test_check.py`): every check on passing input and on each problem it
+  reports.
+- `pyproject.toml` and `uv.lock`: the Python tools — ruff, pytest and coverage — are installed and run with uv.
 - FAQ and publishing guide: when the Indicators dialog renews its cached Favorites list — after 24 hours without
   being opened, on sign-out, or when the site data is cleared.
+
+### Changed
+
+- CI installs uv, lints and format-checks the Python tools, runs their tests and then checks the indicator.
+- `tools/check.py` follows the ruff rules of the project; what it checks is unchanged.
 
 ### Fixed
 

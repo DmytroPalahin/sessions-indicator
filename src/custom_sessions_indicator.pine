@@ -59,7 +59,7 @@ const string TT_TZ       = "The timezone in which the session times below are wr
 const string TT_TZ_CUST  = "Used only when Timezone is 'Custom'. Accepts an IANA name (Europe/Kyiv) or an offset (UTC+3)."
 const string TT_LOOKBACK = "Drawings older than this many days are skipped. 0 draws the whole loaded history (TradingView still keeps only the newest 500 objects of each kind)."
 const string TT_MAX_TF   = "Sessions, killzones and the opening range are hidden on chart timeframes above this many minutes, where they stop being meaningful."
-const string TT_OFFSET   = "How many bars to the right of the last bar the level lines and their labels end."
+const string TT_OFFSET   = "How many bars to the right of the last bar the level lines end. Their labels sit at that end."
 const string TT_SLOT     = "Checkbox · name · time window · colour. A window may cross midnight (1900-0400)."
 const string TT_UNIT     = "Unit of every range shown in labels and in the dashboard. 'Auto' uses pips on forex and price elsewhere."
 const string TT_LEVELS   = "When a session ends, its high and low stay on the chart as lines until price trades through them."
@@ -72,6 +72,7 @@ const string TT_OR_PROJ  = "Projection of the range above its high and below its
 const string TT_VW_BANDS = "Standard-deviation multiplier of the bands. 0 hides the bands."
 const string TT_AVG      = "Number of completed sessions (and days) used for the 'Avg' column."
 const string TT_MAX_DIST = "TradingView fits every level of an indicator into the price scale, so a level far from price squeezes the candles. Levels farther from the last price than this many average daily ranges are not drawn. 0 draws all of them."
+const string TT_TAG_SPOT = "'At the line end' prints the text over the right end of the line (under it for lows), inside the chart, where the price scale cannot cut it off. 'After the line' prints it to the right of the line and needs a right margin wide enough for the text."
 
 //#endregion
 
@@ -132,6 +133,10 @@ enum VwapAnchor
     weekly     = "Week"
     monthly    = "Month"
 
+enum TagSpot
+    atEnd = "At the line end"
+    after = "After the line"
+
 //#endregion
 
 //#region ═════════════════════════════════════════ 3 · Inputs ════════════════════════════════════════════
@@ -141,7 +146,7 @@ string i_tz       = input.string("America/New_York", "Timezone of session times"
 string i_tzCustom = input.string("UTC+3", "Custom timezone", tooltip = TT_TZ_CUST, group = G_GENERAL)
 int    i_lookback = input.int(20, "History, days (0 = all)", minval = 0, tooltip = TT_LOOKBACK, group = G_GENERAL)
 int    i_maxTf    = input.int(60, "Hide sessions above, minutes", minval = 1, maxval = 1440, tooltip = TT_MAX_TF, group = G_GENERAL)
-int    i_offset   = input.int(8, "Level labels offset, bars", minval = 0, maxval = 200, tooltip = TT_OFFSET, group = G_GENERAL)
+int    i_offset   = input.int(5, "Level labels offset, bars", minval = 0, maxval = 200, tooltip = TT_OFFSET, group = G_GENERAL)
 
 // ② Sessions
 // Asia, London, New York and Sydney are the 08:00-16:00 working day of their city; Frankfurt is the hour before London
@@ -274,6 +279,8 @@ int      i_lvWidth  = input.int(1, "", minval = 1, maxval = 4, inline = "lv", gr
 bool     i_tags     = input.bool(true, "Level labels", group = G_STYLE)
 bool     i_tagPrice = input.bool(false, "Price in level labels", group = G_STYLE)
 float    i_maxDist  = input.float(0.0, "Hide levels farther than, × ADR (0 = never)", minval = 0.0, step = 0.5, tooltip = TT_MAX_DIST, group = G_STYLE)
+// Declared last on purpose: an input added in the middle would shift the saved settings of every input after it.
+TagSpot  i_tagSpot  = input.enum(TagSpot.atEnd, "Level labels position", tooltip = TT_TAG_SPOT, group = G_STYLE)
 
 //#endregion
 
@@ -478,6 +485,14 @@ tagStyleOf(Align a, bool below) =>
         Align.finish => below ? label.style_label_upper_right : label.style_label_lower_right
         => below ? label.style_label_up : label.style_label_down
 
+// @function Label style of a level label at the right end of its line.
+// @param below True puts the text under the line (lows), false over it. Ignored when the text follows the line.
+levelTagStyle(bool below) =>
+    if i_tagSpot == TagSpot.after
+        label.style_label_left
+    else
+        below ? label.style_label_upper_right : label.style_label_lower_right
+
 // @function Formats a price distance in the unit chosen by the user.
 // @param span The distance (high - low).
 // @param base A price of the same move, used for the percentage.
@@ -549,7 +564,8 @@ joinName(string list, string name) =>
 // ── Marker ───────────────────────────────────────────────────────────────────────────────────────────────
 
 // @function Redraws the marker from scratch. A marker with no price is erased.
-method place(Marker this, int x1, int x2, float y, string txt, color col) =>
+// @param below True puts the label under the line instead of over it.
+method place(Marker this, int x1, int x2, float y, string txt, color col, bool below) =>
     this.seg.delete()
     this.tag.delete()
     this.seg := na
@@ -558,7 +574,7 @@ method place(Marker this, int x1, int x2, float y, string txt, color col) =>
         this.seg := line.new(x1, y, x2, y, xloc = xloc.bar_time, color = col, style = LV_STYLE, width = i_lvWidth)
         if i_tags
             string caption = i_tagPrice ? txt + "  " + str.tostring(y, format.mintick) : txt
-            this.tag := label.new(x2, y, caption, xloc = xloc.bar_time, style = label.style_label_left, color = color(na), textcolor = col, size = TEXT_SIZE)
+            this.tag := label.new(x2, y, caption, xloc = xloc.bar_time, style = levelTagStyle(below), color = color(na), textcolor = col, size = TEXT_SIZE)
     true
 
 // ── Tracker ──────────────────────────────────────────────────────────────────────────────────────────────
@@ -681,7 +697,7 @@ addLevel(array<Level> levels, float price, int fromTime, bool isHigh, string tit
     lv.seg := line.new(fromTime, price, barEnd, price, xloc = xloc.bar_time, color = col, style = LV_STYLE, width = i_lvWidth)
     if i_tags
         string caption = i_tagPrice ? title + "  " + str.tostring(price, format.mintick) : title
-        lv.tag := label.new(barEnd, price, caption, xloc = xloc.bar_time, style = label.style_label_left, color = color(na), textcolor = col, size = TEXT_SIZE)
+        lv.tag := label.new(barEnd, price, caption, xloc = xloc.bar_time, style = levelTagStyle(not isHigh), color = color(na), textcolor = col, size = TEXT_SIZE)
     levels.push(lv)
     if levels.size() > i_lvMax
         Level oldest = levels.shift()
@@ -763,9 +779,9 @@ method feed(Period this, int pStart, float pOpen, float pHi, float pLo, bool vis
 method redraw(Period this) =>
     bool hl = this.visible and this.showHL
     bool op = this.visible and this.showOpen
-    this.hiMk.place(this.startTime, rightEdge, hl ? this.prevHi : na, "P" + this.code + "H", this.hlCol)
-    this.loMk.place(this.startTime, rightEdge, hl ? this.prevLo : na, "P" + this.code + "L", this.hlCol)
-    this.openMk.place(this.startTime, rightEdge, op ? this.openPrice : na, this.code + " Open", this.openCol)
+    this.hiMk.place(this.startTime, rightEdge, hl ? this.prevHi : na, "P" + this.code + "H", this.hlCol, false)
+    this.loMk.place(this.startTime, rightEdge, hl ? this.prevLo : na, "P" + this.code + "L", this.hlCol, true)
+    this.openMk.place(this.startTime, rightEdge, op ? this.openPrice : na, this.code + " Open", this.openCol, false)
     true
 
 // ── Anchor ───────────────────────────────────────────────────────────────────────────────────────────────
@@ -781,7 +797,7 @@ method capture(Anchor this, bool trigger) =>
 
 // @function Redraws the line of the latest opening price. Called on the last bar only.
 method refresh(Anchor this) =>
-    this.mk.place(this.startTime, rightEdge, this.enabled and timeframe.isintraday ? this.price : na, this.title, this.col)
+    this.mk.place(this.startTime, rightEdge, this.enabled and timeframe.isintraday ? this.price : na, this.title, this.col, false)
     true
 
 // ── Opening range ────────────────────────────────────────────────────────────────────────────────────────

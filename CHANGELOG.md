@@ -13,6 +13,13 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [1.2.0] - 2026-11-25
+
+A Frankfurt session and a cleaner default chart. The session rows changed places: values you typed into rows 2 to 5
+by hand stay in those rows, so check the *② Sessions* group after updating, or use *Defaults → Reset settings*.
+
 ### Added
 
 - A **Frankfurt** session, on by default: the hour before London opens, `0200-0300` in New York time, purple.
@@ -68,6 +75,7 @@ of [docs/TESTING.md](docs/TESTING.md).
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.
 
-[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/DmytroPalahin/sessions-indicator/releases/tag/v1.0.0

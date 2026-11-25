@@ -90,7 +90,8 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 2026-11-25 | 1.0.0 | Full compile and chart run after removing the alerts module | pass — `TVC:DXY` on the daily and the 15-minute timeframe, all modules on |
 | 2026-11-25 | 1.1.0 | New default sessions, colours and box style | pass — `OANDA:EURUSD` 15m: full compile, and the boxes coincide edge to edge with an 08:00 – 16:00 per-city reference indicator |
 | 2026-11-25 | 1.1.0 | Release build | The tagged file differs from the build run on the chart only in the `VERSION` string; static checks pass, it was not run on a chart again |
-| 2026-11-25 | unreleased | Labels hidden by default, timezone setting renamed | pass — `OANDA:EURUSD` 15m: full compile; boxes only, no labels, same edges as the reference indicator |
-| 2026-11-25 | unreleased | Frankfurt session in the defaults, slots in time order | pass — `OANDA:GBPUSD` 15m: full compile; the purple Frankfurt box sits between the Asia and London boxes, at the same place as in the reference indicator |
-| 2026-11-25 | unreleased | VWAP plots taken out of the status line while VWAP is off | pass — `OANDA:GBPUSD` 15m: full compile; the legend shows the indicator name with no empty values |
-| — | 1.1.0 | Chart matrix rows 3, 6, 17, 20 | pending (clock-change week, removed levels, Bar Replay, dark theme) |
+| 2026-11-25 | 1.2.0 | Labels hidden by default, timezone setting renamed | pass — `OANDA:EURUSD` 15m: full compile; boxes only, no labels, same edges as the reference indicator |
+| 2026-11-25 | 1.2.0 | Frankfurt session in the defaults, slots in time order | pass — `OANDA:GBPUSD` 15m: full compile; the purple Frankfurt box sits between the Asia and London boxes, at the same place as in the reference indicator |
+| 2026-11-25 | 1.2.0 | VWAP plots taken out of the status line while VWAP is off | pass — `OANDA:GBPUSD` 15m: full compile; the legend shows the indicator name with no empty values |
+| 2026-11-25 | 1.2.0 | Release build | The tagged file differs from the build run on the chart only in the `VERSION` string; static checks pass, it was not run on a chart again |
+| — | 1.2.0 | Chart matrix rows 3, 6, 17, 20 | pending (clock-change week, removed levels, Bar Replay, dark theme) |

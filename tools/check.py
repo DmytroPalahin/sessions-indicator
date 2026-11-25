@@ -22,6 +22,9 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "src" / "custom_sessions_indicator.pine"
 README_FILES = (ROOT / "README.md", ROOT / "README.ru.md")
 CHANGELOG = ROOT / "CHANGELOG.md"
+DOC_GLOBS = ("*.md", "docs/*.md", ".github/*.md")
+# A Markdown link or picture, or an HTML src / href attribute.
+DOC_LINK = re.compile(r"\]\(([^)\s]+)\)|\b(?:src|href)=\"([^\"]+)\"")
 
 LICENSE_LINE = (
     "// This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 "
@@ -243,6 +246,22 @@ def check_version(lines: list[str]) -> list[str]:
     return problems
 
 
+def check_doc_links() -> list[str]:
+    """Every relative link and picture in the Markdown files must point at a file of the repository."""
+    problems = []
+    for pattern in DOC_GLOBS:
+        for doc in sorted(ROOT.glob(pattern)):
+            text = doc.read_text(encoding="utf-8")
+            for match in DOC_LINK.finditer(text):
+                target = match.group(1) or match.group(2)
+                if target.startswith("#") or re.match(r"[a-z][a-z0-9+.-]*:", target):
+                    continue  # an anchor on the same page, or an absolute URL
+                if not (doc.parent / target.split("#", 1)[0]).exists():
+                    line = text.count("\n", 0, match.start()) + 1
+                    problems.append(f"{doc.relative_to(ROOT)}:{line}: link target not found: {target}")
+    return problems
+
+
 def main() -> int:
     if not SOURCE.exists():
         print(f"FAIL  source file not found: {SOURCE}")
@@ -263,6 +282,7 @@ def main() -> int:
     report.check("names: every function and method has its own name", check_unique_names(lines))
     report.check("plots: within the limit of plot-like calls", check_plot_budget(lines))
     report.check("version: script, README badges and changelog agree", check_version(lines))
+    report.check("docs: local links and pictures resolve", check_doc_links())
 
     print()
     if report.failures:

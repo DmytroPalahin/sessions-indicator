@@ -75,6 +75,7 @@ with these project rules.
 - Nothing new may be drawn on a bar outside `inWindow`.
 - Respect the timeframe gates: if a module cannot be right on a timeframe, it must draw nothing.
 - Count your drawings. The budget is 500 lines, 500 labels and 500 boxes for the whole script.
+- Print text in `inkOf(colour)`, not in the colour itself, so it stays readable on light and dark charts.
 
 ## Screenshots
 

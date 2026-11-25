@@ -92,13 +92,16 @@ hides above the session timeframe limit.
 The default VWAP colour is yellow. It reads well on a dark chart and is faint on a light one. Pick a darker colour
 in *⑨ Session VWAP → Colour*.
 
-## Some labels are pale on a light chart
+## The text of a label is a shade darker than its line
 
-A label is printed in the colour of its line or zone, and most default colours are chosen for dark charts. On a
-white background the yellow, orange, light green and grey ones lose contrast: `PWH`, `W Open`, `00:00 Open`,
-`PDH`, the New York and London captions, the killzone names. Asia blue, Frankfurt purple, the weekday labels and
-the dashboard stay clear. Every one of these colours has its own input next to the line it belongs to — pick
-darker shades there. On a dark chart all default colours read well; Frankfurt purple is the dimmest.
+That is on purpose. A label takes the colour of its line or zone, and most default colours are chosen for dark
+charts: on a white background yellow, orange, light green and grey text is hard to read. With *⑫ Style → Label
+text adapts to the chart background* on, which is the default, such a colour is darkened on a light chart and
+lightened on a dark one until the text reads well. Lines and zones keep the colour you chose. Switch the setting
+off to print text in the exact colour.
+
+A thin line in a pale colour can still be faint on a white chart. Pick a darker colour for it in the input next
+to the line it belongs to.
 
 ## VWAP in Bar Replay is not exactly the VWAP of the live chart
 

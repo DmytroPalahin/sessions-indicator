@@ -152,6 +152,15 @@ TradingView stores the settings of an indicator by the position of each input. A
 shifts every saved value after it into the wrong field. A new input is declared after the last one, also when
 its group sits earlier in the file — `i_tagSpot` is the example.
 
+### 13. Text is adjusted for contrast, lines are not
+
+A label is printed in the colour of its line or zone, so the eye links the two. The default colours suit dark
+charts; on a white background most of them fell below a contrast of 3 : 1 as text. `inkOf` therefore moves a
+text colour towards black on a light chart, or towards white on a dark one, in steps of a tenth until it reaches
+`INK_CONTRAST` (4.5 : 1, the WCAG mark for normal text), and returns a colour that already reads well unchanged.
+Every place that prints text in a user colour calls it: zone captions, level labels and the session names of
+the dashboard. Lines, boxes and backgrounds use the colour as it is, because their hue is the information.
+
 ## Object budget
 
 | Drawing | Per day, defaults | Per day, everything on |
@@ -190,7 +199,6 @@ levels fold back to their first bar.
 - Every level has its own label. Two levels at one price therefore print two labels over each other.
 - A level label ends at the end of its line, `i_offset` bars after the last bar. It is complete only when the
   right margin of the chart is at least that wide.
-- A label takes the colour of its line or zone. The defaults suit dark charts; on a white background most of
-  them have a contrast below 3 : 1.
+- Lines keep the colours of the inputs. A thin line in a pale default colour can be faint on a white chart.
 - The level list is trimmed by age. With `Keep, faded` a broken level can push out an older level that is still
   live.

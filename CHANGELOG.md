@@ -13,11 +13,25 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+Label text that reads on a white chart as well as on a dark one.
+
 ### Added
 
-- FAQ entries: labels that are pale on a light chart, and VWAP in Bar Replay.
+- *⑫ Style → Label text adapts to the chart background*, on by default. Text in a colour that would be hard to read
+  on the chart background is darkened on a light chart and lightened on a dark one, up to a contrast of 4.5 : 1.
+- FAQ entries: why label text can be a shade darker than its line, and VWAP in Bar Replay.
 - The verification log covers the last open rows of the chart matrix: the US clock change, Bar Replay, light and
   dark charts.
+
+### Changed
+
+- Captions, level labels and the session names of the dashboard are printed in the adjusted colour. Lines, boxes
+  and backgrounds are unchanged. Switch the new setting off to get the exact colours back.
+
+### Fixed
+
+- On a white chart most default label colours were too pale to read comfortably (`PWH` 1.4 : 1, `PDH` 1.9 : 1, New
+  York 2.2 : 1, London 2.8 : 1); on a dark chart Frankfurt purple was at 2.8 : 1.
 
 ## [1.3.0] - 2026-11-25
 

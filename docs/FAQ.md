@@ -138,10 +138,20 @@ breakout markers appear only after a bar has closed.
 
 ## I updated the script but the chart still shows the old version
 
-An indicator that is already on a chart keeps the version it was added with. After saving a new version in the Pine
-Editor, either press **Update on chart** in the editor (the button next to the script name), or remove the
-indicator from the chart and add it again from *Indicators → My scripts*. Settings you changed by hand stay as you
-set them; *Settings → Defaults → Reset settings* brings back the defaults of the new version.
+An indicator that is already on a chart keeps the version it was added with. That holds for a script you saved in
+the Pine Editor and for the publication alike: reloading the chart does not move it to a newer version.
+
+- **Your own saved script.** After saving a new version, press **Update on chart** in the editor (the button next
+  to the script name), or remove the indicator and add it again from *Indicators → My scripts*.
+- **The publication.** Remove the indicator from the chart and add it again.
+
+If the indicator you just added is still the old version, the Indicators dialog is the reason. It keeps its
+Favorites list in the browser's cache and reads the version from there, so a browser that opened the dialog before
+the update can go on adding the previous version. Clearing the cached data of the TradingView site makes the
+dialog load the list again, and then it adds the current version.
+
+Settings you changed by hand stay as you set them; *Settings → Defaults → Reset settings* brings back the defaults
+of the new version.
 
 ## Can I rename "Asia" to something else?
 
@@ -156,8 +166,7 @@ Choose `Price`, `Ticks` or `Percent` in *③ Session display → Range unit* ins
 
 From its [page on TradingView](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/): press **Use on chart**. The publication is protected, so TradingView does
 not show its code there; the same code is open in this repository, in
-[src/custom_sessions_indicator.pine](../src/custom_sessions_indicator.pine). An indicator added from the
-publication follows its updates; reload the chart if a new version does not show up.
+[src/custom_sessions_indicator.pine](../src/custom_sessions_indicator.pine).
 
 ## Still stuck?
 

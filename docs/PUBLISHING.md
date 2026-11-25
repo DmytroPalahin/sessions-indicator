@@ -104,8 +104,13 @@ This script is a charting tool, not financial advice.
 An update must describe what changed; the matching `CHANGELOG.md` section does that. Publish an update when the code
 changes, not to edit the page: the release notes are added under the first description, which stays as it is.
 
-People who added the indicator from the publication receive the update on their charts. The Indicators dialog can
-keep offering the previous version for a short while after an update. A copy pasted from this
+An update does not change charts by itself. An indicator that is already on a chart, added from the publication
+or from the saved script, stays on the version it was added with until it is removed and added again. The new
+version is the one that gets added from then on — with one catch: the Indicators dialog keeps its Favorites list
+in the browser's cache, version included, so a browser that opened the dialog before the update can go on adding
+the previous version until that cache is renewed. To check what the service itself serves, read
+`https://pine-facade.tradingview.com/pine-facade/versions/<pine id>`; the pine id of this publication starts with
+`PUB;550e`. A copy pasted from this
 repository into someone's own Pine Editor does not change until they paste the new file.
 
 ## Rules worth remembering

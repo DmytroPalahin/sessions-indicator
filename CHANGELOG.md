@@ -13,6 +13,12 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+### Fixed
+
+- The FAQ and the publishing guide said that an indicator added from the publication follows its updates. It
+  does not: it stays on the version it was added with until it is added again, and the Indicators dialog can add
+  the previous version from its cached Favorites list.
+
 ## [1.4.0] - 2026-11-25
 
 Label text that reads on a white chart as well as on a dark one.

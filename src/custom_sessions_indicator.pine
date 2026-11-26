@@ -57,7 +57,7 @@ const string G_DASH     = "⑩ Dashboard"
 const string G_STYLE    = "⑪ Style"
 
 const string TT_TZ       = "The timezone in which the session times below are written. It is not your own timezone and it does not change the chart clock. The default times are New York times, so keep America/New_York unless you retype every time for another zone. Named zones follow daylight saving time automatically; 'Exchange' follows the symbol."
-const string TT_TZ_CUST  = "Used only when Timezone is 'Custom'. Accepts an IANA name (Europe/Kyiv) or an offset (UTC+3)."
+const string TT_TZ_CUST  = "Used only when 'Timezone of session times' is set to 'Custom'; otherwise this field is ignored. Accepts an IANA name (Europe/London, Asia/Tokyo) or an offset (UTC+3). A name follows daylight saving time, an offset does not."
 const string TT_LOOKBACK = "Drawings older than this many days are skipped. 0 draws the whole loaded history (TradingView still keeps only the newest 500 objects of each kind)."
 const string TT_MAX_TF   = "Sessions, killzones and the opening range are hidden on chart timeframes above this many minutes, where they stop being meaningful."
 const string TT_OFFSET   = "How many bars to the right of the last bar the level lines end. Their labels sit at that end."
@@ -138,7 +138,7 @@ enum TagSpot
 
 // ① General
 string i_tz       = input.string("America/New_York", "Timezone of session times", options = [TZ_EXCHANGE, TZ_UTC, "America/New_York", "America/Chicago", "America/Los_Angeles", "America/Sao_Paulo", "Europe/London", "Europe/Berlin", "Europe/Athens", "Asia/Dubai", "Asia/Kolkata", "Asia/Shanghai", "Asia/Hong_Kong", "Asia/Singapore", "Asia/Tokyo", "Asia/Seoul", "Australia/Sydney", "Pacific/Auckland", TZ_CUSTOM], tooltip = TT_TZ, group = G_GENERAL)
-string i_tzCustom = input.string("UTC+3", "Custom timezone", tooltip = TT_TZ_CUST, group = G_GENERAL)
+string i_tzCustom = input.string("Europe/London", "Custom timezone", tooltip = TT_TZ_CUST, group = G_GENERAL)
 int    i_lookback = input.int(20, "History, days (0 = all)", minval = 0, tooltip = TT_LOOKBACK, group = G_GENERAL)
 int    i_maxTf    = input.int(60, "Hide sessions above, minutes", minval = 1, maxval = 1440, tooltip = TT_MAX_TF, group = G_GENERAL)
 int    i_offset   = input.int(5, "Level labels offset, bars", minval = 0, maxval = 200, tooltip = TT_OFFSET, group = G_GENERAL)

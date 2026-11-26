@@ -9,9 +9,9 @@ How a release goes from this repository to the TradingView community library.
 | Page | <https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/> |
 | Author | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
 | Access | Public, protected: everyone can add it to a chart, TradingView does not show the code. The code is open here. |
-| Code | Version 2.1.0 — the file at the tag `v2.1.0` |
+| Code | Version 2.1.1 — the file at the tag `v2.1.1` |
 | First published | 2026-11-25, from version 1.2.0 |
-| Latest update | 2026-11-26, version 2.1.0; the page carries the release notes of 1.3.0, 1.4.0, 2.0.0 and 2.1.0 |
+| Latest update | 2026-11-26, version 2.1.1; the page carries the release notes of 1.3.0, 1.4.0, 2.0.0, 2.1.0 and 2.1.1 |
 | Categories | Multi-timeframe · Pivot points and levels |
 | Tags | `sessions`, `killzones`, `forex` |
 | Picture | `OANDA:EURUSD`, 15 minutes, default settings |

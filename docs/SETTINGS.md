@@ -5,9 +5,14 @@ as the titled input before them.
 
 > **Tip.** Hover the ⓘ icon next to an input in TradingView to read the same explanation without leaving the chart.
 
-With every input at its default the chart shows the four main sessions and nothing else:
+With every input at its default the chart shows the four main sessions and a small table of their hours:
 
-![Default settings: Asia, Frankfurt, London and New York session boxes](images/sessions-default.png)
+![Default settings: Asia, Frankfurt, London and New York session boxes and the hours table](images/sessions-default.png)
+
+The table has one line per session: its name, its hours as they are written in the settings, and the same hours
+on your own clock. The chart of the picture is set to UTC, which is also the default of *① General → My timezone*,
+so the last column matches the time axis. The other pictures of this page, except the dashboard one, were taken
+with *⑩ Hours on my clock* off.
 
 ## ① General
 
@@ -16,7 +21,7 @@ With every input at its default the chart shows the four main sessions and nothi
 | History, days (0 = all) | `20` | Drawings older than this many days are skipped. `0` draws the whole loaded history. |
 | Hide sessions above, minutes | `60` | Sessions, killzones and the opening range are hidden on chart timeframes above this value. |
 | Level labels offset, bars | `5` | How many bars to the right of the last bar the level lines end. Their labels sit at that end, so keep the right margin of the chart at least this wide. |
-| My timezone | `UTC` | The timezone your own chart shows — the clock in its bottom right corner. TradingView does not tell an indicator which one it is, so pick it here. It is used for the *Hours* column of the dashboard and for every clock set to `My time`. Sessions are drawn in the right place whatever is chosen here. |
+| My timezone | `UTC` | The timezone your own chart shows — the clock in its bottom right corner. TradingView does not tell an indicator which one it is, so pick it here. The hours table on the chart then shows every session on your clock, and it changes as soon as another city is picked. It is also the timezone of every clock set to `My time`. Sessions are drawn in the right place whatever is chosen here. |
 
 ## ② Sessions
 
@@ -165,7 +170,7 @@ them.
 | Text size | `Small` | Size of the table text. |
 | Average length | `20` | Number of completed sessions and days behind the `Avg` column. |
 | Day range row | on | Adds the day range and its share of the average daily range. |
-| Hours on my clock | on | Adds the *Hours* column: the hours of every session in *① General → My timezone*. |
+| Hours on my clock | on | Shows the hours of every session in *① General → My timezone*. With the dashboard off it is a small table of its own: session · hours as written in the settings, with their city · hours on your clock; enabled killzones are listed under the sessions. With the dashboard on it is the *Hours* column. |
 
 Columns: session name · hours on your own clock · status (`Open · 2h 05m left` or `Opens in 5h 03m`) · current or
 latest range · average range. The first line names the timezone the hours are shown in.

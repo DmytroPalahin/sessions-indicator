@@ -121,7 +121,12 @@ display setting that Pine does not expose. Most public session indicators theref
 timezone, UTC or New York, and leave the conversion to the user; a few give each session the timezone of its
 city; one offers a "your timezone" mode for the times it prints. This script takes the second and the third:
 the city per row keeps the hours true all year, and *① General → My timezone* is the one thing the user tells
-the script, used for the *Hours* column of the dashboard and for any clock set to `My time`.
+the script, used for the hours table and for any clock set to `My time`.
+
+That table is on by default. A setting that changes nothing on the screen reads as broken: with the table off,
+picking a timezone had no visible effect, and the rows kept saying 08:00. So each line of the table carries both
+readings, the hours as written in the settings and the hours on the user's clock, and the second one changes the
+moment another timezone is picked.
 
 Up to 2.1.1 there was one timezone for all sessions, New York by default. It kept the engine one line shorter and
 made the settings hard to read: "London 03:00 – 11:00" only makes sense to someone who knows that the numbers are

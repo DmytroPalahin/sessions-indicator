@@ -17,9 +17,17 @@ The hours of a session row are the local time of the city on that row, not the t
 `0800-1600` is 8 to 16 o'clock in London. A chart set to Paris or Berlin time shows that session from 09:00 to
 17:00, a chart set to New York time from 03:00 to 11:00 — the same eight hours, read on another clock.
 
-To see the hours on your own clock, pick your timezone in *① General → My timezone* and switch the dashboard on:
-its *Hours* column lists every session in your time. With Paris or Berlin it reads Asia 00:00 – 08:00, Frankfurt
-08:00 – 09:00, London 09:00 – 17:00 and New York 14:00 – 22:00.
+The table on the chart does that conversion for you. Each line gives the hours as they are written in the
+settings and, next to them, the same hours in *① General → My timezone*. Pick your timezone there and the last
+column reads as your chart does: with Paris or Berlin, Asia 00:00 – 08:00, Frankfurt 08:00 – 09:00, London
+09:00 – 17:00 and New York 14:00 – 22:00.
+
+## I picked my timezone and the hours in the settings still start at 08:00
+
+They stay as they are on purpose. *My timezone* does not rewrite the session rows and does not move anything on
+the chart: a session row keeps the local time of its city, which is what keeps it in the right place all year.
+What changes is the table on the chart, whose last column shows every session on your clock. If you would rather
+type the hours as you see them on your chart, see the next entry.
 
 ## I want to type the hours as I see them on my chart
 
@@ -36,8 +44,13 @@ its own city, and why *My timezone* has to be picked once by hand.
 
 ## What is *My timezone* for?
 
-For two things: the *Hours* column of the dashboard, and every clock set to `My time`. Sessions, killzones and
-opens are drawn in the right place whatever it is set to, so there is nothing to break by leaving it alone.
+For two things: the hours table on the chart (the *Hours* column when the dashboard is on), and every clock set
+to `My time`. Sessions, killzones and opens are drawn in the right place whatever it is set to, so there is
+nothing to break by leaving it alone.
+
+## How do I hide the hours table?
+
+Untick *⑩ Dashboard → Hours on my clock*.
 
 ## A session is shifted by an hour
 

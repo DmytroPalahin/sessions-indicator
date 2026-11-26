@@ -13,6 +13,22 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+The hours of the sessions are on the chart from the start, on your own clock.
+
+### Changed
+
+- *⑩ Dashboard → Hours on my clock* no longer needs the dashboard. With the dashboard off it shows a small table of
+  its own, and since the setting is on by default, so is the table: one line per session with its name, its hours
+  as they are written in the settings and the same hours in *① General → My timezone*. Enabled killzones are
+  listed under the sessions. Picking another timezone changes the last column at once; until now it changed
+  nothing that could be seen while the dashboard was off.
+- The default look therefore has a table in the top right corner. Untick *Hours on my clock* to hide it.
+
+### Added
+
+- FAQ entries: why the hours in the settings still start at 08:00 after you picked your timezone, and how to hide
+  the hours table.
+
 ## [4.0.0] - 2026-11-26
 
 No timezone for the whole indicator any more: every window has its clock next to it, and the one timezone you set

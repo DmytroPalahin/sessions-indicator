@@ -13,8 +13,15 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+### Changed
+
+- *① General → Custom timezone* shows `Europe/London` by default instead of `UTC+3`. The field is used only when
+  *Timezone of session times* is `Custom`; the old example looked like a setting to adjust and, being an offset,
+  did not follow daylight saving time. Its tooltip says so now.
+
 ### Added
 
+- FAQ entry: what the *Custom timezone* field is for.
 - A French README, `README.fr.md`, next to the English and the Russian one.
 - `tools/check.py` checks that every translated README has the sections, pictures and local links of
   `README.md`.

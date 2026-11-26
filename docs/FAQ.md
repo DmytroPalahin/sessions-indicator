@@ -23,6 +23,12 @@ Two ways to fix it:
 - or keep your timezone and retype the windows in it. For Central European winter time: Asia `0000-0800`, Frankfurt
   `0800-0900`, London `0900-1700`, New York `1400-2200`.
 
+## What is the *Custom timezone* field for?
+
+Only for the case when *① General → Timezone of session times* is set to `Custom`: then the session times are read
+in the zone typed there. With any other choice the field is ignored. The value it shows is an example, not your
+location and not a setting you need to match to the season.
+
 ## Sessions are shifted by an hour
 
 The session times are read in the timezone from *① General → Timezone of session times*. Two common causes:

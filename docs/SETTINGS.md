@@ -14,7 +14,7 @@ With every input at its default the chart shows the four main sessions and nothi
 | Input | Default | What it does |
 | ------- | --------- | -------------- |
 | Timezone of session times | `America/New_York` | The timezone in which the times of this indicator are **written**. It is not your own timezone and it does not change the chart clock. The default session times are New York times, so keep `America/New_York` unless you retype every time for another zone. `Exchange` follows the symbol. Named zones follow daylight saving time automatically. |
-| Custom timezone | `UTC+3` | Used only when *Timezone of session times* is `Custom`. Accepts an IANA name (`Europe/Kyiv`) or an offset (`UTC+3`). An offset does not follow daylight saving time. |
+| Custom timezone | `Europe/London` | Used only when *Timezone of session times* is `Custom`; otherwise the field is ignored, whatever it says. Accepts an IANA name (`Europe/London`, `Asia/Tokyo`) or an offset (`UTC+3`). A name follows daylight saving time, an offset does not. |
 | History, days (0 = all) | `20` | Drawings older than this many days are skipped. `0` draws the whole loaded history. |
 | Hide sessions above, minutes | `60` | Sessions, killzones and the opening range are hidden on chart timeframes above this value. |
 | Level labels offset, bars | `5` | How many bars to the right of the last bar the level lines end. Their labels sit at that end, so keep the right margin of the chart at least this wide. |

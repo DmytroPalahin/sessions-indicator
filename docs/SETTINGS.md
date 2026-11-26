@@ -23,6 +23,10 @@ With every input at its default the chart shows the four main sessions and nothi
 
 Five rows. Each row is: checkbox · name · time window · colour.
 
+In the settings dialog this heading reads *② Sessions · times in the timezone set in ① General*: the windows are
+written in *① General → Timezone of session times* — New York time by default — and not in your own timezone. The
+chart draws them on its own clock, so nothing has to be converted.
+
 | Slot | Name | Window | On |
 | ------ | ------ | -------- | ---- |
 | 1 | Asia | `1800-0200` | yes |
@@ -72,6 +76,9 @@ are levels that price has already traded through.*
 
 ## ⑤ Killzones
 
+The heading in the dialog carries the same reminder as *② Sessions*: the windows are written in the timezone set
+in *① General*.
+
 | Input | Default | What it does |
 |-------|---------|--------------|
 | Show killzones | off | Master switch for all five rows. |
@@ -113,7 +120,7 @@ A period is shown only on chart timeframes lower than the period itself.
 | Custom open (hour, minute) | off, `8`, `30` | `08:30 Open` — the bar that opens at this time |
 
 Day, week and month follow the trading calendar of the symbol. Midnight and the custom time follow the indicator
-timezone.
+timezone, *① General → Timezone of session times*.
 
 ![Killzones, previous day high and low, day open and midnight open](images/killzones-levels.png)
 
@@ -124,7 +131,7 @@ timezone.
 | Input | Default | What it does |
 | ------- | --------- | -------------- |
 | Show opening range | off | Master switch. |
-| Window | `0930-1000` | The window in which the range is measured. |
+| Window | `0930-1000` | The window in which the range is measured, written in the timezone set in *① General*. |
 | Colour | cyan | Colour of the box, the lines and the markers. |
 | Extend for, hours | `6.0` | How long the lines keep extending after the window closes. |
 | Midline | on | A dashed line at the middle of the range. |

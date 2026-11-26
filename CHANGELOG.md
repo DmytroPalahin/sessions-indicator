@@ -13,6 +13,17 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+### Changed
+
+- The headings of *② Sessions* and *⑤ Killzones* in the settings dialog end with "times in the timezone set in
+  ① General", and the tooltips of the session rows, the killzone rows, *⑦ Custom open* and *⑧ Window* say that the
+  time is written in that timezone, not in your own. Only texts change: no setting moves and saved settings keep
+  applying.
+
+### Added
+
+- FAQ entry: why the session times are in New York time and not in yours.
+
 ## [2.1.0] - 2026-11-26
 
 A clearer *Custom timezone* field, and a French README. Charts that keep the default timezone do not change.

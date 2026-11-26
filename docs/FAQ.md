@@ -11,6 +11,17 @@ Check these in order.
 4. **The market does not trade then.** A stock chart without extended hours has no bars at 03:00, so there is no
    London session to draw.
 
+## Why are the session times in New York time and not in mine?
+
+A script cannot see where you are, and it cannot read the timezone selected on your chart either — only the
+timezone of the exchange. So the windows have to be written in one stated zone, the one in *① General → Timezone of
+session times*, and New York is the clock in which sessions and killzones are usually quoted. That is why the
+headings of *② Sessions* and *⑤ Killzones* say "times in the timezone set in ① General".
+
+Nothing has to be converted: the chart draws every window on its own clock. With the defaults, a chart set to Paris
+or Berlin time shows Asia at 00:00 – 08:00, Frankfurt at 08:00 – 09:00, London at 09:00 – 17:00 and New York at
+14:00 – 22:00 — one hour earlier in the weeks when only one side of the Atlantic has changed its clocks.
+
 ## I set the timezone to my own and every session moved
 
 *① General → Timezone of session times* is the timezone in which the session times are **written**, not the timezone

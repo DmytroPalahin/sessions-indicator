@@ -27,6 +27,8 @@ indicator("Custom Sessions Indicator", "Sessions", overlay = true, max_boxes_cou
 //    · State and drawing are separated: a Tracker never draws, a view never decides.
 //    · Nothing is drawn on a bar that is older than the "History" input.
 //    · Live levels are redrawn on the last bar, so the 500-object limit can never delete them.
+//    · A module that shows nothing does no work: a slot that is off is not advanced, and a period or an
+//      opening price that nothing shows is not followed.
 //    · No value from the future is used: higher-timeframe data is read with a one-bar offset.
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
@@ -380,7 +382,8 @@ homeZoneOf(Home h) =>
         Home.exchange     => syminfo.timezone
         => "Etc/UTC"
 
-string MY_TZ = homeZoneOf(i_home)
+// The inputs cannot change while the script runs, so every timezone is resolved once, on the first bar.
+var string MY_TZ = homeZoneOf(i_home)
 
 // @function Timezone identifier of the clock a row or a window is written in.
 zoneOf(Clock c) =>
@@ -404,10 +407,10 @@ zoneOf(Clock c) =>
 sessionZone(Clock c) =>
     i_sLocal ? zoneOf(c) : MY_TZ
 
-string KZ_TZ   = zoneOf(i_kClock)
-string OPEN_TZ = zoneOf(i_oClock)
-string OR_TZ   = zoneOf(i_orClock)
-string DAY_TZ  = zoneOf(i_dClock)
+var string KZ_TZ   = zoneOf(i_kClock)
+var string OPEN_TZ = zoneOf(i_oClock)
+var string OR_TZ   = zoneOf(i_orClock)
+var string DAY_TZ  = zoneOf(i_dClock)
 
 int    tfSec      = timeframe.in_seconds()
 int    tfMs       = tfSec * 1000
@@ -416,7 +419,7 @@ bool   inWindow   = i_lookback == 0 or time >= last_bar_time - i_lookback * MS_D
 int    barEnd     = nz(time_close, time + tfMs)
 int    rightEdge  = time + (i_offset + 1) * tfMs
 int    prevTime   = time[1]
-bool   dayRolled  = not na(prevTime) and dayofmonth(time, DAY_TZ) != dayofmonth(prevTime, DAY_TZ)
+bool   dayRolled  = (i_sepOn or i_wdOn) and not na(prevTime) and dayofmonth(time, DAY_TZ) != dayofmonth(prevTime, DAY_TZ)
 float  PIP        = syminfo.type == "forex" ? (syminfo.currency == "JPY" ? 0.01 : 0.0001) : syminfo.mintick
 string TEXT_SIZE  = sizeOf(i_textSize)
 string LV_STYLE   = strokeOf(i_lvStroke)
@@ -784,15 +787,21 @@ method draw(Zone this, ZoneView v, bool visible) =>
                 float mid0 = (t.hi + t.lo) / 2
                 this.midLn := line.new(t.startTime, mid0, t.endTime, mid0, xloc = xloc.bar_time, color = this.col, style = line.style_dashed, width = 1)
     else if t.active
-        float mid = (t.hi + t.lo) / 2
-        this.frame.set_top(t.hi)
-        this.frame.set_bottom(t.lo)
-        this.frame.set_right(t.endTime)
-        this.tag.set_xy(this.captionX(v), v.captionBelow ? t.lo : t.hi)
-        this.tag.set_text(this.captionOf(v))
-        this.openLn.set_x2(t.endTime)
-        this.midLn.set_xy1(t.startTime, mid)
-        this.midLn.set_xy2(t.endTime, mid)
+        // Only the drawings that exist are stretched: outside the history window, or with the label hidden,
+        // there is nothing to format.
+        if not na(this.frame)
+            this.frame.set_top(t.hi)
+            this.frame.set_bottom(t.lo)
+            this.frame.set_right(t.endTime)
+        if not na(this.tag)
+            this.tag.set_xy(this.captionX(v), v.captionBelow ? t.lo : t.hi)
+            this.tag.set_text(this.captionOf(v))
+        if not na(this.openLn)
+            this.openLn.set_x2(t.endTime)
+        if not na(this.midLn)
+            float mid = (t.hi + t.lo) / 2
+            this.midLn.set_xy1(t.startTime, mid)
+            this.midLn.set_xy2(t.endTime, mid)
     true
 
 // @function Advances and draws every zone of a family.
@@ -801,13 +810,19 @@ runZones(array<Zone> zones, ZoneView v) =>
     string startedNames = ""
     string endedNames   = ""
     for z in zones
-        bool inside = z.enabled and intradayOk and not na(time(timeframe.period, z.sess, z.tz))
-        z.trk.advance(inside, windowKey(z.startMin, z.endMin, z.tz))
-        z.draw(v, inWindow)
-        if z.trk.started
-            startedNames := joinName(startedNames, z.title)
-        if z.trk.ended
-            endedNames := joinName(endedNames, z.title)
+        // A slot that is switched off never becomes active, so it is not advanced at all.
+        if z.enabled and intradayOk
+            bool inside = not na(time(timeframe.period, z.sess, z.tz))
+            // The key only matters on a bar of the window.
+            int key = na
+            if inside
+                key := windowKey(z.startMin, z.endMin, z.tz)
+            z.trk.advance(inside, key)
+            z.draw(v, inWindow)
+            if z.trk.started
+                startedNames := joinName(startedNames, z.title)
+            if z.trk.ended
+                endedNames := joinName(endedNames, z.title)
     [startedNames, endedNames]
 
 // @function Background colour of one zone slot on the current bar.
@@ -1029,6 +1044,8 @@ var Anchor midnightOpen = Anchor.new("00:00 Open", i_mnCol, i_mnOn, mk = Marker.
 var Anchor customOpen   = Anchor.new(str.tostring(i_coHour, "00") + ":" + str.tostring(i_coMin, "00") + " Open", i_coCol, i_coOn, mk = Marker.new())
 
 var OpeningRange openingRange = OpeningRange.new(newTracker(), rails = array.new<line>())
+var int OR_START = clockMinutes(i_orTime, 0)
+var int OR_END   = clockMinutes(i_orTime, 5)
 
 var array<string> WEEKDAYS = array.from("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
 
@@ -1052,12 +1069,19 @@ if i_lvOn and inWindow
             addLevel(levels, z.trk.lastLo, z.trk.lastLoTime, false, z.title + " Low", z.col)
 [brokenHighs, brokenLows] = updateLevels(levels)
 
-// 3. Previous day / week / month and the opening prices.
-dayPeriod.feed(dStart, dOpen, pdh, pdl, tfSec < timeframe.in_seconds("D"))
-weekPeriod.feed(wStart, wOpen, pwh, pwl, tfSec < timeframe.in_seconds("W"))
-monthPeriod.feed(mStart, mOpen, pmh, pml, tfSec < timeframe.in_seconds("M"))
-midnightOpen.capture(opensAt(0, 0))
-customOpen.capture(opensAt(i_coHour, i_coMin))
+// 3. Previous day / week / month and the opening prices. A period or an opening price is followed only when
+//    something shows it: its lines, or the Day row of the dashboard. A consumer added later (an alert on a
+//    broken level, for one) has to be added to these conditions too.
+if i_pdOn or i_doOn or (i_dashOn and i_dashDay)
+    dayPeriod.feed(dStart, dOpen, pdh, pdl, tfSec < timeframe.in_seconds("D"))
+if i_pwOn or i_woOn
+    weekPeriod.feed(wStart, wOpen, pwh, pwl, tfSec < timeframe.in_seconds("W"))
+if i_pmOn or i_moOn
+    monthPeriod.feed(mStart, mOpen, pmh, pml, tfSec < timeframe.in_seconds("M"))
+if i_mnOn
+    midnightOpen.capture(opensAt(0, 0))
+if i_coOn
+    customOpen.capture(opensAt(i_coHour, i_coMin))
 
 if barstate.islast
     dayPeriod.redraw()
@@ -1067,8 +1091,12 @@ if barstate.islast
     customOpen.refresh()
 
 // 4. Opening range.
-bool inOpeningRange = i_orOn and intradayOk and not na(time(timeframe.period, i_orTime, OR_TZ))
-openingRange.run(inOpeningRange, windowKey(clockMinutes(i_orTime, 0), clockMinutes(i_orTime, 5), OR_TZ), inWindow)
+if i_orOn and intradayOk
+    bool inOpeningRange = not na(time(timeframe.period, i_orTime, OR_TZ))
+    int  rangeKey       = na
+    if inOpeningRange
+        rangeKey := windowKey(OR_START, OR_END, OR_TZ)
+    openingRange.run(inOpeningRange, rangeKey, inWindow)
 
 // 5. Time tools.
 if dayRolled and inWindow and timeframe.isintraday

@@ -13,6 +13,16 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+The same chart in about half the time.
+
+### Changed
+
+- The script does less work on every bar. Session and killzone rows that are off, the opening range, the
+  opening prices and the previous day / week / month are no longer followed while nothing shows them, and a
+  session label is formatted only when it is on the chart. With the settings the indicator starts with, the Pine
+  profiler shows 406 ms on 10 290 bars of `OANDA:EURUSD` 15m where 4.3.0 took 815 ms. Nothing on the chart
+  changes: plots, boxes, lines, labels and the dashboard are the same.
+
 ## [4.3.0] - 2026-11-26
 
 A clean chart by default again.

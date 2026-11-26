@@ -199,6 +199,19 @@ line and breaks the table look of the group. So the five session colours share o
 the same order, and the dropdown of a row shows a city name short enough for its 96 px box — `Frankfurt` fits,
 `Europe/Berlin` would be cut to `Europe…`.
 
+### 15. A module that shows nothing does no work
+
+The script runs on every loaded bar - 5 000 to 40 000 of them, depending on the plan - so a few checks per bar
+add up. The Pine profiler showed that 4.3.0, with the settings it starts with, spent almost half of its 815 ms
+on modules that were switched off: five killzone slots, the opening range, two opening prices and three periods
+were advanced on each bar although nothing drew them. Now a zone slot that is off is skipped, the identity of a
+window (see 1a) is read only on a bar of that window, a zone stretches only the drawings it has, and the periods,
+opening prices and the opening range run only when a line or the dashboard shows them. The same chart takes
+406 ms.
+
+The price of this rule: the conditions in the pipeline list the consumers of each module. A new consumer - an
+alert on a broken previous high, for one - has to be added to them, or it will never fire.
+
 ## Object budget
 
 | Drawing | Per day, defaults | Per day, everything on |
@@ -222,7 +235,7 @@ The engine reports events on every bar: zones that started or ended, session lev
 lows that broke, opening range breakouts. An alerts module that turned them into `alertcondition()` entries and
 `alert()` messages was built and tried on a live chart, then left out of the first release to keep it focused. It
 lives on the `feature/alerts` branch. The event outputs stay in the engine, so bringing alerts back means adding one
-region and one group of inputs, not touching the engine.
+region and one group of inputs, and naming the alerts in the conditions of the pipeline (decision 15).
 
 ## Parked: session VWAP
 
@@ -240,6 +253,8 @@ levels fold back to their first bar.
 ## Known limits
 
 - Session averages and the running day range depend on the bars loaded on the chart.
+- On a phone-width chart the dashboard with the *Hours* column is wider than the pane, and its first column
+  is cut off. Without that column, and as the hours table alone, it fits.
 - The dashboard status uses the wall clock; it does not know the exchange calendar.
 - Every level has its own label. Two levels at one price therefore print two labels over each other.
 - A level label ends at the end of its line, `i_offset` bars after the last bar. It is complete only when the

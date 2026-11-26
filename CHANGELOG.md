@@ -13,6 +13,8 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-11-26
+
 No timezone for the whole indicator any more: every window has its clock next to it, and the one timezone you set
 is your own. The settings changed order again, so settings saved for 3.0.0 do not carry over.
 
@@ -244,7 +246,8 @@ of [docs/TESTING.md](docs/TESTING.md).
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.
 
-[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v3.0.0...v4.0.0
 [3.0.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.1.1...v3.0.0
 [2.1.1]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.0.0...v2.1.0

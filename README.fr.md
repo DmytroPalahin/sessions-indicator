@@ -34,8 +34,8 @@ pas plus.
 
 | № | Module | Ce que vous obtenez |
 | --- | -------- | -------------- |
-| ① | **General** | Un fuseau horaire pour tout l'indicateur (heure d'été gérée), profondeur de l'historique, limite d'unité de temps |
-| ② | **Sessions** | 5 emplacements : Asia, Frankfurt, London, New York et un de réserve. Le nom, la plage horaire et la couleur se modifient |
+| ① | **General** | Profondeur de l'historique, limite d'unité de temps et fuseau horaire des killzones et des ouvertures (heure d'été gérée) |
+| ② | **Sessions** | 5 emplacements : Asia, Frankfurt, London, New York et un de réserve, chacun à l'heure locale de sa ville. Le nom, les heures, la ville et la couleur se modifient |
 | ③ | **Session display** | Boîte, fond, les deux ou masqué · étiquette avec le nom et l'amplitude · ligne d'ouverture · médiane à 50 % |
 | ④ | **Session high / low levels** | Les plus hauts et les plus bas restent sur le graphique jusqu'à ce que le prix les traverse |
 | ⑤ | **Killzones** | 5 emplacements de plus avec leur propre apparence, préréglés sur les fenêtres habituelles Asia / London / New York |
@@ -97,25 +97,25 @@ Les sessions nécessitent un graphique intrajournalier (60 minutes ou moins par 
 
 ## Sessions par défaut
 
-Toutes les heures sont écrites dans le fuseau choisi dans *① General* — `America/New_York` par défaut. Ce paramètre
-indique comment lire les nombres ci-dessous ; ce n'est pas votre propre fuseau, et le graphique continue d'afficher
-votre heure.
+Chaque session est écrite à l'heure locale de sa propre ville et suit le changement d'heure de cette ville. Le
+graphique la dessine à votre heure : il n'y a rien à convertir.
 
-| Emplacement | Nom | Fenêtre | Activé |
-| ------ | ------ | -------- | ---- |
-| 1 | Asia | 18:00 – 02:00 | oui |
-| 2 | Frankfurt | 02:00 – 03:00 | oui |
-| 3 | London | 03:00 – 11:00 | oui |
-| 4 | New York | 08:00 – 16:00 | oui |
-| 5 | Sydney | 16:00 – 00:00 | non |
+| Emplacement | Nom | Heures | Ville | Activé |
+| ------ | ------ | ------- | ------ | ---- |
+| 1 | Asia | 08:00 – 16:00 | Tokyo | oui |
+| 2 | Frankfurt | 08:00 – 09:00 | Frankfurt | oui |
+| 3 | London | 08:00 – 16:00 | London | oui |
+| 4 | New York | 08:00 – 16:00 | New York | oui |
+| 5 | Sydney | 08:00 – 16:00 | Sydney | non |
 
-Asia, London, New York et Sydney correspondent à la journée de travail 08:00 – 16:00 de leur ville, écrite en heure
-de New York. Frankfurt est l'heure qui précède l'ouverture de Londres. Asia est bleue, Frankfurt violette, London
+Asia, London, New York et Sydney correspondent à la journée de travail 08:00 – 16:00 de leur ville. Frankfurt est
+l'heure qui précède l'ouverture de Londres. Asia est bleue, Frankfurt violette, London
 verte et New York orange, dessinées en boîtes douces sans bordure. *③ Session display → Style → Background* colore
 toute la hauteur du graphique au lieu de l'amplitude.
 
 Killzones par défaut : Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:00 – 10:00, NY Lunch 12:00 – 13:00,
-NY PM 13:30 – 16:00. Ce sont des conventions, pas des règles : chaque fenêtre est modifiable.
+NY PM 13:30 – 16:00, en heure de New York — le fuseau réglé dans *① General*. Ce sont des conventions, pas des
+règles : chaque fenêtre est modifiable.
 
 ## Documentation
 
@@ -167,7 +167,6 @@ qui reste ouvert.
 
 ## Feuille de route
 
-- Un fuseau horaire par session : Asia à l'heure de Tokyo, New York à l'heure de New York
 - Projections en écarts-types de l'amplitude d'une session choisie
 - Profil de volume par session
 - Statistiques : à quelle fréquence une session casse le range d'une autre

@@ -45,7 +45,7 @@ const string TZ_UTC      = "UTC"
 const string TZ_CUSTOM   = "Custom"
 
 const string G_GENERAL  = "① General"
-const string G_SESSIONS = "② Sessions · times in the timezone set in ① General"
+const string G_SESSIONS = "② Sessions · each row in the local time of its city"
 const string G_SVIEW    = "③ Session display"
 const string G_LEVELS   = "④ Session high / low levels"
 const string G_KZ       = "⑤ Killzones · times in the timezone set in ① General"
@@ -56,11 +56,13 @@ const string G_TIME     = "⑨ Time tools"
 const string G_DASH     = "⑩ Dashboard"
 const string G_STYLE    = "⑪ Style"
 
-const string TT_TZ       = "The timezone in which the session times below are written. It is not your own timezone and it does not change the chart clock. The default times are New York times, so keep America/New_York unless you retype every time for another zone. Named zones follow daylight saving time automatically; 'Exchange' follows the symbol."
-const string TT_TZ_CUST  = "Used only when 'Timezone of session times' is set to 'Custom'; otherwise this field is ignored. Accepts an IANA name (Europe/London, Asia/Tokyo) or an offset (UTC+3). A name follows daylight saving time, an offset does not."
+const string TT_TZ       = "The timezone of every time that is not a session row: killzones, the opening range window, the midnight and custom opens and the day labels. Sessions do not use it - each session row has its own city - unless a row is set to 'As in ①'. It is not your own timezone and it does not change the chart clock. Named zones follow daylight saving time automatically; 'Exchange' follows the symbol."
+const string TT_TZ_CUST  = "Used only when 'Killzones and opens timezone' is set to 'Custom'; otherwise this field is ignored. Accepts an IANA name (Europe/London, Asia/Tokyo) or an offset (UTC+3). A name follows daylight saving time, an offset does not."
 const string TT_LOOKBACK = "Drawings older than this many days are skipped. 0 draws the whole loaded history (TradingView still keeps only the newest 500 objects of each kind)."
 const string TT_MAX_TF   = "Sessions, killzones and the opening range are hidden on chart timeframes above this many minutes, where they stop being meaningful."
 const string TT_OFFSET   = "How many bars to the right of the last bar the level lines end. Their labels sit at that end."
+const string TT_SESSION  = "Checkbox · name · hours · city. The hours are the local time of that city: London 08:00 - 16:00 is 8 to 16 o'clock in London, whatever your own timezone is, and it follows London's daylight saving time. The chart draws the session on its own clock. 'As in ①' reads the hours in the timezone set in ① General. Hours may cross midnight (1900-0400)."
+const string TT_S_COLS   = "Colours of the five rows above, in the same order."
 const string TT_SLOT     = "Checkbox · name · time window · colour. The window is written in the timezone set in ① General (New York by default), not in your own; the chart draws it on its own clock. A window may cross midnight (1900-0400)."
 const string TT_UNIT     = "Unit of every range shown in labels and in the dashboard. 'Auto' uses pips on forex and price elsewhere."
 const string TT_LEVELS   = "When a session ends, its high and low stay on the chart as lines until price trades through them."
@@ -132,40 +134,63 @@ enum TagSpot
     atEnd = "At the line end"
     after = "After the line"
 
+// The city whose local time a session row is written in. 'general' hands the row over to the timezone of ① General.
+enum Clock
+    sydney    = "Sydney"
+    tokyo     = "Tokyo"
+    hongKong  = "Hong Kong"
+    singapore = "Singapore"
+    shanghai  = "Shanghai"
+    mumbai    = "Mumbai"
+    dubai     = "Dubai"
+    frankfurt = "Frankfurt"
+    london    = "London"
+    newYork   = "New York"
+    chicago   = "Chicago"
+    utc       = "UTC"
+    general   = "As in ①"
+
 //#endregion
 
 //#region ═════════════════════════════════════════ 3 · Inputs ════════════════════════════════════════════
 
 // ① General
-string i_tz       = input.string("America/New_York", "Timezone of session times", options = [TZ_EXCHANGE, TZ_UTC, "America/New_York", "America/Chicago", "America/Los_Angeles", "America/Sao_Paulo", "Europe/London", "Europe/Berlin", "Europe/Athens", "Asia/Dubai", "Asia/Kolkata", "Asia/Shanghai", "Asia/Hong_Kong", "Asia/Singapore", "Asia/Tokyo", "Asia/Seoul", "Australia/Sydney", "Pacific/Auckland", TZ_CUSTOM], tooltip = TT_TZ, group = G_GENERAL)
-string i_tzCustom = input.string("Europe/London", "Custom timezone", tooltip = TT_TZ_CUST, group = G_GENERAL)
 int    i_lookback = input.int(20, "History, days (0 = all)", minval = 0, tooltip = TT_LOOKBACK, group = G_GENERAL)
 int    i_maxTf    = input.int(60, "Hide sessions above, minutes", minval = 1, maxval = 1440, tooltip = TT_MAX_TF, group = G_GENERAL)
 int    i_offset   = input.int(5, "Level labels offset, bars", minval = 0, maxval = 200, tooltip = TT_OFFSET, group = G_GENERAL)
+// The session rows of ② do not read this timezone: each of them has a city of its own.
+string i_tz       = input.string("America/New_York", "Killzones and opens timezone", options = [TZ_EXCHANGE, TZ_UTC, "America/New_York", "America/Chicago", "America/Los_Angeles", "America/Sao_Paulo", "Europe/London", "Europe/Berlin", "Europe/Athens", "Asia/Dubai", "Asia/Kolkata", "Asia/Shanghai", "Asia/Hong_Kong", "Asia/Singapore", "Asia/Tokyo", "Asia/Seoul", "Australia/Sydney", "Pacific/Auckland", TZ_CUSTOM], tooltip = TT_TZ, group = G_GENERAL)
+string i_tzCustom = input.string("Europe/London", "Custom timezone", tooltip = TT_TZ_CUST, group = G_GENERAL)
 
 // ② Sessions
-// Asia, London, New York and Sydney are the 08:00-16:00 working day of their city; Frankfurt is the hour before London
-// opens. All of them are written in New York time (winter clock for Asia and Sydney). The slots are in time order.
-bool   i_s1On   = input.bool(true, "", inline = "s1", group = G_SESSIONS)
-string i_s1Name = input.string("Asia", "", inline = "s1", group = G_SESSIONS)
-string i_s1Time = input.session("1800-0200", "", inline = "s1", group = G_SESSIONS)
-color  i_s1Col  = input.color(#2962FF, "", inline = "s1", group = G_SESSIONS, tooltip = TT_SLOT)
-bool   i_s2On   = input.bool(true, "", inline = "s2", group = G_SESSIONS)
-string i_s2Name = input.string("Frankfurt", "", inline = "s2", group = G_SESSIONS)
-string i_s2Time = input.session("0200-0300", "", inline = "s2", group = G_SESSIONS)
-color  i_s2Col  = input.color(#9C27B0, "", inline = "s2", group = G_SESSIONS, tooltip = TT_SLOT)
-bool   i_s3On   = input.bool(true, "", inline = "s3", group = G_SESSIONS)
-string i_s3Name = input.string("London", "", inline = "s3", group = G_SESSIONS)
-string i_s3Time = input.session("0300-1100", "", inline = "s3", group = G_SESSIONS)
-color  i_s3Col  = input.color(#4CAF50, "", inline = "s3", group = G_SESSIONS, tooltip = TT_SLOT)
-bool   i_s4On   = input.bool(true, "", inline = "s4", group = G_SESSIONS)
-string i_s4Name = input.string("New York", "", inline = "s4", group = G_SESSIONS)
-string i_s4Time = input.session("0800-1600", "", inline = "s4", group = G_SESSIONS)
-color  i_s4Col  = input.color(#FF9800, "", inline = "s4", group = G_SESSIONS, tooltip = TT_SLOT)
-bool   i_s5On   = input.bool(false, "", inline = "s5", group = G_SESSIONS)
-string i_s5Name = input.string("Sydney", "", inline = "s5", group = G_SESSIONS)
-string i_s5Time = input.session("1600-0000", "", inline = "s5", group = G_SESSIONS)
-color  i_s5Col  = input.color(#26A69A, "", inline = "s5", group = G_SESSIONS, tooltip = TT_SLOT)
+// Every row is written in the local time of its own city and follows that city's daylight saving time. Asia, London,
+// New York and Sydney are the 08:00-16:00 working day there; Frankfurt is the hour before London opens.
+bool   i_s1On    = input.bool(true, "", inline = "s1", group = G_SESSIONS)
+string i_s1Name  = input.string("Asia", "", inline = "s1", group = G_SESSIONS)
+string i_s1Time  = input.session("0800-1600", "", inline = "s1", group = G_SESSIONS)
+Clock  i_s1Clock = input.enum(Clock.tokyo, "", inline = "s1", group = G_SESSIONS, tooltip = TT_SESSION)
+bool   i_s2On    = input.bool(true, "", inline = "s2", group = G_SESSIONS)
+string i_s2Name  = input.string("Frankfurt", "", inline = "s2", group = G_SESSIONS)
+string i_s2Time  = input.session("0800-0900", "", inline = "s2", group = G_SESSIONS)
+Clock  i_s2Clock = input.enum(Clock.frankfurt, "", inline = "s2", group = G_SESSIONS, tooltip = TT_SESSION)
+bool   i_s3On    = input.bool(true, "", inline = "s3", group = G_SESSIONS)
+string i_s3Name  = input.string("London", "", inline = "s3", group = G_SESSIONS)
+string i_s3Time  = input.session("0800-1600", "", inline = "s3", group = G_SESSIONS)
+Clock  i_s3Clock = input.enum(Clock.london, "", inline = "s3", group = G_SESSIONS, tooltip = TT_SESSION)
+bool   i_s4On    = input.bool(true, "", inline = "s4", group = G_SESSIONS)
+string i_s4Name  = input.string("New York", "", inline = "s4", group = G_SESSIONS)
+string i_s4Time  = input.session("0800-1600", "", inline = "s4", group = G_SESSIONS)
+Clock  i_s4Clock = input.enum(Clock.newYork, "", inline = "s4", group = G_SESSIONS, tooltip = TT_SESSION)
+bool   i_s5On    = input.bool(false, "", inline = "s5", group = G_SESSIONS)
+string i_s5Name  = input.string("Sydney", "", inline = "s5", group = G_SESSIONS)
+string i_s5Time  = input.session("0800-1600", "", inline = "s5", group = G_SESSIONS)
+Clock  i_s5Clock = input.enum(Clock.sydney, "", inline = "s5", group = G_SESSIONS, tooltip = TT_SESSION)
+// The colours sit on a row of their own: a fifth control does not fit into a session row of the settings dialog.
+color  i_s1Col   = input.color(#2962FF, "Colours", inline = "sc", group = G_SESSIONS)
+color  i_s2Col   = input.color(#9C27B0, "", inline = "sc", group = G_SESSIONS)
+color  i_s3Col   = input.color(#4CAF50, "", inline = "sc", group = G_SESSIONS)
+color  i_s4Col   = input.color(#FF9800, "", inline = "sc", group = G_SESSIONS)
+color  i_s5Col   = input.color(#26A69A, "", inline = "sc", group = G_SESSIONS, tooltip = TT_S_COLS)
 
 // ③ Session display
 ZoneStyle i_sStyle   = input.enum(ZoneStyle.boxed, "Style", group = G_SVIEW)
@@ -296,8 +321,22 @@ string TZ = switch i_tz
     TZ_CUSTOM   => i_tzCustom
     => i_tz
 
-// The timezone as the dashboard shows it: the name the user picked, not the identifier Pine needs for it.
-string TZ_LABEL = i_tz == TZ_UTC ? TZ_UTC : TZ
+// @function Timezone identifier of the city a session row is written in.
+zoneOf(Clock c) =>
+    switch c
+        Clock.sydney    => "Australia/Sydney"
+        Clock.tokyo     => "Asia/Tokyo"
+        Clock.hongKong  => "Asia/Hong_Kong"
+        Clock.singapore => "Asia/Singapore"
+        Clock.shanghai  => "Asia/Shanghai"
+        Clock.mumbai    => "Asia/Kolkata"
+        Clock.dubai     => "Asia/Dubai"
+        Clock.frankfurt => "Europe/Berlin"
+        Clock.london    => "Europe/London"
+        Clock.newYork   => "America/New_York"
+        Clock.chicago   => "America/Chicago"
+        Clock.utc       => "Etc/UTC"
+        => TZ
 
 int    tfSec      = timeframe.in_seconds()
 int    tfMs       = tfSec * 1000
@@ -385,6 +424,7 @@ type Zone
     bool    enabled
     string  title
     string  sess
+    string  tz
     int     startMin
     int     endMin
     color   col
@@ -532,19 +572,20 @@ clockMinutes(string sess, int pos) =>
     float mm = str.tonumber(str.substring(sess, pos + 2, pos + 4))
     int(nz(hh) * 60 + nz(mm))
 
-// @function The next moment (after the real current time) at which the clock of the indicator timezone shows the given minute of the day.
-nextClock(int minuteOfDay) =>
+// @function The next moment (after the real current time) at which the clock of a timezone shows the given minute of the day.
+nextClock(int minuteOfDay, string tz) =>
     int hh       = math.floor(minuteOfDay / 60.0)
     int mm       = minuteOfDay % 60
     int nowMs    = timenow
     int laterMs  = nowMs + MS_DAY
-    int today    = timestamp(TZ, year(nowMs, TZ), month(nowMs, TZ), dayofmonth(nowMs, TZ), hh, mm, 0)
-    int tomorrow = timestamp(TZ, year(laterMs, TZ), month(laterMs, TZ), dayofmonth(laterMs, TZ), hh, mm, 0)
+    int today    = timestamp(tz, year(nowMs, tz), month(nowMs, tz), dayofmonth(nowMs, tz), hh, mm, 0)
+    int tomorrow = timestamp(tz, year(laterMs, tz), month(laterMs, tz), dayofmonth(laterMs, tz), hh, mm, 0)
     today > nowMs ? today : tomorrow
 
-// @function True when the real current time is inside a window given in minutes of the day. Handles windows that cross midnight.
-clockInside(int startMin, int endMin) =>
-    int nowMin = hour(timenow, TZ) * 60 + minute(timenow, TZ)
+// @function True when the real current time, read on the clock of a timezone, is inside a window given in minutes of the day.
+//           Handles windows that cross midnight.
+clockInside(int startMin, int endMin, string tz) =>
+    int nowMin = hour(timenow, tz) * 60 + minute(timenow, tz)
     startMin < endMin ? (nowMin >= startMin and nowMin < endMin) : (nowMin >= startMin or nowMin < endMin)
 
 // @function Identity of the run of a window that the current bar belongs to: the calendar date on which that run started.
@@ -552,11 +593,12 @@ clockInside(int startMin, int endMin) =>
 //           has no bar between the two runs (regular-hours charts, 24-hour windows).
 // @param startMin Start of the window in minutes since midnight.
 // @param endMin   End of the window in minutes since midnight.
-windowKey(int startMin, int endMin) =>
-    int  barMin        = hour(time, TZ) * 60 + minute(time, TZ)
+// @param tz       Timezone the window is written in.
+windowKey(int startMin, int endMin, string tz) =>
+    int  barMin        = hour(time, tz) * 60 + minute(time, tz)
     bool startedBefore = startMin >= endMin and barMin < startMin
     int  moment        = startedBefore ? time - MS_DAY : time
-    year(moment, TZ) * 10000 + month(moment, TZ) * 100 + dayofmonth(moment, TZ)
+    year(moment, tz) * 10000 + month(moment, tz) * 100 + dayofmonth(moment, tz)
 
 // @function True on the bar that opens at the given time of day (or is the first bar within one bar length after it).
 opensAt(int hh, int mm) =>
@@ -688,8 +730,8 @@ runZones(array<Zone> zones, ZoneView v) =>
     string startedNames = ""
     string endedNames   = ""
     for z in zones
-        bool inside = z.enabled and intradayOk and not na(time(timeframe.period, z.sess, TZ))
-        z.trk.advance(inside, windowKey(z.startMin, z.endMin))
+        bool inside = z.enabled and intradayOk and not na(time(timeframe.period, z.sess, z.tz))
+        z.trk.advance(inside, windowKey(z.startMin, z.endMin, z.tz))
         z.draw(v, inWindow)
         if z.trk.started
             startedNames := joinName(startedNames, z.title)
@@ -881,9 +923,9 @@ method run(OpeningRange this, bool inside, int key, bool visible) =>
 newTracker() =>
     Tracker.new(spans = array.new<float>())
 
-// @function A zone slot built from its four inputs.
-newZone(bool enabled, string title, string sess, color col) =>
-    Zone.new(enabled, title, sess, clockMinutes(sess, 0), clockMinutes(sess, 5), col, newTracker())
+// @function A zone slot built from its inputs and the timezone its window is written in.
+newZone(bool enabled, string title, string sess, string tz, color col) =>
+    Zone.new(enabled, title, sess, tz, clockMinutes(sess, 0), clockMinutes(sess, 5), col, newTracker())
 
 // @function A period with its three markers ready.
 newPeriod(string code, bool showHL, bool showOpen, color hlCol, color openCol) =>
@@ -894,16 +936,16 @@ var array<Zone>  killzones = array.new<Zone>()
 var array<Level> levels    = array.new<Level>()
 
 if barstate.isfirst
-    sessions.push(newZone(i_s1On, i_s1Name, i_s1Time, i_s1Col))
-    sessions.push(newZone(i_s2On, i_s2Name, i_s2Time, i_s2Col))
-    sessions.push(newZone(i_s3On, i_s3Name, i_s3Time, i_s3Col))
-    sessions.push(newZone(i_s4On, i_s4Name, i_s4Time, i_s4Col))
-    sessions.push(newZone(i_s5On, i_s5Name, i_s5Time, i_s5Col))
-    killzones.push(newZone(i_kzOn and i_k1On, i_k1Name, i_k1Time, i_k1Col))
-    killzones.push(newZone(i_kzOn and i_k2On, i_k2Name, i_k2Time, i_k2Col))
-    killzones.push(newZone(i_kzOn and i_k3On, i_k3Name, i_k3Time, i_k3Col))
-    killzones.push(newZone(i_kzOn and i_k4On, i_k4Name, i_k4Time, i_k4Col))
-    killzones.push(newZone(i_kzOn and i_k5On, i_k5Name, i_k5Time, i_k5Col))
+    sessions.push(newZone(i_s1On, i_s1Name, i_s1Time, zoneOf(i_s1Clock), i_s1Col))
+    sessions.push(newZone(i_s2On, i_s2Name, i_s2Time, zoneOf(i_s2Clock), i_s2Col))
+    sessions.push(newZone(i_s3On, i_s3Name, i_s3Time, zoneOf(i_s3Clock), i_s3Col))
+    sessions.push(newZone(i_s4On, i_s4Name, i_s4Time, zoneOf(i_s4Clock), i_s4Col))
+    sessions.push(newZone(i_s5On, i_s5Name, i_s5Time, zoneOf(i_s5Clock), i_s5Col))
+    killzones.push(newZone(i_kzOn and i_k1On, i_k1Name, i_k1Time, TZ, i_k1Col))
+    killzones.push(newZone(i_kzOn and i_k2On, i_k2Name, i_k2Time, TZ, i_k2Col))
+    killzones.push(newZone(i_kzOn and i_k3On, i_k3Name, i_k3Time, TZ, i_k3Col))
+    killzones.push(newZone(i_kzOn and i_k4On, i_k4Name, i_k4Time, TZ, i_k4Col))
+    killzones.push(newZone(i_kzOn and i_k5On, i_k5Name, i_k5Time, TZ, i_k5Col))
 
 var ZoneView sessionView  = ZoneView.new(i_sStyle, i_sFill, i_sBand, i_sBorder, i_sWidth, strokeOf(i_sStroke), i_sCaption, i_sAlign, i_sOpen, i_sMid, false)
 var ZoneView killzoneView = ZoneView.new(i_kStyle, i_kFill, i_kBand, 55, 1, line.style_dotted, i_kCaption, i_kAlign, false, false, true)
@@ -955,7 +997,7 @@ if barstate.islast
 
 // 4. Opening range.
 bool inOpeningRange = i_orOn and intradayOk and not na(time(timeframe.period, i_orTime, TZ))
-openingRange.run(inOpeningRange, windowKey(clockMinutes(i_orTime, 0), clockMinutes(i_orTime, 5)), inWindow)
+openingRange.run(inOpeningRange, windowKey(clockMinutes(i_orTime, 0), clockMinutes(i_orTime, 5), TZ), inWindow)
 
 // 5. Time tools.
 if dayRolled and inWindow and timeframe.isintraday
@@ -1003,7 +1045,7 @@ dashCell(int column, int row, string txt, color col, string halign) =>
 
 if i_dashOn and barstate.islast
     color dim = color.new(DASH_TEXT, 45)
-    dashCell(0, 0, "Custom Sessions  ·  " + str.format_time(timenow, "HH:mm", TZ) + "  " + TZ_LABEL, DASH_TEXT, text.align_left)
+    dashCell(0, 0, "Custom Sessions", DASH_TEXT, text.align_left)
     table.merge_cells(dashboard, 0, 0, 3, 0)
     dashCell(0, 1, "Session", dim, text.align_left)
     dashCell(1, 1, "Status", dim, text.align_left)
@@ -1013,8 +1055,8 @@ if i_dashOn and barstate.islast
     for z in sessions
         if z.enabled
             Tracker t     = z.trk
-            bool isOpen   = clockInside(z.startMin, z.endMin)
-            string status = isOpen ? "Open · " + fmtDuration(nextClock(z.endMin) - timenow) + " left" : "Opens in " + fmtDuration(nextClock(z.startMin) - timenow)
+            bool isOpen   = clockInside(z.startMin, z.endMin, z.tz)
+            string status = isOpen ? "Open · " + fmtDuration(nextClock(z.endMin, z.tz) - timenow) + " left" : "Opens in " + fmtDuration(nextClock(z.startMin, z.tz) - timenow)
             float span    = t.active ? t.hi - t.lo : t.lastHi - t.lastLo
             float base    = t.active ? t.lo : t.lastLo
             dashCell(0, row, "● " + z.title, inkOf(z.col), text.align_left)

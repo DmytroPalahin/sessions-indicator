@@ -84,7 +84,9 @@ This script is a charting tool, not financial advice.
 ```
 
 The text is final on TradingView and still lists the session VWAP. That module is parked on the `feature/vwap`
-branch since version 2.0.0, and the release notes of that update say so.
+branch since version 2.0.0, and the release notes of that update say so. It also says that the session times are
+written in New York time: that holds up to version 2.1.1. From 3.0.0 on each session is written in the local time
+of its city, and the release notes of that update have to say so, because the description cannot be edited.
 
 ### Category and tags
 

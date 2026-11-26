@@ -13,35 +13,38 @@ With every input at its default the chart shows the four main sessions and nothi
 
 | Input | Default | What it does |
 | ------- | --------- | -------------- |
-| Timezone of session times | `America/New_York` | The timezone in which the times of this indicator are **written**. It is not your own timezone and it does not change the chart clock. The default session times are New York times, so keep `America/New_York` unless you retype every time for another zone. `Exchange` follows the symbol. Named zones follow daylight saving time automatically. |
-| Custom timezone | `Europe/London` | Used only when *Timezone of session times* is `Custom`; otherwise the field is ignored, whatever it says. Accepts an IANA name (`Europe/London`, `Asia/Tokyo`) or an offset (`UTC+3`). A name follows daylight saving time, an offset does not. |
 | History, days (0 = all) | `20` | Drawings older than this many days are skipped. `0` draws the whole loaded history. |
 | Hide sessions above, minutes | `60` | Sessions, killzones and the opening range are hidden on chart timeframes above this value. |
 | Level labels offset, bars | `5` | How many bars to the right of the last bar the level lines end. Their labels sit at that end, so keep the right margin of the chart at least this wide. |
+| Killzones and opens timezone | `America/New_York` | The timezone of every time that is not a session row: the killzones, the opening range window, the midnight and custom opens and the day labels. Sessions do not use it — each session row has its own city — unless a row has the city `As in ①`. It is not your own timezone and it does not change the chart clock. `Exchange` follows the symbol. Named zones follow daylight saving time automatically. |
+| Custom timezone | `Europe/London` | Used only when *Killzones and opens timezone* is `Custom`; otherwise the field is ignored, whatever it says. Accepts an IANA name (`Europe/London`, `Asia/Tokyo`) or an offset (`UTC+3`). A name follows daylight saving time, an offset does not. |
 
 ## ② Sessions
 
-Five rows. Each row is: checkbox · name · time window · colour.
+Five rows. Each row is: checkbox · name · hours · city. The colours of the five rows sit on one line under them, in
+the same order.
 
-In the settings dialog this heading reads *② Sessions · times in the timezone set in ① General*: the windows are
-written in *① General → Timezone of session times* — New York time by default — and not in your own timezone. The
-chart draws them on its own clock, so nothing has to be converted.
+In the settings dialog the heading reads *② Sessions · each row in the local time of its city*: London `0800-1600`
+is 8 to 16 o'clock in London, whatever your own timezone is, and it follows London's daylight saving time. The chart
+draws every session on its own clock, so nothing has to be converted.
 
-| Slot | Name | Window | On |
-| ------ | ------ | -------- | ---- |
-| 1 | Asia | `1800-0200` | yes |
-| 2 | Frankfurt | `0200-0300` | yes |
-| 3 | London | `0300-1100` | yes |
-| 4 | New York | `0800-1600` | yes |
-| 5 | Sydney | `1600-0000` | no |
+| Slot | Name | Hours | City | On |
+| ------ | ------ | ------- | ------ | ---- |
+| 1 | Asia | `0800-1600` | `Tokyo` | yes |
+| 2 | Frankfurt | `0800-0900` | `Frankfurt` | yes |
+| 3 | London | `0800-1600` | `London` | yes |
+| 4 | New York | `0800-1600` | `New York` | yes |
+| 5 | Sydney | `0800-1600` | `Sydney` | no |
 
-Asia, London, New York and Sydney are the 08:00 – 16:00 working day of their city, written in New York time.
-Frankfurt is the hour before London opens: 08:00 – 09:00 in Frankfurt. Tokyo and Sydney do not move their clocks
-together with New York, so for part of the year their real working day is one hour off; edit the window if that
-matters to you. Default colours: Asia blue, Frankfurt purple, London green, New York orange. Every slot can be
+Asia, London, New York and Sydney are the 08:00 – 16:00 working day of their city. Frankfurt is the hour before
+London opens. Default colours: Asia blue, Frankfurt purple, London green, New York orange. Every slot can be
 renamed and retimed, so the fifth one doubles as a spare.
 
-A window may cross midnight and may be up to 24 hours long (`1800-1800` restarts every day at 18:00).
+Cities: `Sydney`, `Tokyo`, `Hong Kong`, `Singapore`, `Shanghai`, `Mumbai`, `Dubai`, `Frankfurt`, `London`,
+`New York`, `Chicago`, `UTC` and `As in ①`. The last one reads the hours of the row in the timezone set in
+*① General*: use it for the exchange timezone, or for a zone that is not in the list, through `Custom`.
+
+Hours may cross midnight and may be up to 24 hours long (`1800-1800` restarts every day at 18:00).
 
 ## ③ Session display
 
@@ -76,8 +79,9 @@ are levels that price has already traded through.*
 
 ## ⑤ Killzones
 
-The heading in the dialog carries the same reminder as *② Sessions*: the windows are written in the timezone set
-in *① General*.
+In the settings dialog the heading reads *⑤ Killzones · times in the timezone set in ① General*: the windows are
+written in *① General → Killzones and opens timezone* — New York time by default — and the chart draws them on its
+own clock.
 
 | Input | Default | What it does |
 |-------|---------|--------------|
@@ -120,7 +124,7 @@ A period is shown only on chart timeframes lower than the period itself.
 | Custom open (hour, minute) | off, `8`, `30` | `08:30 Open` — the bar that opens at this time |
 
 Day, week and month follow the trading calendar of the symbol. Midnight and the custom time follow the indicator
-timezone, *① General → Timezone of session times*.
+timezone, *① General → Killzones and opens timezone*.
 
 ![Killzones, previous day high and low, day open and midnight open](images/killzones-levels.png)
 

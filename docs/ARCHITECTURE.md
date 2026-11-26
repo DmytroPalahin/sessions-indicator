@@ -61,7 +61,7 @@ flowchart TD
 | ------ | ------ | -------- |
 | `Tracker` | State machine of one recurring time window: active / started / ended, open, high, low, the times of the extremes, the last completed window and a buffer of past ranges. | never |
 | `ZoneView` | How a family of zones looks: style, transparencies, border, caption. One instance for sessions, one for killzones. | — |
-| `Zone` | One slot of the settings panel: its configuration, its `Tracker` and the drawings of the running window. | yes |
+| `Zone` | One slot of the settings panel: its configuration, the timezone its hours are written in, its `Tracker` and the drawings of the running window. | yes |
 | `Level` | A session high or low waiting to be broken. | yes |
 | `Marker` | A horizontal segment with a tag at its right end. | yes |
 | `Period` | Day, week or month: previous high and low, open, running range, break flags, three `Marker`s. | through `Marker` |
@@ -104,10 +104,19 @@ reading them is not a look-ahead either.
 Tracking these values by hand was rejected: a 1-minute chart loads only a few weeks, so the previous month would be
 wrong or missing.
 
-### 5. Time is read in one place
+### 5. Every time names its clock
 
-Every time comparison goes through `TZ`, a named IANA zone by default. Named zones carry their own daylight saving
-rules, so the weeks in which New York and London are out of step are handled without any date arithmetic in the script.
+A session row carries the city whose local time its hours are written in; killzones, the opening range and the
+opens share the timezone of *① General*. A `Zone` stores its timezone, and everything that asks "is this bar
+inside?" goes through it: `time()`, the identity of a run and the dashboard countdown. Named IANA zones carry
+their own daylight saving rules, so the weeks in which New York, London and Sydney are out of step need no date
+arithmetic in the script.
+
+Up to 2.1.1 there was one timezone for all sessions, New York by default. It kept the engine one line shorter and
+made the settings hard to read: "London 03:00 – 11:00" only makes sense to someone who knows that the numbers are
+New York time, and no label fixed that. It also put every session defined in another city's hours an hour off
+while the clock changes were out of step. "London 08:00 – 16:00, London" needs no explanation, and a script cannot
+read the timezone of the chart, so the hours cannot simply be shown on the user's own clock.
 
 ### 6. Timeframe gates instead of wrong drawings
 
@@ -149,7 +158,11 @@ placement stays available as `After the line`.
 
 TradingView stores the settings of an indicator by the position of each input. An input added in the middle
 shifts every saved value after it into the wrong field. A new input is declared after the last one, also when
-its group sits earlier in the file — `i_tagSpot` is the example.
+its group sits earlier in the file — `i_tagSpot` is the example. Such an input still joins the group and the
+`inline` row it names, at the end of that row.
+
+A major version is the only place where inputs are reordered. 3.0.0 did it once, to put the city next to the hours
+of each session row.
 
 ### 13. Text is adjusted for contrast, lines are not
 
@@ -159,6 +172,13 @@ text colour towards black on a light chart, or towards white on a dark one, in s
 `INK_CONTRAST` (4.5 : 1, the WCAG mark for normal text), and returns a colour that already reads well unchanged.
 Every place that prints text in a user colour calls it: zone captions, level labels and the session names of
 the dashboard. Lines, boxes and backgrounds use the colour as it is, because their hue is the information.
+
+### 14. A settings row holds four controls
+
+The settings dialog is 550 px wide. Checkbox, name, hours and city fill a row; a fifth control wraps to a second
+line and breaks the table look of the group. So the five session colours share one row under the session rows, in
+the same order, and the dropdown of a row shows a city name short enough for its 96 px box — `Frankfurt` fits,
+`Europe/Berlin` would be cut to `Europe…`.
 
 ## Object budget
 

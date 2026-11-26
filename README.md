@@ -33,8 +33,8 @@ so the chart stays clean until you ask for more.
 
 | # | Module | What you get |
 | --- | -------- | -------------- |
-| ① | **General** | One timezone for the whole indicator (DST-aware), history depth, timeframe limit |
-| ② | **Sessions** | 5 slots: Asia, Frankfurt, London, New York and one spare. Name, time window and colour are yours to change |
+| ① | **General** | History depth, timeframe limit, and the timezone of the killzones and opens (DST-aware) |
+| ② | **Sessions** | 5 slots: Asia, Frankfurt, London, New York and one spare, each in the local time of its city. Name, hours, city and colour are yours to change |
 | ③ | **Session display** | Box, background, both or hidden · label with name and range · open line · 50% midline |
 | ④ | **Session high / low levels** | Highs and lows stay on the chart until price trades through them |
 | ⑤ | **Killzones** | 5 more slots with their own look, preset to the usual Asia / London / New York windows |
@@ -95,24 +95,25 @@ The indicator needs an intraday chart for sessions (60 minutes or lower by defau
 
 ## Default sessions
 
-All times are written in the timezone selected in *① General* — `America/New_York` by default. That setting says how
-to read the numbers below; it is not your own timezone, and the chart keeps showing your clock.
+Every session is written in the local time of its own city and follows that city's daylight saving time. The chart
+draws it on your clock, so there is nothing to convert.
 
-| Slot | Name | Window | On |
-| ------ | ------ | -------- | ---- |
-| 1 | Asia | 18:00 – 02:00 | yes |
-| 2 | Frankfurt | 02:00 – 03:00 | yes |
-| 3 | London | 03:00 – 11:00 | yes |
-| 4 | New York | 08:00 – 16:00 | yes |
-| 5 | Sydney | 16:00 – 00:00 | no |
+| Slot | Name | Hours | City | On |
+| ------ | ------ | ------- | ------ | ---- |
+| 1 | Asia | 08:00 – 16:00 | Tokyo | yes |
+| 2 | Frankfurt | 08:00 – 09:00 | Frankfurt | yes |
+| 3 | London | 08:00 – 16:00 | London | yes |
+| 4 | New York | 08:00 – 16:00 | New York | yes |
+| 5 | Sydney | 08:00 – 16:00 | Sydney | no |
 
-Asia, London, New York and Sydney are the 08:00 – 16:00 working day of their city, written in New York time.
+Asia, London, New York and Sydney are the 08:00 – 16:00 working day of their city.
 Frankfurt is the hour before London opens. Asia is blue, Frankfurt purple, London green and New York orange, drawn
 as soft boxes without a border. *③ Session display → Style → Background* shades the whole height of the chart
 instead of the range.
 
 Killzone presets: Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:00 – 10:00, NY Lunch 12:00 – 13:00,
-NY PM 13:30 – 16:00. These are conventions, not rules: every window is editable.
+NY PM 13:30 – 16:00, in New York time — the timezone set in *① General*. These are conventions, not rules: every
+window is editable.
 
 ## Documentation
 
@@ -155,7 +156,6 @@ verification log in [docs/TESTING.md](docs/TESTING.md) lists what has been check
 
 ## Roadmap
 
-- Per-session timezones, so Asia can follow Tokyo time while New York follows New York time
 - Standard-deviation projections of a chosen session range
 - Session volume profile
 - Statistics: how often one session breaks the range of another

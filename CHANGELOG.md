@@ -13,6 +13,32 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+Sessions are written in the local time of their own city. The settings changed order, so settings saved for 2.x
+do not carry over.
+
+### Changed
+
+- **Breaking.** Every session row has a city, and its hours are the local time of that city: Asia `0800-1600`
+  Tokyo, Frankfurt `0800-0900` Frankfurt, London `0800-1600` London, New York `0800-1600` New York, Sydney
+  `0800-1600` Sydney. Until now every row was read in one timezone, New York by default. While all these cities
+  are on winter time the default sessions stay where they were. In the rest of the year each session follows the
+  clock changes of its own city instead of New York's: Asia starts at 08:00 Tokyo all year, and London at 08:00
+  London also in the weeks when Europe and the United States are out of step.
+- **Breaking.** The settings changed order: the city sits in the session row, the five session colours moved to a
+  row of their own, and the timezone fields moved to the end of *① General*. Settings saved for an older version
+  are applied by position and no longer fit: press *Defaults → Reset settings* after the update.
+- *① General → Timezone of session times* is now *Killzones and opens timezone*. It sets the clock of the
+  killzones, the opening range window, the midnight and custom opens and the day labels. A session reads it only
+  on a row with the city `As in ①`.
+- The dashboard header no longer shows a clock in the indicator timezone.
+
+### Added
+
+- City `As in ①` for a session row: its hours are read in the timezone of *① General*. This keeps custom zones,
+  the exchange timezone and the old way of writing hours available.
+- FAQ entries: why London `0800-1600` is drawn at another time on your chart, what the timezone in *① General* is
+  for, and what to do after the update to 3.0.0.
+
 ## [2.1.1] - 2026-11-26
 
 The settings dialog now says in which timezone the times are written. Only texts change.

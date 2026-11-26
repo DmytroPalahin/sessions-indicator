@@ -16,8 +16,7 @@ With every input at its default the chart shows the four main sessions and nothi
 | History, days (0 = all) | `20` | Drawings older than this many days are skipped. `0` draws the whole loaded history. |
 | Hide sessions above, minutes | `60` | Sessions, killzones and the opening range are hidden on chart timeframes above this value. |
 | Level labels offset, bars | `5` | How many bars to the right of the last bar the level lines end. Their labels sit at that end, so keep the right margin of the chart at least this wide. |
-| Killzones and opens timezone | `America/New_York` | The timezone of every time that is not a session row: the killzones, the opening range window, the midnight and custom opens and the day labels. Sessions do not use it — each session row has its own city — unless a row has the city `As in ①`. It is not your own timezone and it does not change the chart clock. `Exchange` follows the symbol. Named zones follow daylight saving time automatically. |
-| Custom timezone | `Europe/London` | Used only when *Killzones and opens timezone* is `Custom`; otherwise the field is ignored, whatever it says. Accepts an IANA name (`Europe/London`, `Asia/Tokyo`) or an offset (`UTC+3`). A name follows daylight saving time, an offset does not. |
+| My timezone | `UTC` | The timezone your own chart shows — the clock in its bottom right corner. TradingView does not tell an indicator which one it is, so pick it here. It is used for the *Hours* column of the dashboard and for every clock set to `My time`. Sessions are drawn in the right place whatever is chosen here. |
 
 ## ② Sessions
 
@@ -41,8 +40,8 @@ London opens. Default colours: Asia blue, Frankfurt purple, London green, New Yo
 renamed and retimed, so the fifth one doubles as a spare.
 
 Cities: `Sydney`, `Tokyo`, `Hong Kong`, `Singapore`, `Shanghai`, `Mumbai`, `Dubai`, `Frankfurt`, `London`,
-`New York`, `Chicago`, `UTC` and `As in ①`. The last one reads the hours of the row in the timezone set in
-*① General*: use it for the exchange timezone, or for a zone that is not in the list, through `Custom`.
+`New York`, `Chicago`, `UTC`, `Exchange` and `My time`. `Exchange` follows the symbol. `My time` reads the hours of
+the row in *① General → My timezone*: type them as you see them on your chart.
 
 Hours may cross midnight and may be up to 24 hours long (`1800-1800` restarts every day at 18:00).
 
@@ -79,13 +78,13 @@ are levels that price has already traded through.*
 
 ## ⑤ Killzones
 
-In the settings dialog the heading reads *⑤ Killzones · times in the timezone set in ① General*: the windows are
-written in *① General → Killzones and opens timezone* — New York time by default — and the chart draws them on its
-own clock.
+The windows are written in the local time of the *Clock* above them — `New York` by default, the clock killzones
+are usually quoted in — and the chart draws them on its own clock.
 
 | Input | Default | What it does |
 |-------|---------|--------------|
 | Show killzones | off | Master switch for all five rows. |
+| Clock | `New York` | The city whose local time the windows below are written in. Same list as for a session row, `Exchange` and `My time` included. |
 
 | Slot | Name | Window |
 | ------ | ------ | -------- |
@@ -120,11 +119,12 @@ A period is shown only on chart timeframes lower than the period itself.
 | Day open | off | `D Open` |
 | Week open | off | `W Open` |
 | Month open | off | `M Open` |
-| Midnight open (00:00) | off | `00:00 Open` — the first bar of the calendar day in the indicator timezone |
+| Midnight open (00:00) | off | `00:00 Open` — the first bar of the calendar day on the clock below |
 | Custom open (hour, minute) | off, `8`, `30` | `08:30 Open` — the bar that opens at this time |
+| Midnight and custom clock | `New York` | — the city whose local time those two opens use |
 
-Day, week and month follow the trading calendar of the symbol. Midnight and the custom time follow the indicator
-timezone, *① General → Killzones and opens timezone*.
+Day, week and month follow the trading calendar of the symbol. Midnight and the custom time follow the clock under
+them.
 
 ![Killzones, previous day high and low, day open and midnight open](images/killzones-levels.png)
 
@@ -135,7 +135,8 @@ timezone, *① General → Killzones and opens timezone*.
 | Input | Default | What it does |
 | ------- | --------- | -------------- |
 | Show opening range | off | Master switch. |
-| Window | `0930-1000` | The window in which the range is measured, written in the timezone set in *① General*. |
+| Window | `0930-1000` | The window in which the range is measured, written in the local time of the clock below. |
+| Clock | `New York` | The city whose local time the window is written in. `Exchange` follows the symbol. |
 | Colour | cyan | Colour of the box, the lines and the markers. |
 | Extend for, hours | `6.0` | How long the lines keep extending after the window closes. |
 | Midline | on | A dashed line at the middle of the range. |
@@ -151,8 +152,9 @@ timezone, *① General → Killzones and opens timezone*.
 
 | Input | Default | What it does |
 |-------|---------|--------------|
-| Day separators | off | A dotted vertical line at the first bar of each calendar day in the indicator timezone. |
+| Day separators | off | A dotted vertical line at the first bar of each calendar day on the clock below. |
 | Weekday labels | off | `Mon`, `Tue`, … below that bar. |
+| Day starts at midnight in | `New York` | The city at whose midnight a new day starts for the two tools above. |
 
 ## ⑩ Dashboard
 
@@ -163,13 +165,15 @@ timezone, *① General → Killzones and opens timezone*.
 | Text size | `Small` | Size of the table text. |
 | Average length | `20` | Number of completed sessions and days behind the `Avg` column. |
 | Day range row | on | Adds the day range and its share of the average daily range. |
+| Hours on my clock | on | Adds the *Hours* column: the hours of every session in *① General → My timezone*. |
 
-Columns: session name · status (`Open · 2h 05m left` or `Opens in 5h 03m`) · current or latest range · average
-range.
+Columns: session name · hours on your own clock · status (`Open · 2h 05m left` or `Opens in 5h 03m`) · current or
+latest range · average range. The first line names the timezone the hours are shown in.
 
 ![Dashboard, day separators and weekday labels](images/dashboard-time-tools.png)
 
-*⑨ Day separators and Weekday labels, ⑩ Show dashboard, EURUSD on 15 minutes.*
+*⑨ Day separators and Weekday labels, ⑩ Show dashboard, ① My timezone = `Paris, Berlin, Madrid`, EURUSD on 15 minutes
+with the chart set to the same timezone.*
 
 ## ⑪ Style
 

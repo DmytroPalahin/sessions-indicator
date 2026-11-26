@@ -15,35 +15,34 @@ Check these in order.
 
 The hours of a session row are the local time of the city on that row, not the time on your chart. London
 `0800-1600` is 8 to 16 o'clock in London. A chart set to Paris or Berlin time shows that session from 09:00 to
-17:00, a chart set to New York time from 03:00 to 11:00 — the same eight hours, read on another clock. With the
-defaults a Paris or Berlin chart shows Asia at 00:00 – 08:00, Frankfurt at 08:00 – 09:00, London at 09:00 – 17:00
-and New York at 14:00 – 22:00.
+17:00, a chart set to New York time from 03:00 to 11:00 — the same eight hours, read on another clock.
 
-Nothing has to be converted and no timezone has to be selected for this. A script cannot see where you are or
-which timezone your chart uses, so every row names its own city instead.
+To see the hours on your own clock, pick your timezone in *① General → My timezone* and switch the dashboard on:
+its *Hours* column lists every session in your time. With Paris or Berlin it reads Asia 00:00 – 08:00, Frankfurt
+08:00 – 09:00, London 09:00 – 17:00 and New York 14:00 – 22:00.
 
-## What is the timezone in *① General* for?
+## I want to type the hours as I see them on my chart
 
-*Killzones and opens timezone* is the clock of every time that is not a session row: the killzones, the opening
-range window, the midnight and custom opens and the day labels. Those are New York conventions, so the default is
-`America/New_York`. It is not your own timezone, and there is no need to change it to the place you live in.
+Pick your timezone in *① General → My timezone* and set the city of the row to `My time`. The hours of that row
+are then read on your own clock: London becomes `0900-1700` for Paris or Berlin. The price is that the row follows
+your clock changes and no longer London's, which matters for a city that changes its clocks on other dates than
+yours or not at all — Asia would be an hour off for half of the year.
 
-Sessions ignore it, unless a row has the city `As in ①`: that row is read in this timezone. Use it for the exchange
-timezone, or for a zone that is not in the list of cities — select `Custom` and type the zone into
-*Custom timezone*.
+## Why can't the indicator simply use the timezone of my chart?
 
-## What is the *Custom timezone* field for?
+TradingView does not give a script access to the timezone of the chart: it is a display setting that scripts
+cannot read. That is why the hours in the settings cannot follow your chart by themselves, why every row names
+its own city, and why *My timezone* has to be picked once by hand.
 
-Only for the case when *① General → Killzones and opens timezone* is set to `Custom`: then the killzones, the
-opens and the session rows with the city `As in ①` are read in the zone typed there. With any other choice the
-field is ignored. The value it shows is an example, not your location and not a setting you need to match to the
-season.
+## What is *My timezone* for?
+
+For two things: the *Hours* column of the dashboard, and every clock set to `My time`. Sessions, killzones and
+opens are drawn in the right place whatever it is set to, so there is nothing to break by leaving it alone.
 
 ## A session is shifted by an hour
 
 - The city of the row is not the one you mean: `Frankfurt` and `London` are an hour apart.
-- The row has the city `As in ①` and *① General* holds a fixed offset such as `UTC+3`. Offsets do not follow
-  daylight saving time. Use a named zone instead.
+- The row has the city `My time` and *My timezone* is not the timezone of your chart.
 - The city changed its clocks and yours did not, or the other way round — see the next entry.
 
 ## The sessions move on my chart for a few weeks in spring and autumn
@@ -53,18 +52,17 @@ different dates, and Tokyo does not change them at all. So for a few weeks a yea
 on the chart is an hour shorter or longer than usual, and Asia moves by an hour against a European or American
 chart twice a year. This is real: the markets do open at another time on your clock then.
 
-## After the update to 3.0.0 my sessions are in the wrong place
+## After an update my sessions are in the wrong place
 
-Up to 2.1.1 the hours of every session were read in one timezone, New York by default. From 3.0.0 on they are the
-local time of the city on the row, and the settings changed order. Three things to know:
+Versions 3.0.0 and 4.0.0 changed how hours are written and the order of the settings. Three things to know:
 
 - An indicator that is already on a chart keeps the version it was added with, so nothing moves until you add it
   again.
 - Settings saved as your defaults for an older version are applied by position and no longer fit. Open the
   settings and press **Defaults → Reset settings**.
-- Hours you used to type in New York time are now read on the clock of the row's city. Either type them in the
-  local time of that city, or set the city of the row to `As in ①`: then the hours are read in the timezone of
-  *① General*, as before.
+- Up to 2.1.1 the hours of every session were read in New York time. Now they are the local time of the city on
+  the row. Either type them in the local time of that city, or set the city of the row to `New York` and keep
+  the hours you had.
 
 ## The box does not start exactly at the session time
 

@@ -34,7 +34,7 @@ pas plus.
 
 | № | Module | Ce que vous obtenez |
 | --- | -------- | -------------- |
-| ① | **General** | Profondeur de l'historique, limite d'unité de temps et fuseau horaire des killzones et des ouvertures (heure d'été gérée) |
+| ① | **General** | Profondeur de l'historique, limite d'unité de temps et votre propre fuseau horaire, pour que le tableau affiche chaque session à votre heure |
 | ② | **Sessions** | 5 emplacements : Asia, Frankfurt, London, New York et un de réserve, chacun à l'heure locale de sa ville. Le nom, les heures, la ville et la couleur se modifient |
 | ③ | **Session display** | Boîte, fond, les deux ou masqué · étiquette avec le nom et l'amplitude · ligne d'ouverture · médiane à 50 % |
 | ④ | **Session high / low levels** | Les plus hauts et les plus bas restent sur le graphique jusqu'à ce que le prix les traverse |
@@ -43,7 +43,7 @@ pas plus.
 | ⑦ | **Opening prices** | Ouverture du jour, de la semaine, du mois, de minuit et d'une heure de votre choix |
 | ⑧ | **Opening range** | Boîte du range, lignes prolongées, médiane, projections et marqueurs de cassure |
 | ⑨ | **Time tools** | Séparateurs de jours et étiquettes des jours de la semaine |
-| ⑩ | **Dashboard** | Quelle session est ouverte, temps restant ou temps avant l'ouverture, amplitude en cours face à sa moyenne, amplitude du jour face à l'ADR |
+| ⑩ | **Dashboard** | Quelle session est ouverte, ses heures à votre propre heure, temps restant ou temps avant l'ouverture, amplitude en cours face à sa moyenne, amplitude du jour face à l'ADR |
 | ⑪ | **Style** | Taille du texte, style et épaisseur des lignes, options des étiquettes, filtre des niveaux éloignés |
 
 ## Captures d'écran
@@ -114,8 +114,12 @@ verte et New York orange, dessinées en boîtes douces sans bordure. *③ Sessio
 toute la hauteur du graphique au lieu de l'amplitude.
 
 Killzones par défaut : Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:00 – 10:00, NY Lunch 12:00 – 13:00,
-NY PM 13:30 – 16:00, en heure de New York — le fuseau réglé dans *① General*. Ce sont des conventions, pas des
-règles : chaque fenêtre est modifiable.
+NY PM 13:30 – 16:00, en heure de New York — le *Clock* de ce groupe. Ce sont des conventions, pas des règles :
+chaque fenêtre est modifiable.
+
+TradingView n'indique pas à un indicateur quel fuseau horaire votre graphique affiche. Choisissez-le une fois dans
+*① General → My timezone* : le tableau liste alors chaque session à votre heure, et une ligne dont la ville est
+`My time` prend ses heures telles que vous les voyez sur votre graphique.
 
 ## Documentation
 

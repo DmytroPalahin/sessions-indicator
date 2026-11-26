@@ -106,11 +106,22 @@ wrong or missing.
 
 ### 5. Every time names its clock
 
-A session row carries the city whose local time its hours are written in; killzones, the opening range and the
-opens share the timezone of *① General*. A `Zone` stores its timezone, and everything that asks "is this bar
-inside?" goes through it: `time()`, the identity of a run and the dashboard countdown. Named IANA zones carry
-their own daylight saving rules, so the weeks in which New York, London and Sydney are out of step need no date
-arithmetic in the script.
+A session row carries the city whose local time its hours are written in; the killzones, the opening range, the
+midnight and custom opens and the day separators each have a *Clock* in their own group, New York by default. A
+`Zone` stores its timezone, and everything that asks "is this bar inside?" goes through it: `time()`, the
+identity of a run and the dashboard countdown. Named IANA zones carry their own daylight saving rules, so the
+weeks in which New York, London and Sydney are out of step need no date arithmetic in the script.
+
+There is no timezone for the whole indicator. A global field called "timezone" is read by users as "my
+timezone", and it was set to the user's own city with every window moving as a result. A clock that sits next
+to the hours it governs cannot be misread that way.
+
+What users ask for is hours "as on my chart". A script cannot do that by itself: the timezone of the chart is a
+display setting that Pine does not expose. Most public session indicators therefore write every window in one
+timezone, UTC or New York, and leave the conversion to the user; a few give each session the timezone of its
+city; one offers a "your timezone" mode for the times it prints. This script takes the second and the third:
+the city per row keeps the hours true all year, and *① General → My timezone* is the one thing the user tells
+the script, used for the *Hours* column of the dashboard and for any clock set to `My time`.
 
 Up to 2.1.1 there was one timezone for all sessions, New York by default. It kept the engine one line shorter and
 made the settings hard to read: "London 03:00 – 11:00" only makes sense to someone who knows that the numbers are

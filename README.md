@@ -33,7 +33,7 @@ so the chart stays clean until you ask for more.
 
 | # | Module | What you get |
 | --- | -------- | -------------- |
-| ① | **General** | History depth, timeframe limit, and the timezone of the killzones and opens (DST-aware) |
+| ① | **General** | History depth, timeframe limit, and your own timezone, so the dashboard can show every session on your clock |
 | ② | **Sessions** | 5 slots: Asia, Frankfurt, London, New York and one spare, each in the local time of its city. Name, hours, city and colour are yours to change |
 | ③ | **Session display** | Box, background, both or hidden · label with name and range · open line · 50% midline |
 | ④ | **Session high / low levels** | Highs and lows stay on the chart until price trades through them |
@@ -42,7 +42,7 @@ so the chart stays clean until you ask for more.
 | ⑦ | **Opening prices** | Day, week, month, midnight and one custom time of day |
 | ⑧ | **Opening range** | Range box, extended lines, midline, projections and breakout markers |
 | ⑨ | **Time tools** | Day separators and weekday labels |
-| ⑩ | **Dashboard** | Which session is open, time left or time to open, current range against its average, day range against ADR |
+| ⑩ | **Dashboard** | Which session is open, its hours on your own clock, time left or time to open, current range against its average, day range against ADR |
 | ⑪ | **Style** | Text size, line style and width, label options, a filter for distant levels |
 
 ## Screenshots
@@ -112,8 +112,12 @@ as soft boxes without a border. *③ Session display → Style → Background* s
 instead of the range.
 
 Killzone presets: Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:00 – 10:00, NY Lunch 12:00 – 13:00,
-NY PM 13:30 – 16:00, in New York time — the timezone set in *① General*. These are conventions, not rules: every
-window is editable.
+NY PM 13:30 – 16:00, in New York time — the *Clock* of that group. These are conventions, not rules: every window
+is editable.
+
+TradingView does not tell an indicator which timezone your chart shows. Pick it once in *① General → My timezone*
+and the dashboard lists every session on your own clock; a row with the city `My time` takes its hours as you see
+them on your chart.
 
 ## Documentation
 

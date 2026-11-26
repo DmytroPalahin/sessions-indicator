@@ -13,6 +13,32 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+No timezone for the whole indicator any more: every window has its clock next to it, and the one timezone you set
+is your own. The settings changed order again, so settings saved for 3.0.0 do not carry over.
+
+### Added
+
+- *① General → My timezone*: the timezone your own chart shows. TradingView does not tell an indicator which one
+  it is, so it is picked once from a list of cities. Sessions are drawn in the right place whatever is chosen.
+- Dashboard column *Hours*: the hours of every session on your own clock, with the timezone named in the first
+  line. *⑩ Dashboard → Hours on my clock* switches it off.
+- City `My time` for a session row: its hours are read in *My timezone*, typed as you see them on your chart.
+- City `Exchange`, the timezone of the symbol.
+
+### Changed
+
+- **Breaking.** *① General → Killzones and opens timezone* is gone. The killzones, the midnight and custom opens,
+  the opening range and the day separators each have a *Clock* in their own group, with the same list of cities as
+  a session row. All of them start at `New York`, so nothing moves on the chart.
+- **Breaking.** The city `As in ①` is replaced by `My time`.
+- **Breaking.** The settings changed order. Settings saved for an older version are applied by position and no
+  longer fit: press *Defaults → Reset settings* after the update.
+- The heading of *⑤ Killzones* is short again; the clock above the rows says what the heading used to say.
+
+### Removed
+
+- *① General → Custom timezone*, the free-text timezone. Every clock is now picked from a list.
+
 ## [3.0.0] - 2026-11-26
 
 Sessions are written in the local time of their own city. The settings changed order, so settings saved for 2.x

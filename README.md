@@ -6,7 +6,7 @@
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
 [![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/)
-[![Version](https://img.shields.io/badge/version-2.0.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.1.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
 [![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/)
@@ -149,7 +149,7 @@ These come from how Pine Script and TradingView work. They are listed so that no
 
 ## Project status
 
-Version 2.0.0 is the current release and the version published on TradingView. It compiles and runs with no errors
+Version 2.1.0 is the current release and the version published on TradingView. It compiles and runs with no errors
 and no warnings, and it has been run on forex, crypto, futures and stock charts from 30 seconds to daily. The
 verification log in [docs/TESTING.md](docs/TESTING.md) lists what has been checked and what is still open.
 

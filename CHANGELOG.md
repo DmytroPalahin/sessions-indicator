@@ -13,6 +13,10 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-11-26
+
+A clearer *Custom timezone* field, and a French README. Charts that keep the default timezone do not change.
+
 ### Changed
 
 - *① General → Custom timezone* shows `Europe/London` by default instead of `UTC+3`. The field is used only when
@@ -171,7 +175,8 @@ of [docs/TESTING.md](docs/TESTING.md).
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.
 
-[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.4.0...v2.0.0
 [1.4.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.2.0...v1.3.0

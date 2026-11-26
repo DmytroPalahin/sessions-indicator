@@ -13,6 +13,8 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+## [4.3.1] - 2026-11-27
+
 The same chart in about half the time.
 
 ### Changed
@@ -301,7 +303,8 @@ of [docs/TESTING.md](docs/TESTING.md).
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.
 
-[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.3.0...HEAD
+[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.3.1...HEAD
+[4.3.1]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.3.0...v4.3.1
 [4.3.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.0.0...v4.1.0

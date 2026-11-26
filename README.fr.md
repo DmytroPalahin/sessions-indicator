@@ -6,7 +6,7 @@
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
 [![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/)
-[![Version](https://img.shields.io/badge/version-4.3.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.3.1-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
 [![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/)
@@ -165,7 +165,7 @@ surprenne.
 
 ## État du projet
 
-La version 4.3.0 est la version actuelle, celle qui est publiée sur TradingView. Elle compile et fonctionne sans
+La version 4.3.1 est la version actuelle, celle qui est publiée sur TradingView. Elle compile et fonctionne sans
 erreur ni avertissement, et elle a été exécutée sur des graphiques forex, crypto, futures et actions, de 30 secondes
 au journalier. Le journal de vérification de [docs/TESTING.md](docs/TESTING.md) indique ce qui a été vérifié et ce
 qui reste ouvert.

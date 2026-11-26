@@ -40,7 +40,7 @@ body:
     attributes:
       label: Indicator version
       description: The VERSION line at the top of the script.
-      placeholder: 4.3.0
+      placeholder: 4.3.1
     validations:
       required: true
   - type: textarea

@@ -41,7 +41,7 @@ const string NO_VALUE  = "—"
 const float  INK_CONTRAST = 4.5
 
 const string G_GENERAL  = "① General"
-const string G_SESSIONS = "② Sessions · each row in the local time of its city"
+const string G_SESSIONS = "② Sessions"
 const string G_SVIEW    = "③ Session display"
 const string G_LEVELS   = "④ Session high / low levels"
 const string G_KZ       = "⑤ Killzones"
@@ -56,8 +56,9 @@ const string TT_HOME     = "The timezone your own chart shows - the clock in its
 const string TT_LOOKBACK = "Drawings older than this many days are skipped. 0 draws the whole loaded history (TradingView still keeps only the newest 500 objects of each kind)."
 const string TT_MAX_TF   = "Sessions, killzones and the opening range are hidden on chart timeframes above this many minutes, where they stop being meaningful."
 const string TT_OFFSET   = "How many bars to the right of the last bar the level lines end. Their labels sit at that end."
-const string TT_SESSION  = "Checkbox · name · hours · city. The hours are the local time of that city, not the time on your chart: London 08:00 - 16:00 is 8 to 16 o'clock in London, and it follows London's daylight saving time. The hours table on the chart shows the same session on your own clock. With 'My time' the hours are read in your own timezone, set in ① General: type them as you see them on your chart. Hours may cross midnight (1900-0400)."
+const string TT_SESSION  = "Checkbox · name · hours · city. The hours are the local time of that city, not the time on your chart: London 08:00 - 16:00 is 8 to 16 o'clock in London, and it follows London's daylight saving time. The hours table on the chart shows the same session on your own clock. To type the hours as you see them on your chart, set the city to 'My time', or untick 'Hours are local' under the rows for all of them at once. Hours may cross midnight (1900-0400)."
 const string TT_S_COLS   = "Colours of the five rows above, in the same order."
+const string TT_S_LOCAL  = "Ticked: the hours of every row are the local time of the city in that row. That is why every row can start at 08:00: it is 8 o'clock in Tokyo, in Frankfurt, in London and in New York - four different moments on your chart. Unticked: every row is read in ① General → My timezone instead, whatever its city says, so you type the hours as you see them on your chart."
 const string TT_SLOT     = "Checkbox · name · time window · colour. The window is written in the local time of the clock above, New York by default; the chart draws it on its own clock. A window may cross midnight (1900-0400)."
 const string TT_KZ_CLOCK = "The city whose local time the killzone windows below are written in. The usual killzone times are New York times. 'My time' reads them in your own timezone, set in ① General."
 const string TT_UNIT     = "Unit of every range shown in labels and in the dashboard. 'Auto' uses pips on forex and price elsewhere."
@@ -72,7 +73,7 @@ const string TT_OR_EXT   = "How long the range lines keep extending after the wi
 const string TT_OR_PROJ  = "Projection of the range above its high and below its low, as a multiple of the range. 0 turns a projection off."
 const string TT_AVG      = "Number of completed sessions (and days) used for the 'Avg' column."
 const string TT_DAY_CLK  = "The city at whose midnight a new day starts for the separators and the weekday labels."
-const string TT_DASH_HRS = "Shows the hours of every session on your own clock: the timezone set in ① General → My timezone. With the dashboard off this is a small table of its own that also repeats the hours as they are written in the settings; with the dashboard on it is the 'Hours' column."
+const string TT_DASH_HRS = "Shows the hours of every session on your own clock: the timezone set in ① General → My timezone. With the dashboard off this is a small table of its own, with enabled killzones under the sessions; with the dashboard on it is the 'Hours' column."
 const string TT_MAX_DIST = "TradingView fits every level of an indicator into the price scale, so a level far from price squeezes the candles. Levels farther from the last price than this many average daily ranges are not drawn. 0 draws all of them."
 const string TT_TAG_SPOT = "'At the line end' prints the text over the right end of the line (under it for lows), inside the chart, where the price scale cannot cut it off. 'After the line' prints it to the right of the line and needs a right margin wide enough for the text."
 const string TT_INK      = "A label takes the colour of its line or zone. When this is on, a colour that would be hard to read on the chart background is darkened on a light chart and lightened on a dark one, for the text only. Lines and zones keep their colour."
@@ -328,6 +329,8 @@ float    i_maxDist  = input.float(0.0, "Hide levels farther than, × ADR (0 = ne
 // Declared last on purpose: an input added in the middle would shift the saved settings of every input after it.
 TagSpot  i_tagSpot  = input.enum(TagSpot.atEnd, "Level labels position", tooltip = TT_TAG_SPOT, group = G_STYLE)
 bool     i_inkAuto  = input.bool(true, "Label text adapts to the chart background", tooltip = TT_INK, group = G_STYLE)
+// Shown under the session rows. Its title answers the question the rows raise: why does every one of them start at 08:00?
+bool     i_sLocal   = input.bool(true, "Hours are local: 08:00 is 8 o'clock in the row's city", tooltip = TT_S_LOCAL, group = G_SESSIONS)
 
 //#endregion
 
@@ -396,6 +399,10 @@ zoneOf(Clock c) =>
         Clock.utc       => "Etc/UTC"
         Clock.exchange  => syminfo.timezone
         => MY_TZ
+
+// @function Timezone of a session row: its city, or the user's own timezone when 'Hours are local' is off.
+sessionZone(Clock c) =>
+    i_sLocal ? zoneOf(c) : MY_TZ
 
 string KZ_TZ   = zoneOf(i_kClock)
 string OPEN_TZ = zoneOf(i_oClock)
@@ -489,7 +496,6 @@ type Zone
     string  title
     string  sess
     string  tz
-    string  clock
     int     startMin
     int     endMin
     color   col
@@ -636,10 +642,6 @@ clockMinutes(string sess, int pos) =>
     float hh = str.tonumber(str.substring(sess, pos, pos + 2))
     float mm = str.tonumber(str.substring(sess, pos + 2, pos + 4))
     int(nz(hh) * 60 + nz(mm))
-
-// @function Turns a session string ("0800-1600") into the text shown in tables ("08:00 – 16:00").
-fmtWindow(string sess) =>
-    str.substring(sess, 0, 2) + ":" + str.substring(sess, 2, 4) + " – " + str.substring(sess, 5, 7) + ":" + str.substring(sess, 7, 9)
 
 // @function The next moment (after the real current time) at which the clock of a timezone shows the given minute of the day.
 nextClock(int minuteOfDay, string tz) =>
@@ -992,9 +994,9 @@ method run(OpeningRange this, bool inside, int key, bool visible) =>
 newTracker() =>
     Tracker.new(spans = array.new<float>())
 
-// @function A zone slot built from its inputs, the timezone its window is written in and the name of that clock.
-newZone(bool enabled, string title, string sess, string tz, string clock, color col) =>
-    Zone.new(enabled, title, sess, tz, clock, clockMinutes(sess, 0), clockMinutes(sess, 5), col, newTracker())
+// @function A zone slot built from its inputs and the timezone its window is written in.
+newZone(bool enabled, string title, string sess, string tz, color col) =>
+    Zone.new(enabled, title, sess, tz, clockMinutes(sess, 0), clockMinutes(sess, 5), col, newTracker())
 
 // @function A period with its three markers ready.
 newPeriod(string code, bool showHL, bool showOpen, color hlCol, color openCol) =>
@@ -1005,16 +1007,16 @@ var array<Zone>  killzones = array.new<Zone>()
 var array<Level> levels    = array.new<Level>()
 
 if barstate.isfirst
-    sessions.push(newZone(i_s1On, i_s1Name, i_s1Time, zoneOf(i_s1Clock), str.tostring(i_s1Clock), i_s1Col))
-    sessions.push(newZone(i_s2On, i_s2Name, i_s2Time, zoneOf(i_s2Clock), str.tostring(i_s2Clock), i_s2Col))
-    sessions.push(newZone(i_s3On, i_s3Name, i_s3Time, zoneOf(i_s3Clock), str.tostring(i_s3Clock), i_s3Col))
-    sessions.push(newZone(i_s4On, i_s4Name, i_s4Time, zoneOf(i_s4Clock), str.tostring(i_s4Clock), i_s4Col))
-    sessions.push(newZone(i_s5On, i_s5Name, i_s5Time, zoneOf(i_s5Clock), str.tostring(i_s5Clock), i_s5Col))
-    killzones.push(newZone(i_kzOn and i_k1On, i_k1Name, i_k1Time, KZ_TZ, str.tostring(i_kClock), i_k1Col))
-    killzones.push(newZone(i_kzOn and i_k2On, i_k2Name, i_k2Time, KZ_TZ, str.tostring(i_kClock), i_k2Col))
-    killzones.push(newZone(i_kzOn and i_k3On, i_k3Name, i_k3Time, KZ_TZ, str.tostring(i_kClock), i_k3Col))
-    killzones.push(newZone(i_kzOn and i_k4On, i_k4Name, i_k4Time, KZ_TZ, str.tostring(i_kClock), i_k4Col))
-    killzones.push(newZone(i_kzOn and i_k5On, i_k5Name, i_k5Time, KZ_TZ, str.tostring(i_kClock), i_k5Col))
+    sessions.push(newZone(i_s1On, i_s1Name, i_s1Time, sessionZone(i_s1Clock), i_s1Col))
+    sessions.push(newZone(i_s2On, i_s2Name, i_s2Time, sessionZone(i_s2Clock), i_s2Col))
+    sessions.push(newZone(i_s3On, i_s3Name, i_s3Time, sessionZone(i_s3Clock), i_s3Col))
+    sessions.push(newZone(i_s4On, i_s4Name, i_s4Time, sessionZone(i_s4Clock), i_s4Col))
+    sessions.push(newZone(i_s5On, i_s5Name, i_s5Time, sessionZone(i_s5Clock), i_s5Col))
+    killzones.push(newZone(i_kzOn and i_k1On, i_k1Name, i_k1Time, KZ_TZ, i_k1Col))
+    killzones.push(newZone(i_kzOn and i_k2On, i_k2Name, i_k2Time, KZ_TZ, i_k2Col))
+    killzones.push(newZone(i_kzOn and i_k3On, i_k3Name, i_k3Time, KZ_TZ, i_k3Col))
+    killzones.push(newZone(i_kzOn and i_k4On, i_k4Name, i_k4Time, KZ_TZ, i_k4Col))
+    killzones.push(newZone(i_kzOn and i_k5On, i_k5Name, i_k5Time, KZ_TZ, i_k5Col))
 
 var ZoneView sessionView  = ZoneView.new(i_sStyle, i_sFill, i_sBand, i_sBorder, i_sWidth, strokeOf(i_sStroke), i_sCaption, i_sAlign, i_sOpen, i_sMid, false)
 var ZoneView killzoneView = ZoneView.new(i_kStyle, i_kFill, i_kBand, 55, 1, line.style_dotted, i_kCaption, i_kAlign, false, false, true)
@@ -1111,7 +1113,7 @@ int DASH_SHIFT = i_dashHrs ? 1 : 0
 // With the dashboard off the hours still get a small table of their own, so that 'My timezone' always shows on the chart.
 bool HOURS_ONLY = i_dashHrs and not i_dashOn
 
-var table dashboard = i_dashOn or HOURS_ONLY ? table.new(positionOf(i_dashPos), HOURS_ONLY ? 3 : 4 + DASH_SHIFT, 12, bgcolor = color.new(chart.bg_color, 10), frame_color = color.new(chart.fg_color, 80), frame_width = 1, border_width = 0) : na
+var table dashboard = i_dashOn or HOURS_ONLY ? table.new(positionOf(i_dashPos), HOURS_ONLY ? 2 : 4 + DASH_SHIFT, 12, bgcolor = color.new(chart.bg_color, 10), frame_color = color.new(chart.fg_color, 80), frame_width = 1, border_width = 0) : na
 
 // @function Writes one cell of the dashboard.
 dashCell(int column, int row, string txt, color col, string halign) =>
@@ -1121,17 +1123,15 @@ dashCell(int column, int row, string txt, color col, string halign) =>
 myHours(Zone z) =>
     str.format_time(nextClock(z.startMin, z.tz), "HH:mm", MY_TZ) + " – " + str.format_time(nextClock(z.endMin, z.tz), "HH:mm", MY_TZ)
 
-// @function Writes one line of the hours table: name · hours as written in the settings · hours on the user's clock.
+// @function Writes one line of the hours table: name · hours on the user's clock.
 hoursRow(Zone z, int row) =>
     dashCell(0, row, "● " + z.title, inkOf(z.col), text.align_left)
-    dashCell(1, row, fmtWindow(z.sess) + "  " + z.clock, color.new(DASH_TEXT, 45), text.align_left)
-    dashCell(2, row, myHours(z), DASH_TEXT, text.align_left)
+    dashCell(1, row, myHours(z), DASH_TEXT, text.align_left)
 
 if HOURS_ONLY and intradayOk and barstate.islast
     color dim = color.new(DASH_TEXT, 45)
     dashCell(0, 0, "Session", dim, text.align_left)
-    dashCell(1, 0, "In the settings", dim, text.align_left)
-    dashCell(2, 0, str.tostring(i_home) + " time", dim, text.align_left)
+    dashCell(1, 0, str.tostring(i_home) + " time", dim, text.align_left)
     int row = 1
     for z in sessions
         if z.enabled

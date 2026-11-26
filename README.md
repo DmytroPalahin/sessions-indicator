@@ -115,10 +115,9 @@ Killzone presets: Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:00 – 
 NY PM 13:30 – 16:00, in New York time — the *Clock* of that group. These are conventions, not rules: every window
 is editable.
 
-A small table on the chart repeats the hours as they are written in the settings and shows them on your own clock
-next to that. TradingView does not tell an indicator which timezone your chart shows, so pick it once in
-*① General → My timezone*: the table changes at once. A row with the city `My time` takes its hours as you see them
-on your chart.
+A small table on the chart shows the hours of every session on your own clock. TradingView does not tell an
+indicator which timezone your chart shows, so pick it once in *① General → My timezone*: the table changes at once.
+To type the hours as you see them on your chart, untick *Hours are local* under the session rows.
 
 ## Documentation
 

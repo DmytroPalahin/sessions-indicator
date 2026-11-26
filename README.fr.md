@@ -117,10 +117,10 @@ Killzones par défaut : Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:0
 NY PM 13:30 – 16:00, en heure de New York — le *Clock* de ce groupe. Ce sont des conventions, pas des règles :
 chaque fenêtre est modifiable.
 
-Un petit tableau sur le graphique reprend les heures telles qu'elles sont écrites dans les paramètres et les
-affiche à votre heure juste à côté. TradingView n'indique pas à un indicateur quel fuseau horaire votre graphique
-affiche : choisissez-le une fois dans *① General → My timezone*, le tableau change aussitôt. Une ligne dont la
-ville est `My time` prend ses heures telles que vous les voyez sur votre graphique.
+Un petit tableau sur le graphique affiche les heures de chaque session à votre heure. TradingView n'indique pas à
+un indicateur quel fuseau horaire votre graphique affiche : choisissez-le une fois dans *① General → My timezone*,
+le tableau change aussitôt. Pour saisir les heures telles que vous les voyez sur votre graphique, décochez *Hours
+are local* sous les lignes des sessions.
 
 ## Documentation
 

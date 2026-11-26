@@ -11,30 +11,33 @@ Check these in order.
 4. **The market does not trade then.** A stock chart without extended hours has no bars at 08:00 London time, so
    there is no London session to draw.
 
-## London is set to 08:00 – 16:00 but my chart shows it at another time
+## Why does every session start at 08:00 in the settings?
 
-The hours of a session row are the local time of the city on that row, not the time on your chart. London
-`0800-1600` is 8 to 16 o'clock in London. A chart set to Paris or Berlin time shows that session from 09:00 to
-17:00, a chart set to New York time from 03:00 to 11:00 — the same eight hours, read on another clock.
+Because the hours of a row are the local time of the city on that row: 08:00 in Tokyo, 08:00 in Frankfurt, 08:00
+in London and 08:00 in New York are four different moments. The line under the rows says so — *Hours are local:
+08:00 is 8 o'clock in the row's city*.
 
-The table on the chart does that conversion for you. Each line gives the hours as they are written in the
-settings and, next to them, the same hours in *① General → My timezone*. Pick your timezone there and the last
-column reads as your chart does: with Paris or Berlin, Asia 00:00 – 08:00, Frankfurt 08:00 – 09:00, London
-09:00 – 17:00 and New York 14:00 – 22:00.
+On your chart each of them falls where your own clock puts it. A chart set to Paris or Berlin time shows London
+from 09:00 to 17:00, a chart set to New York time from 03:00 to 11:00 — the same eight hours, read on another
+clock. The table on the chart does that conversion for you: pick your timezone in *① General → My timezone* and it
+reads as your chart does. With Paris or Berlin: Asia 00:00 – 08:00, Frankfurt 08:00 – 09:00, London 09:00 – 17:00
+and New York 14:00 – 22:00.
 
-## I picked my timezone and the hours in the settings still start at 08:00
+## I picked my timezone and the hours in the settings did not change
 
 They stay as they are on purpose. *My timezone* does not rewrite the session rows and does not move anything on
 the chart: a session row keeps the local time of its city, which is what keeps it in the right place all year.
-What changes is the table on the chart, whose last column shows every session on your clock. If you would rather
-type the hours as you see them on your chart, see the next entry.
+What changes is the table on the chart. If you would rather type the hours as you see them on your chart, see the
+next entry.
 
 ## I want to type the hours as I see them on my chart
 
-Pick your timezone in *① General → My timezone* and set the city of the row to `My time`. The hours of that row
-are then read on your own clock: London becomes `0900-1700` for Paris or Berlin. The price is that the row follows
-your clock changes and no longer London's, which matters for a city that changes its clocks on other dates than
-yours or not at all — Asia would be an hour off for half of the year.
+Pick your timezone in *① General → My timezone*, then either untick *Hours are local* under the session rows —
+every row is then read on your own clock and its city is ignored — or set the city of a single row to `My time`.
+London becomes `0900-1700` for Paris or Berlin, Asia `0000-0800`, Frankfurt `0800-0900`, New York `1400-2200`.
+
+The price is that such a row follows your clock changes and no longer the city's. That matters for a city that
+changes its clocks on other dates than yours or not at all: Asia would be an hour off for half of the year.
 
 ## Why can't the indicator simply use the timezone of my chart?
 

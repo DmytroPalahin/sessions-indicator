@@ -9,10 +9,9 @@ With every input at its default the chart shows the four main sessions and a sma
 
 ![Default settings: Asia, Frankfurt, London and New York session boxes and the hours table](images/sessions-default.png)
 
-The table has one line per session: its name, its hours as they are written in the settings, and the same hours
-on your own clock. The chart of the picture is set to UTC, which is also the default of *① General → My timezone*,
-so the last column matches the time axis. The other pictures of this page, except the dashboard one, were taken
-with *⑩ Hours on my clock* off.
+The table has one line per session: its name and its hours on your own clock. The chart of the picture is set to
+UTC, which is also the default of *① General → My timezone*, so the hours match the time axis. The other pictures
+of this page, except the dashboard one, were taken with *⑩ Hours on my clock* off.
 
 ## ① General
 
@@ -25,12 +24,14 @@ with *⑩ Hours on my clock* off.
 
 ## ② Sessions
 
-Five rows. Each row is: checkbox · name · hours · city. The colours of the five rows sit on one line under them, in
-the same order.
+Five rows. Each row is: checkbox · name · hours · city. Under them sit the colours of the five rows, in the same
+order, and one line that says how the hours are read.
 
-In the settings dialog the heading reads *② Sessions · each row in the local time of its city*: London `0800-1600`
-is 8 to 16 o'clock in London, whatever your own timezone is, and it follows London's daylight saving time. The chart
-draws every session on its own clock, so nothing has to be converted.
+| Input | Default | What it does |
+| ------- | --------- | -------------- |
+| Hours are local: 08:00 is 8 o'clock in the row's city | on | On: the hours of every row are the local time of the city in that row. That is why every row can start at 08:00: it is 8 o'clock in Tokyo, in Frankfurt, in London and in New York, four different moments on your chart. London `0800-1600` follows London's daylight saving time. Off: every row is read in *① General → My timezone*, whatever its city says, so the hours are typed as you see them on your chart. |
+
+The chart draws every session on its own clock, so nothing has to be converted; the hours table shows the result.
 
 | Slot | Name | Hours | City | On |
 | ------ | ------ | ------- | ------ | ---- |
@@ -170,7 +171,7 @@ them.
 | Text size | `Small` | Size of the table text. |
 | Average length | `20` | Number of completed sessions and days behind the `Avg` column. |
 | Day range row | on | Adds the day range and its share of the average daily range. |
-| Hours on my clock | on | Shows the hours of every session in *① General → My timezone*. With the dashboard off it is a small table of its own: session · hours as written in the settings, with their city · hours on your clock; enabled killzones are listed under the sessions. With the dashboard on it is the *Hours* column. |
+| Hours on my clock | on | Shows the hours of every session in *① General → My timezone*. With the dashboard off it is a small table of its own: session · hours on your clock, with enabled killzones listed under the sessions. With the dashboard on it is the *Hours* column. |
 
 Columns: session name · hours on your own clock · status (`Open · 2h 05m left` or `Opens in 5h 03m`) · current or
 latest range · average range. The first line names the timezone the hours are shown in.

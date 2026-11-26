@@ -13,6 +13,20 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+The answer to "why does every session start at 08:00?" now sits under the session rows.
+
+### Added
+
+- *② Sessions → Hours are local: 08:00 is 8 o'clock in the row's city*, a checkbox under the session rows, on by
+  default. Its title says how the rows are read. Unticked, every row is read in *① General → My timezone*
+  instead, whatever its city says, so the hours can be typed as the chart shows them.
+
+### Changed
+
+- The hours table has two columns, the session and its hours on your clock. The column that repeated the hours of
+  the settings is gone: the new line in the settings says the same where the question comes up.
+- The heading of *② Sessions* is short again.
+
 ## [4.1.0] - 2026-11-26
 
 The hours of the sessions are on the chart from the start, on your own clock.

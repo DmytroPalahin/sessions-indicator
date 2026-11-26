@@ -124,9 +124,11 @@ the city per row keeps the hours true all year, and *① General → My timezone
 the script, used for the hours table and for any clock set to `My time`.
 
 That table is on by default. A setting that changes nothing on the screen reads as broken: with the table off,
-picking a timezone had no visible effect, and the rows kept saying 08:00. So each line of the table carries both
-readings, the hours as written in the settings and the hours on the user's clock, and the second one changes the
-moment another timezone is picked.
+picking a timezone had no visible effect. The other half of the question, "why does every row start at 08:00?",
+is answered where it is asked: a checkbox under the rows whose title is the answer — *Hours are local: 08:00 is 8
+o'clock in the row's city*. Its title is read by everyone who opens the dialog, which a group heading in small
+capitals and a tooltip were not. Unticked, it reads every row in *My timezone*, for those who want to type the
+hours as their chart shows them. It is declared last and joins its group at the end, so no saved setting moved.
 
 Up to 2.1.1 there was one timezone for all sessions, New York by default. It kept the engine one line shorter and
 made the settings hard to read: "London 03:00 – 11:00" only makes sense to someone who knows that the numbers are

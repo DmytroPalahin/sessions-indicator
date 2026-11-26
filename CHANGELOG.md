@@ -13,6 +13,8 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-11-26
+
 The answer to "why does every session start at 08:00?" now sits under the session rows.
 
 ### Added
@@ -278,7 +280,8 @@ of [docs/TESTING.md](docs/TESTING.md).
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.
 
-[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.2.0...HEAD
+[4.2.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v3.0.0...v4.0.0
 [3.0.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.1.1...v3.0.0

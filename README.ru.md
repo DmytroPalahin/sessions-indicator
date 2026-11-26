@@ -6,7 +6,7 @@
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
 [![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/)
-[![Version](https://img.shields.io/badge/version-4.1.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.2.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
 [![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/)
@@ -157,7 +157,7 @@ NY PM 13:30 – 16:00, по нью-йоркскому времени — это 
 
 ## Статус проекта
 
-Версия 4.1.0 — текущий релиз, и именно она опубликована на TradingView. Она компилируется и работает без ошибок и
+Версия 4.2.0 — текущий релиз, и именно она опубликована на TradingView. Она компилируется и работает без ошибок и
 предупреждений и запускалась на графиках форекса, крипты, фьючерсов и акций на таймфреймах от 30 секунд до дня. Что
 проверено и что ещё осталось, записано в журнале проверок в [docs/TESTING.md](docs/TESTING.md).
 

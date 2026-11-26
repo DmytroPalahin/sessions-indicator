@@ -19,7 +19,7 @@
 
 <a href="https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator avec les paramètres par défaut sur EURUSD, 15 minutes : boîtes des sessions Asia, Frankfurt, London et New York" width="100%"></a>
 
-<sub>Paramètres par défaut sur EURUSD, 15 minutes : Asia, Frankfurt, London et New York, et le tableau de leurs heures.</sub>
+<sub>Paramètres par défaut sur EURUSD, 15 minutes : Asia, Frankfurt, London et New York.</sub>
 
 </div>
 
@@ -117,9 +117,9 @@ Killzones par défaut : Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:0
 NY PM 13:30 – 16:00, en heure de New York — le *Clock* de ce groupe. Ce sont des conventions, pas des règles :
 chaque fenêtre est modifiable.
 
-Un petit tableau sur le graphique affiche les heures de chaque session à votre heure. TradingView n'indique pas à
-un indicateur quel fuseau horaire votre graphique affiche : choisissez-le une fois dans *① General → My timezone*,
-le tableau change aussitôt. Pour saisir les heures telles que vous les voyez sur votre graphique, décochez *Hours
+Cochez *⑩ Dashboard → Hours on my clock* : un petit tableau affiche les heures de chaque session à votre heure.
+TradingView n'indique pas à un indicateur quel fuseau horaire votre graphique affiche : choisissez-le dans
+*① General → My timezone*. Pour saisir les heures telles que vous les voyez sur votre graphique, décochez *Hours
 are local* sous les lignes des sessions.
 
 ## Documentation

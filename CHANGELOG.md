@@ -13,6 +13,15 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+A clean chart by default again.
+
+### Changed
+
+- *⑩ Dashboard → Hours on my clock* is off by default, so the hours table is no longer on the chart until it is
+  asked for. An indicator that is already on a chart keeps the table it has.
+- *① General → My timezone* starts at `Paris, Berlin, Madrid` instead of `UTC`. It is only a starting value for
+  the hours table and for clocks set to `My time`; sessions do not depend on it.
+
 ## [4.2.0] - 2026-11-26
 
 The answer to "why does every session start at 08:00?" now sits under the session rows.

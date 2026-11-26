@@ -5,13 +5,9 @@ as the titled input before them.
 
 > **Tip.** Hover the ⓘ icon next to an input in TradingView to read the same explanation without leaving the chart.
 
-With every input at its default the chart shows the four main sessions and a small table of their hours:
+With every input at its default the chart shows the four main sessions and nothing else:
 
-![Default settings: Asia, Frankfurt, London and New York session boxes and the hours table](images/sessions-default.png)
-
-The table has one line per session: its name and its hours on your own clock. The chart of the picture is set to
-UTC, which is also the default of *① General → My timezone*, so the hours match the time axis. The other pictures
-of this page, except the dashboard one, were taken with *⑩ Hours on my clock* off.
+![Default settings: Asia, Frankfurt, London and New York session boxes](images/sessions-default.png)
 
 ## ① General
 
@@ -20,7 +16,7 @@ of this page, except the dashboard one, were taken with *⑩ Hours on my clock* 
 | History, days (0 = all) | `20` | Drawings older than this many days are skipped. `0` draws the whole loaded history. |
 | Hide sessions above, minutes | `60` | Sessions, killzones and the opening range are hidden on chart timeframes above this value. |
 | Level labels offset, bars | `5` | How many bars to the right of the last bar the level lines end. Their labels sit at that end, so keep the right margin of the chart at least this wide. |
-| My timezone | `UTC` | The timezone your own chart shows — the clock in its bottom right corner. TradingView does not tell an indicator which one it is, so pick it here. The hours table on the chart then shows every session on your clock, and it changes as soon as another city is picked. It is also the timezone of every clock set to `My time`. Sessions are drawn in the right place whatever is chosen here. |
+| My timezone | `Paris, Berlin, Madrid` | The timezone your own chart shows — the clock in its bottom right corner. TradingView does not tell an indicator which one it is, so pick it here. It is used in two places: the hours table (*⑩ Dashboard → Hours on my clock*), which shows every session on your clock, and every clock set to `My time`. Sessions are drawn in the right place whatever is chosen here. |
 
 ## ② Sessions
 
@@ -31,7 +27,8 @@ order, and one line that says how the hours are read.
 | ------- | --------- | -------------- |
 | Hours are local: 08:00 is 8 o'clock in the row's city | on | On: the hours of every row are the local time of the city in that row. That is why every row can start at 08:00: it is 8 o'clock in Tokyo, in Frankfurt, in London and in New York, four different moments on your chart. London `0800-1600` follows London's daylight saving time. Off: every row is read in *① General → My timezone*, whatever its city says, so the hours are typed as you see them on your chart. |
 
-The chart draws every session on its own clock, so nothing has to be converted; the hours table shows the result.
+The chart draws every session on its own clock, so nothing has to be converted. Tick *⑩ Dashboard → Hours on my
+clock* to read the result in a small table.
 
 | Slot | Name | Hours | City | On |
 | ------ | ------ | ------- | ------ | ---- |
@@ -171,15 +168,15 @@ them.
 | Text size | `Small` | Size of the table text. |
 | Average length | `20` | Number of completed sessions and days behind the `Avg` column. |
 | Day range row | on | Adds the day range and its share of the average daily range. |
-| Hours on my clock | on | Shows the hours of every session in *① General → My timezone*. With the dashboard off it is a small table of its own: session · hours on your clock, with enabled killzones listed under the sessions. With the dashboard on it is the *Hours* column. |
+| Hours on my clock | off | Shows the hours of every session in *① General → My timezone*. With the dashboard off it is a small table of its own, in the corner chosen in *Position*: session · hours on your clock, with enabled killzones listed under the sessions. With the dashboard on it is the *Hours* column. |
 
 Columns: session name · hours on your own clock · status (`Open · 2h 05m left` or `Opens in 5h 03m`) · current or
 latest range · average range. The first line names the timezone the hours are shown in.
 
 ![Dashboard, day separators and weekday labels](images/dashboard-time-tools.png)
 
-*⑨ Day separators and Weekday labels, ⑩ Show dashboard, ① My timezone = `Paris, Berlin, Madrid`, EURUSD on 15 minutes
-with the chart set to the same timezone.*
+*⑨ Day separators and Weekday labels, ⑩ Show dashboard and Hours on my clock, EURUSD on 15 minutes with the chart
+set to Paris time, the default of ① My timezone.*
 
 ## ⑪ Style
 

@@ -19,7 +19,7 @@
 
 <a href="https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator with default settings on EURUSD, 15 minutes: Asia, Frankfurt, London and New York session boxes" width="100%"></a>
 
-<sub>Default settings on EURUSD, 15 minutes: Asia, Frankfurt, London and New York, and the table of their hours.</sub>
+<sub>Default settings on EURUSD, 15 minutes: Asia, Frankfurt, London and New York.</sub>
 
 </div>
 
@@ -115,8 +115,8 @@ Killzone presets: Asia 20:00 – 00:00, London 02:00 – 05:00, NY AM 07:00 – 
 NY PM 13:30 – 16:00, in New York time — the *Clock* of that group. These are conventions, not rules: every window
 is editable.
 
-A small table on the chart shows the hours of every session on your own clock. TradingView does not tell an
-indicator which timezone your chart shows, so pick it once in *① General → My timezone*: the table changes at once.
+Tick *⑩ Dashboard → Hours on my clock* and a small table shows the hours of every session on your own clock.
+TradingView does not tell an indicator which timezone your chart shows, so pick it in *① General → My timezone*.
 To type the hours as you see them on your chart, untick *Hours are local* under the session rows.
 
 ## Documentation

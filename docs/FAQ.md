@@ -19,16 +19,16 @@ in London and 08:00 in New York are four different moments. The line under the r
 
 On your chart each of them falls where your own clock puts it. A chart set to Paris or Berlin time shows London
 from 09:00 to 17:00, a chart set to New York time from 03:00 to 11:00 — the same eight hours, read on another
-clock. The table on the chart does that conversion for you: pick your timezone in *① General → My timezone* and it
-reads as your chart does. With Paris or Berlin: Asia 00:00 – 08:00, Frankfurt 08:00 – 09:00, London 09:00 – 17:00
-and New York 14:00 – 22:00.
+clock. The indicator can do that conversion for you: tick *⑩ Dashboard → Hours on my clock*, pick your timezone in
+*① General → My timezone*, and a small table lists every session as your chart shows it. With Paris or Berlin:
+Asia 00:00 – 08:00, Frankfurt 08:00 – 09:00, London 09:00 – 17:00 and New York 14:00 – 22:00.
 
 ## I picked my timezone and the hours in the settings did not change
 
 They stay as they are on purpose. *My timezone* does not rewrite the session rows and does not move anything on
 the chart: a session row keeps the local time of its city, which is what keeps it in the right place all year.
-What changes is the table on the chart. If you would rather type the hours as you see them on your chart, see the
-next entry.
+What changes is the hours table, when *⑩ Dashboard → Hours on my clock* is ticked. If you would rather type the
+hours as you see them on your chart, see the next entry.
 
 ## I want to type the hours as I see them on my chart
 
@@ -47,13 +47,15 @@ its own city, and why *My timezone* has to be picked once by hand.
 
 ## What is *My timezone* for?
 
-For two things: the hours table on the chart (the *Hours* column when the dashboard is on), and every clock set
-to `My time`. Sessions, killzones and opens are drawn in the right place whatever it is set to, so there is
-nothing to break by leaving it alone.
+For two things: the hours table (the *Hours* column when the dashboard is on), and every clock set to `My time`.
+Sessions, killzones and opens are drawn in the right place whatever it is set to, so there is nothing to break
+by leaving it alone. Its default, Paris, is only a starting value: pick your own, and press **Defaults → Save as
+default** if you want TradingView to remember it.
 
-## How do I hide the hours table?
+## How do I see the session hours on my own clock?
 
-Untick *⑩ Dashboard → Hours on my clock*.
+Tick *⑩ Dashboard → Hours on my clock*. A small table appears in the corner chosen in *Position*; with the
+dashboard on, the hours are a column of the dashboard instead.
 
 ## A session is shifted by an hour
 

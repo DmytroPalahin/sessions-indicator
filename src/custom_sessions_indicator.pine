@@ -52,11 +52,11 @@ const string G_TIME     = "⑨ Time tools"
 const string G_DASH     = "⑩ Dashboard"
 const string G_STYLE    = "⑪ Style"
 
-const string TT_HOME     = "The timezone your own chart shows - the clock in its bottom right corner. TradingView does not tell an indicator which one it is, so pick it here. The hours table on the chart then shows every session on your clock, and it changes as soon as you pick another city. It is also the timezone of every clock set to 'My time'. Sessions are drawn in the right place whatever is chosen here."
+const string TT_HOME     = "The timezone your own chart shows - the clock in its bottom right corner. TradingView does not tell an indicator which one it is, so pick it here. It is used in two places: the hours table (⑩ Dashboard → Hours on my clock), which shows every session on your clock, and every clock set to 'My time'. Sessions are drawn in the right place whatever is chosen here."
 const string TT_LOOKBACK = "Drawings older than this many days are skipped. 0 draws the whole loaded history (TradingView still keeps only the newest 500 objects of each kind)."
 const string TT_MAX_TF   = "Sessions, killzones and the opening range are hidden on chart timeframes above this many minutes, where they stop being meaningful."
 const string TT_OFFSET   = "How many bars to the right of the last bar the level lines end. Their labels sit at that end."
-const string TT_SESSION  = "Checkbox · name · hours · city. The hours are the local time of that city, not the time on your chart: London 08:00 - 16:00 is 8 to 16 o'clock in London, and it follows London's daylight saving time. The hours table on the chart shows the same session on your own clock. To type the hours as you see them on your chart, set the city to 'My time', or untick 'Hours are local' under the rows for all of them at once. Hours may cross midnight (1900-0400)."
+const string TT_SESSION  = "Checkbox · name · hours · city. The hours are the local time of that city, not the time on your chart: London 08:00 - 16:00 is 8 to 16 o'clock in London, and it follows London's daylight saving time. Tick 'Hours on my clock' in ⑩ Dashboard to see the same session on your own clock. To type the hours as you see them on your chart, set the city to 'My time', or untick 'Hours are local' under the rows for all of them at once. Hours may cross midnight (1900-0400)."
 const string TT_S_COLS   = "Colours of the five rows above, in the same order."
 const string TT_S_LOCAL  = "Ticked: the hours of every row are the local time of the city in that row. That is why every row can start at 08:00: it is 8 o'clock in Tokyo, in Frankfurt, in London and in New York - four different moments on your chart. Unticked: every row is read in ① General → My timezone instead, whatever its city says, so you type the hours as you see them on your chart."
 const string TT_SLOT     = "Checkbox · name · time window · colour. The window is written in the local time of the clock above, New York by default; the chart draws it on its own clock. A window may cross midnight (1900-0400)."
@@ -73,7 +73,7 @@ const string TT_OR_EXT   = "How long the range lines keep extending after the wi
 const string TT_OR_PROJ  = "Projection of the range above its high and below its low, as a multiple of the range. 0 turns a projection off."
 const string TT_AVG      = "Number of completed sessions (and days) used for the 'Avg' column."
 const string TT_DAY_CLK  = "The city at whose midnight a new day starts for the separators and the weekday labels."
-const string TT_DASH_HRS = "Shows the hours of every session on your own clock: the timezone set in ① General → My timezone. With the dashboard off this is a small table of its own, with enabled killzones under the sessions; with the dashboard on it is the 'Hours' column."
+const string TT_DASH_HRS = "Shows the hours of every session on your own clock: the timezone set in ① General → My timezone. With the dashboard off this is a small table of its own in the corner chosen above, with enabled killzones under the sessions; with the dashboard on it is the 'Hours' column."
 const string TT_MAX_DIST = "TradingView fits every level of an indicator into the price scale, so a level far from price squeezes the candles. Levels farther from the last price than this many average daily ranges are not drawn. 0 draws all of them."
 const string TT_TAG_SPOT = "'At the line end' prints the text over the right end of the line (under it for lows), inside the chart, where the price scale cannot cut it off. 'After the line' prints it to the right of the line and needs a right margin wide enough for the text."
 const string TT_INK      = "A label takes the colour of its line or zone. When this is on, a colour that would be hard to read on the chart background is darkened on a light chart and lightened on a dark one, for the text only. Lines and zones keep their colour."
@@ -189,7 +189,7 @@ int    i_lookback = input.int(20, "History, days (0 = all)", minval = 0, tooltip
 int    i_maxTf    = input.int(60, "Hide sessions above, minutes", minval = 1, maxval = 1440, tooltip = TT_MAX_TF, group = G_GENERAL)
 int    i_offset   = input.int(5, "Level labels offset, bars", minval = 0, maxval = 200, tooltip = TT_OFFSET, group = G_GENERAL)
 // No window reads this by default: it serves the dashboard hours and every clock set to 'My time'.
-Home   i_home     = input.enum(Home.utc, "My timezone", tooltip = TT_HOME, group = G_GENERAL)
+Home   i_home     = input.enum(Home.paris, "My timezone", tooltip = TT_HOME, group = G_GENERAL)
 
 // ② Sessions
 // Every row is written in the local time of its own city and follows that city's daylight saving time. Asia, London,
@@ -315,7 +315,7 @@ Corner   i_dashPos  = input.enum(Corner.topRight, "Position", group = G_DASH)
 TextSize i_dashSize = input.enum(TextSize.small, "Text size", group = G_DASH)
 int      i_avgLen   = input.int(20, "Average length", minval = 1, maxval = 200, tooltip = TT_AVG, group = G_DASH)
 bool     i_dashDay  = input.bool(true, "Day range row", group = G_DASH)
-bool     i_dashHrs  = input.bool(true, "Hours on my clock", tooltip = TT_DASH_HRS, group = G_DASH)
+bool     i_dashHrs  = input.bool(false, "Hours on my clock", tooltip = TT_DASH_HRS, group = G_DASH)
 
 // ⑪ Style
 TextSize i_textSize = input.enum(TextSize.small, "Text size", group = G_STYLE)
@@ -1110,7 +1110,7 @@ plot(sessions.get(4).trk.active ? sessions.get(4).trk.lo : na, "Session 5 low", 
 
 // The hours column is optional, so the columns after it are numbered from here.
 int DASH_SHIFT = i_dashHrs ? 1 : 0
-// With the dashboard off the hours still get a small table of their own, so that 'My timezone' always shows on the chart.
+// With the dashboard off the hours get a small table of their own.
 bool HOURS_ONLY = i_dashHrs and not i_dashOn
 
 var table dashboard = i_dashOn or HOURS_ONLY ? table.new(positionOf(i_dashPos), HOURS_ONLY ? 2 : 4 + DASH_SHIFT, 12, bgcolor = color.new(chart.bg_color, 10), frame_color = color.new(chart.fg_color, 80), frame_width = 1, border_width = 0) : na

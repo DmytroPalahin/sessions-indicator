@@ -19,7 +19,7 @@
 
 <a href="https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator с настройками по умолчанию на EURUSD, 15 минут: боксы сессий Asia, Frankfurt, London и New York" width="100%"></a>
 
-<sub>Настройки по умолчанию на EURUSD, 15 минут: Asia, Frankfurt, London и New York и таблица их часов.</sub>
+<sub>Настройки по умолчанию на EURUSD, 15 минут: Asia, Frankfurt, London и New York.</sub>
 
 </div>
 
@@ -115,10 +115,10 @@ Killzones по умолчанию: Asia 20:00 – 00:00, London 02:00 – 05:00,
 NY PM 13:30 – 16:00, по нью-йоркскому времени — это *Clock* той же группы. Это общепринятые значения, а не правило:
 любое окно можно изменить.
 
-Небольшая таблица на графике показывает часы каждой сессии по вашим часам. TradingView не сообщает индикатору,
-какой часовой пояс показывает ваш график, поэтому выберите его один раз в *① General → My timezone*: таблица
-изменится сразу. Чтобы вводить часы так, как вы видите их на графике, снимите галочку *Hours are local* под
-строками сессий.
+Включите *⑩ Dashboard → Hours on my clock*, и небольшая таблица покажет часы каждой сессии по вашим часам.
+TradingView не сообщает индикатору, какой часовой пояс показывает ваш график, поэтому выберите его в
+*① General → My timezone*. Чтобы вводить часы так, как вы видите их на графике, снимите галочку *Hours are local*
+под строками сессий.
 
 ## Документация
 

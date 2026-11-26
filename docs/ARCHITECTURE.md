@@ -123,9 +123,10 @@ city; one offers a "your timezone" mode for the times it prints. This script tak
 the city per row keeps the hours true all year, and *① General → My timezone* is the one thing the user tells
 the script, used for the hours table and for any clock set to `My time`.
 
-That table is on by default. A setting that changes nothing on the screen reads as broken: with the table off,
-picking a timezone had no visible effect. The other half of the question, "why does every row start at 08:00?",
-is answered where it is asked: a checkbox under the rows whose title is the answer — *Hours are local: 08:00 is 8
+That table is off by default: the default chart carries the sessions and nothing else, and a table in a corner is
+something the user asks for with one checkbox. (For two releases it was on, so that picking a timezone had a
+visible effect at once; a clean chart won.) The question "why does every row start at 08:00?" is answered where
+it is asked: a checkbox under the rows whose title is the answer — *Hours are local: 08:00 is 8
 o'clock in the row's city*. Its title is read by everyone who opens the dialog, which a group heading in small
 capitals and a tooltip were not. Unticked, it reads every row in *My timezone*, for those who want to type the
 hours as their chart shows them. It is declared last and joins its group at the end, so no saved setting moved.

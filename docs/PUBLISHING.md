@@ -9,9 +9,9 @@ How a release goes from this repository to the TradingView community library.
 | Page | <https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/> |
 | Author | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
 | Access | Public, protected: everyone can add it to a chart, TradingView does not show the code. The code is open here. |
-| Code | Version 2.1.1 — the file at the tag `v2.1.1` |
+| Code | Version 3.0.0 — the file at the tag `v3.0.0` |
 | First published | 2026-11-25, from version 1.2.0 |
-| Latest update | 2026-11-26, version 2.1.1; the page carries the release notes of 1.3.0, 1.4.0, 2.0.0, 2.1.0 and 2.1.1 |
+| Latest update | 2026-11-26, version 3.0.0; the page carries the release notes of 1.3.0, 1.4.0, 2.0.0, 2.1.0, 2.1.1 and 3.0.0 |
 | Categories | Multi-timeframe · Pivot points and levels |
 | Tags | `sessions`, `killzones`, `forex` |
 | Picture | `OANDA:EURUSD`, 15 minutes, default settings |
@@ -86,7 +86,7 @@ This script is a charting tool, not financial advice.
 The text is final on TradingView and still lists the session VWAP. That module is parked on the `feature/vwap`
 branch since version 2.0.0, and the release notes of that update say so. It also says that the session times are
 written in New York time: that holds up to version 2.1.1. From 3.0.0 on each session is written in the local time
-of its city, and the release notes of that update have to say so, because the description cannot be edited.
+of its city, and the release notes of that update say so, because the description cannot be edited.
 
 ### Category and tags
 

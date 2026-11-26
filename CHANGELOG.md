@@ -13,6 +13,8 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-11-26
+
 Sessions are written in the local time of their own city. The settings changed order, so settings saved for 2.x
 do not carry over.
 
@@ -216,7 +218,8 @@ of [docs/TESTING.md](docs/TESTING.md).
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.
 
-[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.1.1...HEAD
+[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.1.1...v3.0.0
 [2.1.1]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v1.4.0...v2.0.0

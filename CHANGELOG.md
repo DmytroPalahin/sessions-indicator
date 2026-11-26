@@ -13,12 +13,14 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-11-26
+
 A clean chart by default again.
 
 ### Changed
 
 - *⑩ Dashboard → Hours on my clock* is off by default, so the hours table is no longer on the chart until it is
-  asked for. An indicator that is already on a chart keeps the table it has.
+  asked for. To get it back after the update, tick that checkbox.
 - *① General → My timezone* starts at `Paris, Berlin, Madrid` instead of `UTC`. It is only a starting value for
   the hours table and for clocks set to `My time`; sessions do not depend on it.
 
@@ -289,7 +291,8 @@ of [docs/TESTING.md](docs/TESTING.md).
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.
 
-[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.2.0...HEAD
+[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.3.0...HEAD
+[4.3.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v3.0.0...v4.0.0

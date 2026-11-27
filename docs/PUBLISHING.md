@@ -64,6 +64,10 @@ named in the description:
 
 An update takes a new picture unless *Don't update the chart* is ticked: apply these settings first, or tick it.
 
+The same picture is the base of [images/social-preview.png](images/social-preview.png), the 1280 × 640 card that
+link previews of this repository show. GitHub does not read it from the repository: it is uploaded by hand in
+*Settings → General → Social preview*, and again whenever the picture changes.
+
 ## First publication
 
 1. Open the script in the Pine Editor and **Save** it under the name TradingView offers, the title of the script:

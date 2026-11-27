@@ -32,6 +32,11 @@ dessine les sessions Asia, Frankfurt, London et New York sous forme de boîtes d
 s'active d'une case à cocher et reste désactivé par défaut : le graphique reste propre tant que vous n'en demandez
 pas plus.
 
+On le cherche sous différents noms : indicateur de sessions pour TradingView, plus hauts et plus bas de session,
+range asiatique (Asian range), killzones ICT, plus haut et plus bas de la veille, cassure du range d'ouverture
+(opening range breakout). Il réunit tout cela dans un seul script, et les horaires des sessions suivent d'eux-mêmes
+le passage à l'heure d'été.
+
 | № | Module | Ce que vous obtenez |
 | --- | -------- | -------------- |
 | ① | **General** | Profondeur de l'historique, limite d'unité de temps et votre propre fuseau horaire, pour que le tableau affiche chaque session à votre heure |

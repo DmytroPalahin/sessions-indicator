@@ -31,6 +31,10 @@ A single Pine Script v6 indicator that maps the trading day on your chart. Out o
 Frankfurt, London and New York sessions as soft colour boxes. Everything else is one checkbox away and off by default,
 so the chart stays clean until you ask for more.
 
+People look for it under different names: a TradingView session indicator, session high and low levels, the Asian
+range, ICT killzones, previous day high and low, an opening range breakout tool. It is all of these in one script,
+and the session hours follow daylight-saving time on their own.
+
 | # | Module | What you get |
 | --- | -------- | -------------- |
 | ① | **General** | History depth, timeframe limit, and your own timezone, so the dashboard can show every session on your clock |

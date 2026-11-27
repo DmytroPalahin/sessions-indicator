@@ -207,9 +207,13 @@ Choose `Price`, `Ticks` or `Percent` in *③ Session display → Range unit* ins
 
 ## Where do I get the indicator?
 
-From its [page on TradingView](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/): press **Use on chart**. The publication is protected, so TradingView does
-not show its code there; the same code is open in this repository, in
+From its [page on TradingView](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/): press **Use on chart**. The publication is open-source, so TradingView
+shows its code on the page; the same code is in this repository, in
 [src/custom_sessions_indicator.pine](../src/custom_sessions_indicator.pine).
+
+Until 2026-11-27 the indicator lived on another page, *Custom Sessions Indicator*. The description of that page
+could not be corrected, so it stopped at version 4.3.1 and gets no more updates. If your chart has the indicator
+from that page, add it again from the new one; the settings are the same.
 
 ## Still stuck?
 

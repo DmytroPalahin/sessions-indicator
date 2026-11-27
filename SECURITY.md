@@ -24,6 +24,6 @@ instead. You can expect a first answer within a week.
 ## A note on copies
 
 The only official sources of this indicator are this repository and the
-[TradingView publication](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) by `dmitry_plhn`.
+[TradingView publication](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/) by `dmitry_plhn`.
 Be careful with copies from elsewhere, and never give your TradingView password or broker access to anyone offering
 a "premium" version.

@@ -5,8 +5,8 @@
 **Sessions, killzones, niveaux de liquidité, prix d'ouverture, opening range et tableau de bord — un seul indicateur TradingView, entièrement configurable.**
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
-[![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/)
-[![Version](https://img.shields.io/badge/version-4.3.1-blue)](CHANGELOG.md)
+[![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/)
+[![Version](https://img.shields.io/badge/version-4.4.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
 [![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/)
@@ -15,9 +15,9 @@
 
 [English](README.md) · [Русский](README.ru.md) · **Français**
 
-[**Ouvrir sur TradingView**](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) · [Dernière version](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) · [Paramètres](docs/SETTINGS.md) · [FAQ](docs/FAQ.md) · [Journal des modifications](CHANGELOG.md) · [Signaler un bug](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose)
+[**Ouvrir sur TradingView**](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/) · [Dernière version](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) · [Paramètres](docs/SETTINGS.md) · [FAQ](docs/FAQ.md) · [Journal des modifications](CHANGELOG.md) · [Signaler un bug](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose)
 
-<a href="https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator avec les paramètres par défaut sur EURUSD, 15 minutes : boîtes des sessions Asia, Frankfurt, London et New York" width="100%"></a>
+<a href="https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator avec les paramètres par défaut sur EURUSD, 15 minutes : boîtes des sessions Asia, Frankfurt, London et New York" width="100%"></a>
 
 <sub>Paramètres par défaut sur EURUSD, 15 minutes : Asia, Frankfurt, London et New York.</sub>
 
@@ -81,9 +81,9 @@ Chaque image ci-dessous montre le même indicateur avec quelques cases cochées.
 
 ## Démarrage rapide
 
-**Depuis TradingView.** Ouvrez la [publication sur TradingView](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) et cliquez sur **Use on chart**. La
-publication est un script protégé : elle fonctionne comme n'importe quel indicateur, et son code est le fichier de
-ce dépôt.
+**Depuis TradingView.** Ouvrez la [publication sur TradingView](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/) et cliquez sur **Use on chart**. La
+publication est en open source : TradingView affiche son code sur la page, et ce code est le fichier de ce
+dépôt.
 
 **Depuis le code source.**
 
@@ -165,7 +165,7 @@ surprenne.
 
 ## État du projet
 
-La version 4.3.1 est la version actuelle, celle qui est publiée sur TradingView. Elle compile et fonctionne sans
+La version 4.4.0 est la version actuelle, celle qui est publiée sur TradingView. Elle compile et fonctionne sans
 erreur ni avertissement, et elle a été exécutée sur des graphiques forex, crypto, futures et actions, de 30 secondes
 au journalier. Le journal de vérification de [docs/TESTING.md](docs/TESTING.md) indique ce qui a été vérifié et ce
 qui reste ouvert.
@@ -188,7 +188,7 @@ Une idée ? [Ouvrez une demande de fonctionnalité](https://github.com/DmytroPal
 
 | | |
 | --- | --- |
-| Indicateur sur TradingView | [Custom Sessions Indicator](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) |
+| Indicateur sur TradingView | [Sessions, Killzones, Opening Range and Dashboard with Auto DST](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/) |
 | Auteur sur TradingView | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
 | Code source | [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) |
 | Dernière version | [DmytroPalahin/sessions-indicator/releases/latest](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) |

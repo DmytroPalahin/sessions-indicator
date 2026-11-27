@@ -32,7 +32,7 @@ indicator("Sessions, Killzones, Opening Range and Dashboard with Auto DST", "Ses
 
 //#region ═════════════════════════════════════════ 1 · Constants ═════════════════════════════════════════
 
-const string VERSION   = "4.3.1"
+const string VERSION   = "4.4.0"
 const int    MS_MINUTE = 60000
 const int    MS_HOUR   = 3600000
 const int    MS_DAY    = 86400000

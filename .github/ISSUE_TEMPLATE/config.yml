@@ -4,7 +4,7 @@ contact_links:
     url: https://github.com/DmytroPalahin/sessions-indicator/blob/main/docs/FAQ.md
     about: Nothing is drawn, sessions are an hour off, labels are cut off — start here.
   - name: The indicator on TradingView
-    url: https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/
+    url: https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/
     about: Add it to a chart, or leave a short question in the comments.
   - name: Security problem
     url: https://github.com/DmytroPalahin/sessions-indicator/blob/main/SECURITY.md

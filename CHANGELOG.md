@@ -13,12 +13,19 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
-Prepared for a corrected publication on TradingView; see `docs/PUBLISHING.md`.
+## [4.4.0] - 2026-11-27
+
+A new page on TradingView, with the code open and a description that matches the script.
 
 ### Changed
 
-- The script declares the title `Sessions, Killzones, Opening Range and Dashboard with Auto DST`. The short
-  title on the chart stays `Sessions`, and no setting moved.
+- The indicator is published again, as an open-source script named
+  `Sessions, Killzones, Opening Range and Dashboard with Auto DST`:
+  <https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/>.
+  The description of the first page could not be edited and no longer matched the script; that page stays at
+  4.3.1 and gets no more updates. Add the indicator from the new page to keep getting them: the settings are the
+  same.
+- The script declares that title. The short title on the chart stays `Sessions`, and no setting moved.
 - The header of the script no longer carries a link: TradingView does not allow links to other sites in
   published code.
 
@@ -312,7 +319,8 @@ of [docs/TESTING.md](docs/TESTING.md).
 - Project documentation, contribution guide, issue and pull request templates.
 - `tools/check.py` and a CI workflow that run static checks on the script.
 
-[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.3.1...HEAD
+[Unreleased]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.4.0...HEAD
+[4.4.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.3.1...v4.4.0
 [4.3.1]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.3.0...v4.3.1
 [4.3.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/DmytroPalahin/sessions-indicator/compare/v4.1.0...v4.2.0

@@ -5,8 +5,8 @@
 **Сессии, killzones, уровни ликвидности, цены открытия, opening range и дашборд — один индикатор для TradingView, в котором настраивается всё.**
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
-[![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/)
-[![Version](https://img.shields.io/badge/version-4.3.1-blue)](CHANGELOG.md)
+[![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/)
+[![Version](https://img.shields.io/badge/version-4.4.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
 [![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/)
@@ -15,9 +15,9 @@
 
 [English](README.md) · **Русский** · [Français](README.fr.md)
 
-[**Открыть на TradingView**](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) · [Последний релиз](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) · [Настройки](docs/SETTINGS.md) · [FAQ](docs/FAQ.md) · [История изменений](CHANGELOG.md) · [Сообщить об ошибке](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose)
+[**Открыть на TradingView**](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/) · [Последний релиз](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) · [Настройки](docs/SETTINGS.md) · [FAQ](docs/FAQ.md) · [История изменений](CHANGELOG.md) · [Сообщить об ошибке](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose)
 
-<a href="https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator с настройками по умолчанию на EURUSD, 15 минут: боксы сессий Asia, Frankfurt, London и New York" width="100%"></a>
+<a href="https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator с настройками по умолчанию на EURUSD, 15 минут: боксы сессий Asia, Frankfurt, London и New York" width="100%"></a>
 
 <sub>Настройки по умолчанию на EURUSD, 15 минут: Asia, Frankfurt, London и New York.</sub>
 
@@ -80,8 +80,8 @@ Asia, Frankfurt, London и New York мягкими цветными боксам
 
 ## Быстрый старт
 
-**Из TradingView.** Откройте [публикацию на TradingView](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) и нажмите **Use on chart**. Публикация
-сделана с закрытым кодом (protected): она работает как обычный индикатор, а её код — это файл из этого репозитория.
+**Из TradingView.** Откройте [публикацию на TradingView](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/) и нажмите **Use on chart**. Публикация
+сделана с открытым кодом (open-source): TradingView показывает код на странице, и это файл из этого репозитория.
 
 **Из исходника.**
 
@@ -157,7 +157,7 @@ TradingView не сообщает индикатору, какой часово�
 
 ## Статус проекта
 
-Версия 4.3.1 — текущий релиз, и именно она опубликована на TradingView. Она компилируется и работает без ошибок и
+Версия 4.4.0 — текущий релиз, и именно она опубликована на TradingView. Она компилируется и работает без ошибок и
 предупреждений и запускалась на графиках форекса, крипты, фьючерсов и акций на таймфреймах от 30 секунд до дня. Что
 проверено и что ещё осталось, записано в журнале проверок в [docs/TESTING.md](docs/TESTING.md).
 
@@ -179,7 +179,7 @@ TradingView не сообщает индикатору, какой часово�
 
 | | |
 | --- | --- |
-| Индикатор на TradingView | [Custom Sessions Indicator](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) |
+| Индикатор на TradingView | [Sessions, Killzones, Opening Range and Dashboard with Auto DST](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/) |
 | Автор на TradingView | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
 | Исходный код | [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) |
 | Последний релиз | [DmytroPalahin/sessions-indicator/releases/latest](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) |

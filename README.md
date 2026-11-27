@@ -5,8 +5,8 @@
 **Sessions, killzones, liquidity levels, opening prices, opening range and a dashboard — one TradingView overlay, every part of it configurable.**
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
-[![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/)
-[![Version](https://img.shields.io/badge/version-4.3.1-blue)](CHANGELOG.md)
+[![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/)
+[![Version](https://img.shields.io/badge/version-4.4.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
 [![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/)
@@ -15,9 +15,9 @@
 
 **English** · [Русский](README.ru.md) · [Français](README.fr.md)
 
-[**Open on TradingView**](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) · [Latest release](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) · [Settings](docs/SETTINGS.md) · [FAQ](docs/FAQ.md) · [Changelog](CHANGELOG.md) · [Report a bug](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose)
+[**Open on TradingView**](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/) · [Latest release](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) · [Settings](docs/SETTINGS.md) · [FAQ](docs/FAQ.md) · [Changelog](CHANGELOG.md) · [Report a bug](https://github.com/DmytroPalahin/sessions-indicator/issues/new/choose)
 
-<a href="https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator with default settings on EURUSD, 15 minutes: Asia, Frankfurt, London and New York session boxes" width="100%"></a>
+<a href="https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/"><img src="docs/images/sessions-default.png" alt="Custom Sessions Indicator with default settings on EURUSD, 15 minutes: Asia, Frankfurt, London and New York session boxes" width="100%"></a>
 
 <sub>Default settings on EURUSD, 15 minutes: Asia, Frankfurt, London and New York.</sub>
 
@@ -80,8 +80,8 @@ Every picture below is the same indicator with a few checkboxes switched on. The
 
 ## Quick start
 
-**From TradingView.** Open the [publication on TradingView](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) and press **Use on chart**. The
-publication is a protected script: it works like any indicator, and its code is the file in this repository.
+**From TradingView.** Open the [publication on TradingView](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/) and press **Use on chart**. The
+publication is open-source: TradingView shows its code on the page, and that code is the file in this repository.
 
 **From the source.**
 
@@ -154,7 +154,7 @@ These come from how Pine Script and TradingView work. They are listed so that no
 
 ## Project status
 
-Version 4.3.1 is the current release and the version published on TradingView. It compiles and runs with no errors
+Version 4.4.0 is the current release and the version published on TradingView. It compiles and runs with no errors
 and no warnings, and it has been run on forex, crypto, futures and stock charts from 30 seconds to daily. The
 verification log in [docs/TESTING.md](docs/TESTING.md) lists what has been checked and what is still open.
 
@@ -176,7 +176,7 @@ Have an idea? [Open a feature request](https://github.com/DmytroPalahin/sessions
 
 | | |
 | --- | --- |
-| Indicator on TradingView | [Custom Sessions Indicator](https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/) |
+| Indicator on TradingView | [Sessions, Killzones, Opening Range and Dashboard with Auto DST](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/) |
 | Author on TradingView | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
 | Source code | [src/custom_sessions_indicator.pine](src/custom_sessions_indicator.pine) |
 | Latest release | [DmytroPalahin/sessions-indicator/releases/latest](https://github.com/DmytroPalahin/sessions-indicator/releases/latest) |

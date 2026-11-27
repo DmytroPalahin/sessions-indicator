@@ -157,8 +157,8 @@ ipython_config.py
 .ipython/profile_default/history.sqlite
 .ipython/profile_default/startup/
 
-# pyenv
-.python-version
+# # pyenv
+# .python-version
 
 # pipenv
 Pipfile.lock

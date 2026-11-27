@@ -154,7 +154,7 @@ them.
 ## ⑨ Time tools
 
 | Input | Default | What it does |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | Day separators | off | A dotted vertical line at the first bar of each calendar day on the clock below. |
 | Weekday labels | off | `Mon`, `Tue`, … below that bar. |
 | Day starts at midnight in | `New York` | The city at whose midnight a new day starts for the two tools above. |

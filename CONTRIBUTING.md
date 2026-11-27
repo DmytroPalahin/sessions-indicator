@@ -27,7 +27,8 @@ cd sessions-indicator
 uv sync
 ```
 
-`uv sync` installs the Python version named in `pyproject.toml` and the tools pinned in `uv.lock` into `.venv`.
+`uv sync` installs the Python version named in `.python-version` (3.12, the only one `pyproject.toml` allows) and
+the tools pinned in `uv.lock` into `.venv`.
 Then:
 
 ```bash

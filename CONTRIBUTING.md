@@ -125,22 +125,30 @@ change alters what they show.
 Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-<type>(<scope>): <summary in the imperative, lower case, no full stop>
+<emoji> <type>(<scope>): <summary in the imperative, lower case, no full stop>
 ```
 
-| Type | Use it for |
-| ------ | ----------- |
-| `feat` | a new module or setting |
-| `fix` | a bug fix |
-| `docs` | documentation only |
-| `refactor` | a change that neither fixes a bug nor adds a feature |
-| `chore` | repository housekeeping |
-| `ci` | the workflow or the check script |
+Every commit starts with the emoji of its type, so the history can be read at a glance:
+
+| Emoji | Type | Use it for |
+| ------- | ------ | ----------- |
+| ✨ | `feat` | a new module or setting |
+| 🐛 | `fix` | a bug fix |
+| ⚡ | `perf` | the same result with less work |
+| ♻️ | `refactor` | a change that neither fixes a bug nor adds a feature |
+| 📝 | `docs` | documentation only |
+| ✅ | `test` | tests only |
+| 👷 | `ci` | the workflow or the check script |
+| 🔧 | `chore` | repository housekeeping |
+| 🚀 | `chore(release)` | a release commit |
+
+One emoji per commit; a breaking change adds 💥 after it. Commits made before 2026-11-27 have none, and the
+history is not rewritten for it.
 
 Scopes are the modules: `sessions`, `killzones`, `levels`, `periods`, `opens`, `range`, `vwap`, `dashboard`,
 `alerts`, `style`.
 
-Examples: `feat(killzones): add a sixth slot`, `fix(levels): keep the label when a level is faded`.
+Examples: `✨ feat(killzones): add a sixth slot`, `🐛 fix(levels): keep the label when a level is faded`.
 
 ## Pull requests
 
@@ -159,7 +167,7 @@ Examples: `feat(killzones): add a sixth slot`, `fix(levels): keep the label when
 2. Set `VERSION` in the script, and the version badge and the status line in every README (`README.md`,
    `README.ru.md`, `README.fr.md`).
 3. Run the full matrix of [docs/TESTING.md](docs/TESTING.md) and add a line to its verification log.
-4. Commit as `chore(release): vX.Y.Z`, tag `vX.Y.Z`, push with tags.
+4. Commit as `🚀 chore(release): vX.Y.Z`, tag `vX.Y.Z`, push with tags.
 5. Create the GitHub release from the tag with the changelog section as notes.
 6. Update the script on TradingView as described in [docs/PUBLISHING.md](docs/PUBLISHING.md).
 7. Retake the screenshots if the release changes how the chart looks.

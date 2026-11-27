@@ -66,7 +66,9 @@ An update takes a new picture unless *Don't update the chart* is ticked: apply t
 
 ## First publication
 
-1. Open the script in the Pine Editor and **Save** it as `Custom Sessions Indicator`.
+1. Open the script in the Pine Editor and **Save** it under the name TradingView offers, the title of the script:
+   `Sessions, Killzones, Opening Range and Dashboard with Auto DST`. The saved script and the page then carry the
+   same name in the Indicators dialog.
 2. Open the prepared chart and add the saved script to it.
 3. Press **Publish script** and choose **Public**, then the visibility: **Open-source** shows the code to everyone,
    **Protected** hides it. This indicator is published as open-source. Neither choice can be changed later.

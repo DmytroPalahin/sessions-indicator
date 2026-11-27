@@ -35,7 +35,9 @@ takes a new one with every update. Prepare the chart first:
 - one symbol, this indicator only, no other indicators and no drawings — moderators reject cluttered pictures;
 - a liquid symbol and an intraday timeframe on which the sessions are easy to read (`OANDA:EURUSD`, 15 minutes);
 - default settings, so the picture shows what a new user gets;
-- two or three days on screen.
+- two or three days on screen;
+- the chart legend shown, so the symbol, the timeframe and the name of the script are on the picture — the
+  publishing rules ask for all three.
 
 Keeping a separate chart layout for this makes the picture repeatable.
 
@@ -122,13 +124,107 @@ site data is cleared. Someone who opens the dialog every day therefore keeps get
 `PUB;550e`. A copy pasted from this
 repository into someone's own Pine Editor does not change until they paste the new file.
 
+## Prepared: a corrected publication
+
+The description of the page above cannot be edited and no longer matches the script (see
+[Description](#description)). For an issue that updates cannot fix, TradingView's *Tips for script authors* give one
+way out: publish a corrected version and ask the script moderators to hide the old one. That publication is
+prepared here. **It is not published yet.**
+
+The steps, in this order:
+
+1. Ask the script moderators, in a private message to the `PineCoders` account, whether the old page can be hidden
+   once the new one is up. Without their word a second page of the same script is a duplicate.
+2. Publish the script as **Private** first, with the texts below, and read the page. A private publication can be
+   edited and deleted at any time.
+3. Publish it as **Public** and **Open-source**. The title, the description and both of these choices are final
+   15 minutes later.
+4. Send the moderators both links and replace the link to the page in this repository.
+
+### New title
+
+```
+Sessions, Killzones, Opening Range and Dashboard with Auto DST
+```
+
+62 characters; the longest titles in the search are 64. The script declares the same title in `indicator()`, and
+`tools/check.py` keeps it within the limit. The indicator search lists at most 50 scripts for a query, the most
+boosted first, and it found this script by the words of its title only. A new script has no boosts, so the title
+is made of words that few titles combine: on 2026-11-27 the search returned 7 scripts for `sessions dashboard`,
+8 for `sessions opening range`, 14 for `sessions DST` and 28 for `sessions killzones`, against the full 50 for
+`sessions` alone.
+
+### New description
+
+```
+This indicator maps the trading day on an intraday chart: sessions, killzones, the levels they leave behind, an opening range and a dashboard, all in one settings panel. Every session is written in the local time of its own city, so daylight saving time takes care of itself.
+
+WHY IT IS DIFFERENT
+Many session indicators ask for one timezone for all sessions. Europe and the United States change their clocks on different dates, and for one to three weeks the boxes sit an hour off. Here every session row has a city: London 08:00-16:00 is 8 to 16 o'clock in London and follows London's daylight saving time, Tokyo follows Tokyo's clock, New York follows New York's. Nothing has to be retyped when the clocks change. If you prefer to type the hours as you see them on your chart, set a row to "My time".
+
+WHAT IT SHOWS
+- Sessions: 5 rows. Asia, Frankfurt, London and New York are on; a fifth row, Sydney, is off. Name, hours, city and colour are editable. A session is drawn as a box, a full-height background, both or hidden, with an optional label (name, range in price, ticks, pips or percent), an open line and a midline.
+- Session high / low levels: when a session ends, its high and low stay on the chart until price trades through them.
+- Killzones: 5 more rows with a clock and a style of their own. Asia, London, NY AM, NY Lunch and NY PM by default, written in New York time.
+- Previous day / week / month high and low.
+- Opening prices: day, week, month, midnight and one custom time.
+- Opening range: the range of a chosen window with extended lines, a midline, projections and a marker on the first close outside the range.
+- Day separators and weekday labels.
+- Dashboard: which session is open, the time left or the time to the open, the current range against its average, the day range against the average daily range and, if you tick it, the hours of every session on your own clock.
+
+HOW IT WORKS
+A session is the set of bars whose opening time falls inside its window, read on the clock of its city; its high and low are tracked bar by bar. A new run of a session is recognised by its calendar date, so sessions are also correct on regular-hours charts and may be up to 24 hours long. A session level is broken when a later bar trades beyond it. Previous day, week and month values come from the higher timeframe with a one-bar offset, so historical bars never use data from their own future. An opening range breakout is a bar that closes outside the range. Label text is adjusted for contrast against the chart background, so it stays readable on light and dark themes.
+
+The modules live in one script on purpose: killzones, levels, the opening range and the dashboard read the same session engine and the same clocks, so they cannot disagree about when a session starts or ends.
+
+HOW TO USE IT
+Add the indicator to a chart of 60 minutes or lower. Out of the box it draws only the four session boxes. Everything else is off and is switched on group by group in the settings. Pick your timezone in "My timezone" and tick "Hours on my clock" to read every session on your own clock. The chart above shows the indicator with session labels, killzones, the previous day high and low, the day open and the dashboard switched on.
+
+LIMITATIONS
+Sessions, killzones and the opening range need an intraday chart. The dashboard follows the wall clock and does not know about weekends and holidays. Session averages depend on the bars loaded on the chart. TradingView keeps the newest 500 lines, labels and boxes of a script, so a long history is trimmed. An indicator cannot read the timezone of your chart, which is why "My timezone" is a setting.
+
+This script is a charting tool, not financial advice.
+```
+
+### New picture
+
+`OANDA:EURUSD`, 15 minutes, two and a half days on screen, the chart legend shown. Changed from the defaults, and
+named in the description:
+
+| Group | Input | Value |
+| --- | --- | --- |
+| ③ Session display | Box fill transparency | `88` |
+| ③ Session display | Border transparency | `55` |
+| ③ Session display | Label | `Name + range` |
+| ⑤ Killzones | Show killzones | on |
+| ⑤ Killzones | Style | `Box` |
+| ⑤ Killzones | Box fill transparency | `80` |
+| ⑥ Previous day / week / month | Previous day high / low | on |
+| ⑦ Opening prices | Day open | on |
+| ⑩ Dashboard | Show dashboard | on |
+| ⑩ Dashboard | Position | `Bottom right` |
+| ⑩ Dashboard | Hours on my clock | on |
+
+This replaces "default settings" from [The chart is the picture](#the-chart-is-the-picture) for the new page: boxes
+without names say little in a list of scripts, and the description tells what a new user sees before switching
+anything on.
+
+Access, categories and tags: public, open-source; **Multi-timeframe** and **Pivot points and levels**; `sessions`,
+`killzones`, `forex`.
+
 ## Rules worth remembering
 
-- A publication can be edited or deleted for 15 minutes. After that the title and the description are final, and
-  only updates with release notes are possible.
+- A publication can be edited or deleted for 15 minutes. After that the title, the description, the privacy
+  (public or private) and the visibility (open-source, protected or invite-only) are final, the page cannot be
+  deleted, and only updates with release notes are possible. An update can change the code, the picture and the
+  tags.
 - A public open-source script cannot be made private later.
-- The description may not contain links that sell or advertise. For that reason the publication does not link to
-  this repository, while the repository links to the publication.
+- The description, the release notes, the title, the picture and the code may not carry links or references to
+  other websites or to social media, and may not ask for boosts, comments or followers. For that reason neither the
+  publication nor the script links to this repository, while the repository links to the publication.
+- A closed-source description must also say why the code is hidden. Editors' picks are chosen from public
+  open-source scripts only.
+- New publications are limited to 5 public scripts in 24 hours and 15 in 30 days; updates do not count.
 - Moderators hide scripts that duplicate existing ones without adding anything; the description should say what is
   different here.
 - The copyright line of a published script names the TradingView account that publishes it.

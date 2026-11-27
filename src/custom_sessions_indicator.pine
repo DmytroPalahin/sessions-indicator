@@ -2,15 +2,13 @@
 // © dmitry_plhn
 
 //@version=6
-indicator("Custom Sessions Indicator", "Sessions", overlay = true, max_boxes_count = 500, max_lines_count = 500, max_labels_count = 500)
+indicator("Sessions, Killzones, Opening Range and Dashboard with Auto DST", "Sessions", overlay = true, max_boxes_count = 500, max_lines_count = 500, max_labels_count = 500)
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 //  Custom Sessions Indicator
 //  Sessions, killzones, liquidity levels, opening prices, opening range and a dashboard in one overlay.
 //
-//  Source, documentation and issue tracker: https://github.com/DmytroPalahin/sessions-indicator
-//
-//  File layout (see docs/ARCHITECTURE.md for the reasoning):
+//  File layout:
 //    1 · Constants      compile-time values, group names, tooltips
 //    2 · Enums          every dropdown of the settings panel
 //    3 · Inputs         the settings panel, one group per module
@@ -1054,8 +1052,8 @@ var array<string> WEEKDAYS = array.from("Sun", "Mon", "Tue", "Wed", "Thu", "Fri"
 //#region ═════════════════════════════════════════ 9 · Pipeline ══════════════════════════════════════════
 
 // The engine reports events as it goes: zones that started or ended, levels that broke, range breakouts.
-// Nothing consumes them on main today: the alerts module that turns them into notifications is parked on the
-// feature/alerts branch, and the session VWAP that restarts at a session start on feature/vwap.
+// Nothing consumes them in this version: alerts, which would turn them into notifications, and a session VWAP,
+// which would restart at a session start, are not part of it.
 
 // 1. Sessions and killzones.
 [sessionsStarted, sessionsEnded]   = runZones(sessions, sessionView)

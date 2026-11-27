@@ -32,6 +32,7 @@ LICENSE_LINE = (
     "// This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 "
     "at https://mozilla.org/MPL/2.0/"
 )
+TITLE_MAX = 64  # the longest title a TradingView publication takes
 SHORT_TITLE_MAX = 10  # TradingView warns above this (SHORT_TITLE_TOO_LONG)
 PLOT_LIMIT = 64  # maximum number of plot-like outputs of one script
 PROBLEMS_SHOWN = 20  # a failed check prints this many problems, then a count
@@ -181,7 +182,13 @@ def check_titles(lines: list[str]) -> list[str]:
     strings = re.findall(r'"([^"]*)"', call)
     if not strings[1:]:
         return ["indicator() must have a title and a short title"]
-    short_title = strings[1]
+    title, short_title = strings[0], strings[1]
+    if len(title) > TITLE_MAX:
+        problems.append(
+            f'title "{title}" is {len(title)} characters, the limit is {TITLE_MAX}'
+        )
+    if not title.isascii():
+        problems.append(f'title "{title}" must be plain ASCII')
     if len(short_title) > SHORT_TITLE_MAX:
         problems.append(
             f'short title "{short_title}" is {len(short_title)} characters, the limit is {SHORT_TITLE_MAX}'
@@ -418,7 +425,8 @@ def main() -> int:
         "header: license, copyright, //@version=6, indicator()", check_header(lines)
     )
     report.check(
-        "titles: short title within the TradingView limit", check_titles(lines)
+        "titles: title and short title within the TradingView limits",
+        check_titles(lines),
     )
     report.check(
         "whitespace: LF endings, no tabs, no trailing spaces",

@@ -81,6 +81,21 @@ def test_titles_reject_a_short_title_over_the_limit():
     assert problems == ['short title "ElevenChars" is 11 characters, the limit is 10']
 
 
+def test_titles_accept_a_title_of_exactly_the_limit():
+    assert check.check_titles([f'indicator("{"T" * 64}", "Short")']) == []
+
+
+def test_titles_reject_a_title_over_the_limit():
+    title = "T" * 65
+    problems = check.check_titles([f'indicator("{title}", "Short")'])
+    assert problems == [f'title "{title}" is 65 characters, the limit is 64']
+
+
+def test_titles_reject_a_title_that_is_not_ascii():
+    problems = check.check_titles(['indicator("Sessions — Killzones", "Short")'])
+    assert problems == ['title "Sessions — Killzones" must be plain ASCII']
+
+
 @pytest.mark.parametrize("lines", [[], ['indicator("Only a title")']])
 def test_titles_need_a_title_and_a_short_title(lines: list[str]):
     assert check.check_titles(lines) == [

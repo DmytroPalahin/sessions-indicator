@@ -13,6 +13,15 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+Prepared for a corrected publication on TradingView; see `docs/PUBLISHING.md`.
+
+### Changed
+
+- The script declares the title `Sessions, Killzones, Opening Range and Dashboard with Auto DST`. The short
+  title on the chart stays `Sessions`, and no setting moved.
+- The header of the script no longer carries a link: TradingView does not allow links to other sites in
+  published code.
+
 ## [4.3.1] - 2026-11-27
 
 The same chart in about half the time.

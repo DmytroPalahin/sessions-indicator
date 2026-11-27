@@ -15,7 +15,7 @@ How a release goes from this repository to the TradingView community library.
 | Categories | Multi-timeframe · Pivot points and levels |
 | Tags | `sessions`, `killzones`, `forex` |
 | Picture | `OANDA:EURUSD`, 15 minutes, the settings listed under [The chart is the picture](#the-chart-is-the-picture) |
-| Earlier page | <https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/> — see [The first page](#the-first-page) |
+| Earlier page | *Custom Sessions Indicator*, hidden by the script moderators on 2026-11-27 — see [The first page](#the-first-page) |
 
 The description on that page is the text in [Description](#description) below; the release notes of each update
 will follow it there.
@@ -160,12 +160,16 @@ repository into someone's own Pine Editor does not change until they paste the n
 ## The first page
 
 The indicator was first published on 2026-11-25 as *Custom Sessions Indicator*, protected, at
-<https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/>, and updated there up to version 4.3.1. A description cannot be edited after the first 15 minutes, and that
-one stopped matching the script: it listed a session VWAP that was parked in 2.0.0 and named a timezone setting that
-was removed in 4.0.0. For an issue that updates cannot fix, TradingView's *Tips for script authors* give one way
-out: publish a corrected version and ask the script moderators to hide the old one. The page above is that
-corrected version. The moderators were asked on 2026-11-27, in a private message to the `PineCoders` account, to
-hide the first page. It gets no more updates.
+`https://www.tradingview.com/script/ticv4Yo6-Custom-Sessions-Indicator/`, and updated there up to version 4.3.1. A
+description cannot be edited after the first 15 minutes, and that one stopped matching the script: it listed a
+session VWAP that was parked in 2.0.0 and named a timezone setting that was removed in 4.0.0. For an issue that
+updates cannot fix, TradingView's *Tips for script authors* give one way out: publish a corrected version and ask
+the script moderators to hide the old one. The page above is that corrected version.
+
+The moderators were asked on 2026-11-27, in a private message to the `PineCoders` account, and hid the first page
+the same day. A hidden script can be neither changed nor removed; only its author and the moderators still see it,
+so the address above opens for nobody else. The moderators confirm the hiding with their standard warning message,
+marked `AUTHOR REQUEST`: it is their record of the event, not a rule violation.
 
 Before the public page the same form was published once as **Private**: a private publication can be edited and
 deleted at any time, and it showed the title, the description and the picture exactly as the public page has them.

@@ -212,8 +212,9 @@ shows its code on the page; the same code is in this repository, in
 [src/custom_sessions_indicator.pine](../src/custom_sessions_indicator.pine).
 
 Until 2026-11-27 the indicator lived on another page, *Custom Sessions Indicator*. The description of that page
-could not be corrected, so it stopped at version 4.3.1 and gets no more updates. If your chart has the indicator
-from that page, add it again from the new one; the settings are the same.
+could not be corrected, so it stopped at version 4.3.1 and was hidden by the TradingView moderators at the author's
+request: its link no longer opens. If your chart has the indicator from that page, add it again from the new one;
+the settings are the same.
 
 ## Still stuck?
 

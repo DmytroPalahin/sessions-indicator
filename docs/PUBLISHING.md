@@ -188,6 +188,8 @@ This script is a charting tool, not financial advice.
 
 ### New picture
 
+![The chart prepared for the corrected publication](images/publication-showcase.png)
+
 `OANDA:EURUSD`, 15 minutes, two and a half days on screen, the chart legend shown. Changed from the defaults, and
 named in the description:
 

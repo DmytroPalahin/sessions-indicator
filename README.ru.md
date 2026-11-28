@@ -56,26 +56,38 @@ range breakout). Здесь всё это в одном скрипте, а ча�
 <table>
 <tr>
 <td width="50%" valign="top">
+<a href="docs/images/sessions-background.png"><img src="docs/images/sessions-background.png" alt="Сессии в виде фоновых полос во всю высоту графика"></a>
+<b>Сессии во всю высоту графика</b><br>
+<sub>③ <i>Style</i> = <code>Background</code></sub>
+</td>
+<td width="50%" valign="top">
 <a href="docs/images/sessions-labels-levels.png"><img src="docs/images/sessions-labels-levels.png" alt="Подписи сессий с диапазоном в пипсах и уровни high и low сессий, продлённые до пробоя"></a>
 <b>Подписи и уровни сессий</b><br>
 <sub>③ <i>Label</i> = <code>Name + range</code> · ④ <i>Extend session high / low until broken</i></sub>
 </td>
+</tr>
+<tr>
 <td width="50%" valign="top">
 <a href="docs/images/killzones-levels.png"><img src="docs/images/killzones-levels.png" alt="Killzones в виде фоновых полос, high и low прошлого дня, открытие дня и открытие полуночи"></a>
 <b>Killzones, прошлый день и цены открытия</b><br>
 <sub>⑤ <i>Show killzones</i> · ⑥ <i>Previous day high / low</i> · ⑦ <i>Day open</i>, <i>Midnight open</i></sub>
 </td>
-</tr>
-<tr>
 <td width="50%" valign="top">
 <a href="docs/images/opening-range.png"><img src="docs/images/opening-range.png" alt="Бокс opening range с продлёнными линиями, серединой, двумя проекциями и метками пробоя"></a>
 <b>Opening range</b><br>
 <sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code></sub>
 </td>
+</tr>
+<tr>
 <td width="50%" valign="top">
 <a href="docs/images/dashboard-time-tools.png"><img src="docs/images/dashboard-time-tools.png" alt="Дашборд со статусом, обратным отсчётом и диапазонами каждой сессии, разделители дней и подписи дней недели"></a>
 <b>Дашборд и инструменты времени</b><br>
 <sub>⑩ <i>Show dashboard</i> · ⑨ <i>Day separators</i>, <i>Weekday labels</i></sub>
+</td>
+<td width="50%" valign="top">
+<a href="docs/images/publication-showcase.png"><img src="docs/images/publication-showcase.png" alt="Боксы сессий с подписями, killzones в виде боксов, high и low прошлого дня, открытие дня и дашборд на одном графике"></a>
+<b>Несколько модулей вместе</b><br>
+<sub>③ <i>Label</i> = <code>Name + range</code> · ⑤ <i>Show killzones</i>, <i>Style</i> = <code>Box</code> · ⑥ <i>Previous day high / low</i> · ⑦ <i>Day open</i> · ⑩ <i>Show dashboard</i>, <i>Hours on my clock</i></sub>
 </td>
 </tr>
 </table>

@@ -56,26 +56,38 @@ Every picture below is the same indicator with a few checkboxes switched on. The
 <table>
 <tr>
 <td width="50%" valign="top">
+<a href="docs/images/sessions-background.png"><img src="docs/images/sessions-background.png" alt="Sessions drawn as background bands that fill the whole height of the chart"></a>
+<b>Sessions in full height</b><br>
+<sub>③ <i>Style</i> = <code>Background</code></sub>
+</td>
+<td width="50%" valign="top">
 <a href="docs/images/sessions-labels-levels.png"><img src="docs/images/sessions-labels-levels.png" alt="Session labels with the range in pips, and session highs and lows extended until price trades through them"></a>
 <b>Labels and session levels</b><br>
 <sub>③ <i>Label</i> = <code>Name + range</code> · ④ <i>Extend session high / low until broken</i></sub>
 </td>
+</tr>
+<tr>
 <td width="50%" valign="top">
 <a href="docs/images/killzones-levels.png"><img src="docs/images/killzones-levels.png" alt="Killzones as background bands with the previous day high and low, the day open and the midnight open"></a>
 <b>Killzones, previous day and opening prices</b><br>
 <sub>⑤ <i>Show killzones</i> · ⑥ <i>Previous day high / low</i> · ⑦ <i>Day open</i>, <i>Midnight open</i></sub>
 </td>
-</tr>
-<tr>
 <td width="50%" valign="top">
 <a href="docs/images/opening-range.png"><img src="docs/images/opening-range.png" alt="Opening range box with extended lines, midline, two projections and breakout markers"></a>
 <b>Opening range</b><br>
 <sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code></sub>
 </td>
+</tr>
+<tr>
 <td width="50%" valign="top">
 <a href="docs/images/dashboard-time-tools.png"><img src="docs/images/dashboard-time-tools.png" alt="Dashboard with the status, countdown and ranges of every session, day separators and weekday labels"></a>
 <b>Dashboard and time tools</b><br>
 <sub>⑩ <i>Show dashboard</i> · ⑨ <i>Day separators</i>, <i>Weekday labels</i></sub>
+</td>
+<td width="50%" valign="top">
+<a href="docs/images/publication-showcase.png"><img src="docs/images/publication-showcase.png" alt="Session boxes with labels, killzones as boxes, the previous day high and low, the day open and the dashboard on one chart"></a>
+<b>Several modules together</b><br>
+<sub>③ <i>Label</i> = <code>Name + range</code> · ⑤ <i>Show killzones</i>, <i>Style</i> = <code>Box</code> · ⑥ <i>Previous day high / low</i> · ⑦ <i>Day open</i> · ⑩ <i>Show dashboard</i>, <i>Hours on my clock</i></sub>
 </td>
 </tr>
 </table>

@@ -8,8 +8,8 @@ Check these in order.
    a lower timeframe or raise the limit.
 2. **History.** Only the last *History, days* are drawn. Scroll to recent bars or raise the value.
 3. **The slot is off.** In *② Sessions* the checkbox of the row must be ticked.
-4. **The market does not trade then.** A stock chart without extended hours has no bars at 08:00 London time, so
-   there is no London session to draw.
+4. **The market does not trade then.** A US stock chart without extended hours has no bars during the working day
+   of Tokyo, so there is no Asia session to draw, and London starts only at the opening bell of the stock market.
 
 ## Why does every session start at 08:00 in the settings?
 
@@ -154,6 +154,33 @@ sessions to average.
 Yes. Set *③ Session display → Style* to `Background`: every session shades the chart from top to bottom, like a
 classic session-highlight indicator. `Box + background` draws the range box on top of the band. *Background
 transparency* sets how strong the shade is.
+
+![Sessions as full-height background bands](images/sessions-background.png)
+
+## Which markets and timeframes does it work on?
+
+Any symbol. What is drawn depends on the timeframe of the chart:
+
+- sessions, killzones and the opening range — intraday charts up to *① General → Hide sessions above, minutes*,
+  60 by default;
+- previous day, week and month levels and the day, week and month opens — timeframes lower than the period itself;
+- the midnight and the custom open, day separators and weekday labels — every intraday timeframe.
+
+A market that is closed during a session has no bars there, so that session is not drawn. A US stock chart
+without extended hours has no Asia and no Frankfurt session, and its London session starts at the opening bell.
+
+## Does the indicator have alerts?
+
+Not in this version. Alerts for session starts, broken levels and opening range breakouts are written and kept on
+the `feature/alerts` branch of the repository; they may return in a later release. Until then TradingView's own
+price alert works for any level: right-click the chart at that price and choose **Add alert**.
+
+## Where can I read the high and low of a session as numbers?
+
+On the chart, set *③ Session display → Label* to `Name + range` or `Range` for the size of the range, or switch
+on *④ Extend session high / low until broken* with *⑪ Style → Price in level labels* for the two prices of a
+finished session. The high and low of a session that is still running are in TradingView's *Data Window*, as
+`Session 1 high`, `Session 1 low` and so on, numbered like the session rows.
 
 ## Where did the session VWAP go?
 

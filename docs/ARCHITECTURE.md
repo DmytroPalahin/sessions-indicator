@@ -50,7 +50,6 @@ flowchart TD
     J -- yes --> K[Period.redraw / Anchor.refresh<br/>redraw current levels]
     B --> L[Plots]
     C --> L
-    I --> L
     B --> M[Dashboard]
     F --> M
 ```

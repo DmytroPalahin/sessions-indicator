@@ -22,8 +22,8 @@ A report with these details can usually be answered in one reply:
 
 - the **symbol** with its exchange prefix, for example `FX:EURUSD`;
 - the **chart timeframe**;
-- the **timezone** selected in *① General → Timezone of session times*;
-- which **modules** are on, and any session time you changed;
+- the **timezone** of your chart and the one selected in *① General → My timezone*;
+- which **modules** are on, and any session hours or city you changed;
 - a **screenshot** of the chart and, for errors, the exact text of the message;
 - the indicator **version** — the `VERSION` line at the top of the script, or, if you added the indicator from
   TradingView, the date of the latest update shown on its page.

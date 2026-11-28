@@ -1,0 +1,32 @@
+# Dependabot looks for new versions on the first day of each month and opens one pull request per group below.
+# CI runs on that pull request; it is merged by hand.
+version: 2
+updates:
+  # The actions used by .github/workflows/ci.yml.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    # A release has to be a week old before it is proposed.
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "👷 ci"
+      include: scope
+
+  # The Python tools of the check script: pytest, pytest-cov and ruff, pinned in uv.lock.
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      tools:
+        patterns: ["*"]
+    commit-message:
+      prefix: "👷 build"
+      include: scope

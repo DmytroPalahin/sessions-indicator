@@ -108,6 +108,10 @@ The settings of ruff, pytest and coverage are in `pyproject.toml`. The script wr
 the ruff rules keep `print` for tests. A new check comes with tests: one input that
 passes and one for every problem it can report. CI runs the same commands on every push and pull request.
 
+[Dependabot](.github/dependabot.yml) looks for new versions on the first day of each month: of the GitHub Actions
+in the workflow and of the tools pinned in `uv.lock`. It opens one pull request for the actions and one for the
+tools, CI runs on each, and a maintainer merges it.
+
 ## Screenshots
 
 The pictures in the READMEs and in `docs/SETTINGS.md` live in [docs/images](docs/images). Retake them when a
@@ -139,7 +143,7 @@ Every commit starts with the emoji of its type, so the history can be read at a 
 | ♻️ | `refactor` | a change that neither fixes a bug nor adds a feature |
 | 📝 | `docs` | documentation only |
 | ✅ | `test` | tests only |
-| 👷 | `ci` | the workflow or the check script |
+| 👷 | `ci`, `build` | the workflow or the check script; `build` is a new version of a pinned tool |
 | 🔧 | `chore` | repository housekeeping |
 | 🚀 | `chore(release)` | a release commit |
 

@@ -92,6 +92,18 @@ Chaque image ci-dessous montre le même indicateur avec quelques cases cochées.
 <sub>③ <i>Label</i> = <code>Name + range</code> · ⑤ <i>Show killzones</i>, <i>Style</i> = <code>Box</code> · ⑥ <i>Previous day high / low</i> · ⑦ <i>Day open</i> · ⑩ <i>Show dashboard</i>, <i>Hours on my clock</i></sub>
 </td>
 </tr>
+<tr>
+<td width="50%" valign="top">
+<a href="docs/images/initial-balance.png"><img src="docs/images/initial-balance.png" alt="Deux initial balances, la première heure de Francfort et celle de New York, chacun avec son étiquette de taille, ses lignes prolongées et leurs étiquettes"></a>
+<b>Initial balance</b><br>
+<sub>⑧ <i>Show initial balance</i></sub>
+</td>
+<td width="50%" valign="top">
+<a href="docs/images/ranges-together.png"><img src="docs/images/ranges-together.png" alt="L'opening range et les deux initial balances pendant la matinée de New York, avec des étiquettes communes là où leurs lignes se rejoignent"></a>
+<b>Opening range et initial balance ensemble</b><br>
+<sub>⑧ <i>Show opening range</i> · <i>Show initial balance</i>, pendant la matinée de New York</sub>
+</td>
+</tr>
 </table>
 
 <sub>EURUSD en 15 et 5 minutes, thème de graphique clair. Cliquez sur une image pour l'ouvrir en taille réelle.</sub>
@@ -171,7 +183,7 @@ Elles découlent du fonctionnement de Pine Script et de TradingView. Elles sont 
 surprenne.
 
 - Les sessions, les killzones, l'opening range et l'initial balance sont des outils intrajournaliers. Ils se masquent
-  au-dessus de l'unité de temps définie dans *① General*. Les deux ranges demandent aussi des barres qui s'accordent
+  au-dessus de l'unité de temps définie dans *① General*. Les ranges demandent aussi des barres qui s'accordent
   avec leur fenêtre : un graphique dont les barres ouvrent à l'heure pile ne peut pas mesurer 09:30 – 10:30, et rien
   n'y est tracé.
 - Les niveaux éloignés du prix écrasent les bougies, car TradingView fait tenir tous les niveaux d'un indicateur dans

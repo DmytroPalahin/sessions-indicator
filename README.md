@@ -90,6 +90,18 @@ Every picture below is the same indicator with a few checkboxes switched on. The
 <sub>③ <i>Label</i> = <code>Name + range</code> · ⑤ <i>Show killzones</i>, <i>Style</i> = <code>Box</code> · ⑥ <i>Previous day high / low</i> · ⑦ <i>Day open</i> · ⑩ <i>Show dashboard</i>, <i>Hours on my clock</i></sub>
 </td>
 </tr>
+<tr>
+<td width="50%" valign="top">
+<a href="docs/images/initial-balance.png"><img src="docs/images/initial-balance.png" alt="Two initial balances, the first hour of Frankfurt and of New York, each with a size label, extended lines and their labels"></a>
+<b>Initial balance</b><br>
+<sub>⑧ <i>Show initial balance</i></sub>
+</td>
+<td width="50%" valign="top">
+<a href="docs/images/ranges-together.png"><img src="docs/images/ranges-together.png" alt="The opening range and both initial balances during the New York morning, with shared labels where their lines meet"></a>
+<b>Opening range and initial balance together</b><br>
+<sub>⑧ <i>Show opening range</i> · <i>Show initial balance</i>, during the New York morning</sub>
+</td>
+</tr>
 </table>
 
 <sub>EURUSD on 15 and 5 minutes, light chart theme. Click a picture to open it in full size.</sub>
@@ -162,7 +174,7 @@ To type the hours as you see them on your chart, untick *Hours are local* under 
 These come from how Pine Script and TradingView work. They are listed so that nothing surprises you.
 
 - Sessions, killzones, the opening range and the initial balance are intraday tools. They hide above the timeframe
-  set in *① General*. The two ranges also need bars that fit their window: a chart whose bars open on the hour cannot
+  set in *① General*. The ranges also need bars that fit their window: a chart whose bars open on the hour cannot
   measure 09:30 – 10:30, so nothing is drawn there.
 - Levels far from price squeeze the candles, because TradingView fits every level of an indicator into the price
   scale. *⑪ Style → Hide levels farther than* removes them; so does *Scale price chart only* in the price-scale menu.

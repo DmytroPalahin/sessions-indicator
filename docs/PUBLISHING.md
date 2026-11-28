@@ -12,6 +12,7 @@ How a release goes from this repository to the TradingView community library.
 | Access | Public, open-source: everyone can add it to a chart and read the code on the page. It is the code of this repository. |
 | Code | Version 4.5.0 — the file at the tag `v4.5.0` |
 | First published | 2026-11-27, from version 4.4.0 |
+| Last update | 2026-11-28, version 4.5.0: two initial balances and labels on the lines of the opening range |
 | Categories | Multi-timeframe · Pivot points and levels |
 | Tags | `sessions`, `killzones`, `forex` |
 | Picture | `OANDA:EURUSD`, 15 minutes, the settings listed under [The chart is the picture](#the-chart-is-the-picture) |
@@ -139,12 +140,13 @@ This script is a charting tool, not financial advice.
 3. Open the prepared chart, so the update gets a clean picture. The saved script itself must be on it: an
    indicator added from the publication does not count, and TradingView then offers to add the saved one. Remove
    the other copy, so the picture shows the indicator once.
-4. Press **Publish script → Update existing script**.
+4. Press **Publish script**. The form opens on *Publish new script*: switch it to **Update existing script**
+   before anything else.
 5. Choose `Sessions, Killzones, Opening Range and Dashboard with Auto DST` in the list of published scripts. The list opens after you type a few letters of the
    name. Tick *Don't update the chart* unless the picture settings are applied.
 6. Write the release notes: the version, then the changes of the matching `CHANGELOG.md` section in plain text.
-7. On the next page keep **Public** and **Open**, tick the House Rules box and press **Publish new version**.
-   The form remembers the last choice, so read both before pressing.
+7. On the next page, *Final touches*, **Public** and **Open** are already set and cannot be changed for an
+   update: read both, tick the House Rules box and press **Publish new version**.
 
 An update must describe what changed; the matching `CHANGELOG.md` section does that. Publish an update when the code
 changes, not to edit the page: the release notes are added under the first description, which stays as it is.

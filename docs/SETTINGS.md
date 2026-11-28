@@ -229,6 +229,11 @@ shows the number.
   starts. A 1-hour chart whose bars open on the hour cannot measure 09:30 – 10:30, so nothing is drawn there, while
   09:00 – 10:00 is one of its bars; on 30, 15, 5 and 1 minutes both are drawn.
 
+![The opening range and both initial balances during the New York morning](images/ranges-together.png)
+
+*⑧ Show opening range and Show initial balance, EURUSD on 5 minutes at 11:35 in New York: the lines of the opening
+range and of `NY IB` still extend past the last bar, and lines that meet share a label.*
+
 ## ⑨ Time tools
 
 | Input | Default | What it does |

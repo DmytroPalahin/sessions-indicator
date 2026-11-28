@@ -91,6 +91,18 @@ range breakout), начальный баланс первого часа (initia
 <sub>③ <i>Label</i> = <code>Name + range</code> · ⑤ <i>Show killzones</i>, <i>Style</i> = <code>Box</code> · ⑥ <i>Previous day high / low</i> · ⑦ <i>Day open</i> · ⑩ <i>Show dashboard</i>, <i>Hours on my clock</i></sub>
 </td>
 </tr>
+<tr>
+<td width="50%" valign="top">
+<a href="docs/images/initial-balance.png"><img src="docs/images/initial-balance.png" alt="Два initial balance, первый час Франкфурта и первый час Нью-Йорка, у каждого подпись размера, продлённые линии и их подписи"></a>
+<b>Initial balance</b><br>
+<sub>⑧ <i>Show initial balance</i></sub>
+</td>
+<td width="50%" valign="top">
+<a href="docs/images/ranges-together.png"><img src="docs/images/ranges-together.png" alt="Opening range и оба initial balance утром по Нью-Йорку, с общими подписями там, где их линии сходятся"></a>
+<b>Opening range и initial balance вместе</b><br>
+<sub>⑧ <i>Show opening range</i> · <i>Show initial balance</i>, утро по Нью-Йорку</sub>
+</td>
+</tr>
 </table>
 
 <sub>EURUSD на 15 и 5 минутах, светлая тема графика. Нажмите на картинку, чтобы открыть её в полном размере.</sub>
@@ -166,7 +178,7 @@ TradingView не сообщает индикатору, какой часово�
 Они следуют из того, как работают Pine Script и TradingView.
 
 - Сессии, killzones, opening range и initial balance — внутридневные инструменты. Выше таймфрейма из *① General*
-  они скрываются. Двум диапазонам ещё нужны бары, которые укладываются в их окно: график, где бары открываются
+  они скрываются. Диапазонам ещё нужны бары, которые укладываются в их окно: график, где бары открываются
   ровно в начале часа, не может измерить 09:30 – 10:30, и на нём ничего не рисуется.
 - Уровни далеко от цены сжимают свечи, потому что TradingView вписывает в шкалу цены все уровни индикатора.
   Их убирает настройка *⑪ Style → Hide levels farther than* или пункт *Scale price chart only* в меню шкалы цены.

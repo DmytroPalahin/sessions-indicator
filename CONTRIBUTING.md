@@ -118,8 +118,8 @@ The pictures in the READMEs and in `docs/SETTINGS.md` live in [docs/images](docs
 change alters what they show.
 
 - Use a chart with this indicator only: no other indicators, no drawings, the light theme.
-- Symbol `OANDA:EURUSD`: 15 minutes for the session pictures and the dashboard, 5 minutes for killzones and the
-  opening range.
+- Symbol `OANDA:EURUSD`: 15 minutes for the session pictures and the dashboard, 5 minutes for killzones, the
+  opening range and the initial balance.
 - Keep TradingView's default right margin, so the pictures show what a new user sees.
 - Take the picture with TradingView's own snapshot (the camera icon → *Download image*), so the symbol, the
   timeframe and the time are part of it.

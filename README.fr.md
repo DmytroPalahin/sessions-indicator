@@ -158,6 +158,7 @@ La documentation détaillée est rédigée en anglais.
 | Document | À lire pour |
 | ---------- | -------------------------- |
 | [docs/SETTINGS.md](docs/SETTINGS.md) | savoir ce que fait chaque paramètre et quelle est sa valeur par défaut |
+| [docs/INITIAL-BALANCE.md](docs/INITIAL-BALANCE.md) | régler l'initial balance pour votre marché et lire ce qu'il trace, par l'exemple |
 | [docs/FAQ.md](docs/FAQ.md) | régler « rien ne s'affiche » ou « les sessions sont décalées d'une heure » |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | comprendre ou modifier le code |
 | [docs/TESTING.md](docs/TESTING.md) | tester une modification avant de l'envoyer |

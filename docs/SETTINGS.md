@@ -201,6 +201,9 @@ both. Which hour it is depends on the market, so there are two rows, and both ca
 *⑧ Show initial balance with every other input at its default, EURUSD on 5 minutes with the chart set to Paris
 time: the first hour of Frankfurt is 09:00 – 10:00 there and the first hour of New York 15:30 – 16:30.*
 
+Set-ups for the DAX, for US index futures, for London, Tokyo and crypto, and a day read line by line, are in
+[INITIAL-BALANCE.md](INITIAL-BALANCE.md).
+
 The size label tells a narrow first hour from a wide one. Many traders expect price to leave a narrow initial
 balance more easily and to stay inside a wide one more often; it is a tendency, not a rule, and the indicator only
 shows the number.

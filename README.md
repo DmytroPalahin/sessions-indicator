@@ -152,6 +152,7 @@ To type the hours as you see them on your chart, untick *Hours are local* under 
 | Document | Read it when you want to |
 | ---------- | -------------------------- |
 | [docs/SETTINGS.md](docs/SETTINGS.md) | know what every input does and what its default is |
+| [docs/INITIAL-BALANCE.md](docs/INITIAL-BALANCE.md) | set up the initial balance for your market and read what it draws, by example |
 | [docs/FAQ.md](docs/FAQ.md) | fix "nothing is drawn" or "sessions are an hour off" |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | understand or change the code |
 | [docs/TESTING.md](docs/TESTING.md) | test a change before sending it |

@@ -156,6 +156,7 @@ TradingView не сообщает индикатору, какой часово�
 | Документ | Зачем читать |
 | ---------- | -------------- |
 | [docs/SETTINGS.md](docs/SETTINGS.md) | что делает каждая настройка и какое у неё значение по умолчанию |
+| [docs/INITIAL-BALANCE.md](docs/INITIAL-BALANCE.md) | настроить initial balance под свой рынок и понять, что он рисует, — на примерах |
 | [docs/FAQ.md](docs/FAQ.md) | что делать, если ничего не рисуется или сессии сдвинуты на час |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | как устроен код |
 | [docs/TESTING.md](docs/TESTING.md) | как проверить изменение |

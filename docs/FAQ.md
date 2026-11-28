@@ -191,6 +191,9 @@ A row is checkbox · name · window · city, like a session row. For another mar
 its city, for example `0800-0900` and `London`. The name is free text and starts every label of the row. The
 opening range next to them can stay on: all three are separate switches.
 
+[INITIAL-BALANCE.md](INITIAL-BALANCE.md) has worked examples: the set-up for several markets, a day read line by
+line, and the dashboard rows.
+
 ## The opening range or the initial balance is not drawn
 
 Check these in order.

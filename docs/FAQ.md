@@ -182,7 +182,7 @@ size of the first hour and its share of the average of the last days: `IB  42.0 
 
 ![Initial balance with its size label, its lines and their labels](images/initial-balance.png)
 
-For a market with another first hour change *IB window* and its city, for example `0800-0900` and `London`, or
+For a market with another first hour change *IB window* and *IB clock*, for example `0800-0900` and `London`, or
 `0900-1000` and `Frankfurt` for the DAX. The opening range next to it can stay on: the two are separate switches.
 
 ## The opening range or the initial balance is not drawn

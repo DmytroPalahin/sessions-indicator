@@ -76,7 +76,7 @@ const string TT_OR_EXT   = "How long the range lines keep extending after the wi
 const string TT_OR_PROJ  = "Projection of the range above its high and below its low, as a multiple of the range. 0 turns a projection off."
 const string TT_OR_SIZE  = "Prints the size of the opening range under its box and, once the window has closed, its share of the average of the last ranges: OR  12.0 p · 85% of avg. ⑩ Dashboard → Average length sets how many ranges the average takes."
 const string TT_IB       = "The initial balance is the range of the first hour of the regular session: 09:30 - 10:30 in New York by default. Its high (IBH), its low (IBL) and its middle stay on the chart for the rest of the day, with extensions above and below."
-const string TT_IB_TIME  = "The window in which the initial balance is measured and the city whose local time it is written in. 'Exchange' follows the symbol; 'My time' is your own timezone, set in ① General."
+const string TT_IB_TIME  = "The window in which the initial balance is measured, written in the local time of the clock below."
 const string TT_IB_HOURS = "How long the lines of the initial balance keep extending after its window closes. 5.5 hours after 10:30 is the New York close at 16:00."
 const string TT_IB_EXT   = "Lines above the high and below the low of the initial balance, as multiples of its size: 0.5 is half a range away, 1 a whole range. 0 turns a pair off."
 const string TT_IB_SIZE  = "Prints the size of the initial balance over its box and, once its window has closed, its share of the average of the last days: IB  42.0 p · 78% of avg. ⑩ Dashboard → Average length sets how many days the average takes."
@@ -344,10 +344,10 @@ bool     i_sLocal   = input.bool(true, "Hours are local: 08:00 is 8 o'clock in t
 bool     i_orSize   = input.bool(false, "Size label", tooltip = TT_OR_SIZE, group = G_OR)
 // The initial balance. Its group puts these rows under the opening range, whose engine it shares.
 bool     i_ibOn      = input.bool(false, "Show initial balance", tooltip = TT_IB, group = G_OR)
-string   i_ibTime    = input.session("0930-1030", "IB window", inline = "ibw", group = G_OR)
-Clock    i_ibClock   = input.enum(Clock.newYork, "", inline = "ibw", tooltip = TT_IB_TIME, group = G_OR)
+string   i_ibTime    = input.session("0930-1030", "IB window", tooltip = TT_IB_TIME, group = G_OR)
+Clock    i_ibClock   = input.enum(Clock.newYork, "IB clock", tooltip = TT_OR_CLOCK, group = G_OR)
 color    i_ibCol     = input.color(#EC407A, "IB colour", group = G_OR)
-float    i_ibHours   = input.float(5.5, "IB lines extend for, hours", minval = 0.0, maxval = 24.0, step = 0.5, tooltip = TT_IB_HOURS, group = G_OR)
+float    i_ibHours   = input.float(5.5, "IB extend, hours", minval = 0.0, maxval = 24.0, step = 0.5, tooltip = TT_IB_HOURS, group = G_OR)
 bool     i_ibMid     = input.bool(true, "IB midline", group = G_OR)
 float    i_ibExt1    = input.float(0.5, "IB extensions ×", minval = 0.0, step = 0.5, inline = "ibx", group = G_OR)
 float    i_ibExt2    = input.float(1.0, "", minval = 0.0, step = 0.5, inline = "ibx", group = G_OR)

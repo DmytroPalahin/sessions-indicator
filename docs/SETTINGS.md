@@ -184,9 +184,10 @@ price that stays inside it, leaves it on one side or leaves it on both.
 | Input | Default | What it does |
 | ------- | --------- | -------------- |
 | Show initial balance | off | Master switch. |
-| IB window | `0930-1030`, `New York` | The window in which the initial balance is measured and the city whose local time it is written in. `Exchange` follows the symbol. For another market set its own first hour, for example `0800-0900` and `London`. |
+| IB window | `0930-1030` | The window in which the initial balance is measured, written in the local time of the clock below. For another market set its own first hour, for example `0800-0900` with the clock `London`. |
+| IB clock | `New York` | The city whose local time the window is written in. `Exchange` follows the symbol. |
 | IB colour | pink | Colour of the box, the lines, the labels and the markers. |
-| IB lines extend for, hours | `5.5` | How long the lines keep extending after the window closes. 5.5 hours after 10:30 is the New York close at 16:00. |
+| IB extend, hours | `5.5` | How long the lines keep extending after the window closes. 5.5 hours after 10:30 is the New York close at 16:00. |
 | IB midline | on | A dashed line at the middle of the initial balance. |
 | IB extensions × | `0.5`, `1.0`, `0.0` | Three pairs of lines above the high and below the low, as multiples of the size of the initial balance: `0.5` is half a range away, `1.0` a whole range. `0` turns a pair off. |
 | IB breakout markers | on | A triangle on the first bar that closes outside the initial balance, once per side, while the lines extend. |

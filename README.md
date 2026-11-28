@@ -44,7 +44,7 @@ hour. It is all of these in one script, and the session hours follow daylight-sa
 | ⑤ | **Killzones** | 5 more slots with their own look, preset to the usual Asia / London / New York windows |
 | ⑥ | **Previous day / week / month** | PDH/PDL, PWH/PWL, PMH/PML |
 | ⑦ | **Opening prices** | Day, week, month, midnight and one custom time of day |
-| ⑧ | **Opening range and initial balance** | Two ranges of the session start, each with its own switch: range box, extended lines with labels, midline, projections, breakout markers and the size of the range against its average |
+| ⑧ | **Opening range and initial balance** | An opening range and two initial balances — the first hour of Frankfurt and of New York — each with its own switch: range box, extended lines with labels, midline, projections, the size of the range against its average, optional breakout markers |
 | ⑨ | **Time tools** | Day separators and weekday labels |
 | ⑩ | **Dashboard** | Which session is open, its hours on your own clock, time left or time to open, current range against its average, day range against ADR |
 | ⑪ | **Style** | Text size, line style and width, label options, a filter for distant levels |
@@ -75,7 +75,7 @@ Every picture below is the same indicator with a few checkboxes switched on. The
 <td width="50%" valign="top">
 <a href="docs/images/opening-range.png"><img src="docs/images/opening-range.png" alt="Opening range box with extended lines, midline, two projections and breakout markers"></a>
 <b>Opening range</b><br>
-<sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code></sub>
+<sub>⑧ <i>Show opening range</i>, <i>Breakout markers</i>, <i>Projection 2 ×</i> = <code>2</code></sub>
 </td>
 </tr>
 <tr>
@@ -152,8 +152,8 @@ To type the hours as you see them on your chart, untick *Hours are local* under 
 - **No repainting from the future.** Previous day / week / month values are read with a one-bar offset, so a
   historical bar shows exactly what was known when it closed.
 - **Session levels break on a trade-through.** A high is broken by a higher high, a low by a lower low.
-- **Opening range and initial balance breakouts need a close.** The marker appears when a bar closes outside the
-  range.
+- **Opening range and initial balance breakouts need a close.** With the markers switched on, one appears when a
+  bar closes outside the range.
 - **Live levels cannot disappear.** TradingView keeps only the newest 500 lines, labels and boxes. Current levels are
   redrawn on the last bar, so the limit only ever removes old history.
 

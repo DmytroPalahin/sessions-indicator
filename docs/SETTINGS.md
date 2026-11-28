@@ -151,10 +151,10 @@ chart.
 
 ## ⑧ Opening range and initial balance
 
-Two ranges measured at the start of a session, each with its own switch. Both work the same way: a box while the
-window runs, then lines from its high, its low and its middle, projections above and below, and a marker on the
-first close outside. They can be shown together — a 30-minute opening range inside the first-hour initial balance
-is a common pair.
+Ranges measured at the start of a session: one opening range and two initial balances, each with its own switch.
+All of them work the same way: a box while the window runs, then lines from its high, its low and its middle, and
+projections above and below. They can be shown together — a 30-minute opening range inside the first-hour initial
+balance of New York is a common pair.
 
 ### Opening range
 
@@ -168,60 +168,66 @@ is a common pair.
 | Midline | on | A dashed line at the middle of the range. |
 | Projection 1 × | `1.0` | Lines at one range above the high and below the low. `0` turns them off. |
 | Projection 2 × | `0.0` | A second pair of projections. |
-| Breakout markers | on | A triangle on the first bar that closes outside the range, once per side: under the bar for a close above the range, over the bar for a close below it. A breakout is looked for while the lines extend, that is for *Extend for, hours* after the window closes. |
-| Size label | off | Prints the size of the range under its box and, once the window has closed, its share of the average of the last ranges: `OR  12.0 p · 85% of avg`. |
+| Breakout markers | off | A triangle on the first bar that closes outside the range, once per side: under the bar for a close above the range, over the bar for a close below it. A breakout is looked for while the lines extend, that is for *Extend for, hours* after the window closes. |
+| Size label | off | Prints the size of the range under its box and, once the window has closed, its share of the average of the last ranges: `OR`, `12.0 p`, `85% of avg`, one under the other. |
 
 ![Opening range with projections and breakout markers](images/opening-range.png)
 
-*⑧ Show opening range with Projection 2 × = `2`, EURUSD on 5 minutes.*
+*⑧ Show opening range with Breakout markers and Projection 2 × = `2`, EURUSD on 5 minutes.*
 
 ### Initial balance
 
-The initial balance is the range of the first hour of the regular session: 09:30 to 10:30 in New York for US stocks
-and index futures. It comes from the market profile, where the rest of the day is read against that first hour:
-price that stays inside it, leaves it on one side or leaves it on both.
+The initial balance is the range of the first hour of a session. It comes from the market profile, where the rest
+of the day is read against that first hour: price that stays inside it, leaves it on one side or leaves it on
+both. Which hour it is depends on the market, so there are two rows, and both can be on at once:
+
+- `EU IB` — the first hour of Frankfurt, 09:00 to 10:00, which the DAX and other European markets are read against;
+- `NY IB` — the first hour of New York, 09:30 to 10:30, the classic one for US stocks and index futures.
 
 | Input | Default | What it does |
 | ------- | --------- | -------------- |
-| Show initial balance | off | Master switch. |
-| IB window | `0930-1030` | The window in which the initial balance is measured, written in the local time of the clock below. For another market set its own first hour, for example `0800-0900` with the clock `London`. |
-| IB clock | `New York` | The city whose local time the window is written in. `Exchange` follows the symbol. |
-| IB colour | pink | Colour of the box, the lines, the labels and the markers. |
-| IB extend, hours | `5.5` | How long the lines keep extending after the window closes. 5.5 hours after 10:30 is the New York close at 16:00. |
-| IB midline | on | A dashed line at the middle of the initial balance. |
+| Show initial balance | off | Master switch for both rows. |
+| Row 1 | on · `EU IB` · `0900-1000` · `Frankfurt` | Checkbox · name · window · city. The window is written in the local time of that city and follows its daylight saving time. The name starts every label of the row. |
+| Row 2 | on · `NY IB` · `0930-1030` · `New York` | The same for the second initial balance. For another market type its own first hour, for example `0800-0900` and `London`. |
+| IB colours | violet, pink | Colours of the two rows, in the same order: box, lines, labels and markers. |
+| IB extend, hours | `5.5`, `5.5` | How long the lines of each row keep extending after its window closes. With the defaults the lines of Frankfurt end when New York opens, and the lines of New York at its close at 16:00. |
+| IB midline | on | A dashed line at the middle of each initial balance. |
 | IB extensions × | `0.5`, `1.0`, `0.0` | Three pairs of lines above the high and below the low, as multiples of the size of the initial balance: `0.5` is half a range away, `1.0` a whole range. `0` turns a pair off. |
-| IB breakout markers | on | A triangle on the first bar that closes outside the initial balance, once per side, while the lines extend. |
-| IB size label | on | Prints the size of the initial balance over its box and, once the window has closed, its share of the average of the last days: `IB  42.0 p · 78% of avg`. |
+| IB size label | on | Prints the name and the size of an initial balance over its box and, once the window has closed, its share of the average of the last days: `NY IB`, `18.6 p`, `86% of avg`, one under the other. |
+| IB breakout markers | off | A triangle on the first bar that closes outside an initial balance, once per side, while its lines extend. |
 
-![Initial balance with its size label, its lines and their labels](images/initial-balance.png)
+![Two initial balances with their size labels, their lines and the labels of the lines](images/initial-balance.png)
 
-*⑧ Show initial balance, EURUSD on 5 minutes with the chart set to Paris time: the first hour of New York is
-15:30 – 16:30 there.*
+*⑧ Show initial balance with every other input at its default, EURUSD on 5 minutes with the chart set to Paris
+time: the first hour of Frankfurt is 09:00 – 10:00 there and the first hour of New York 15:30 – 16:30.*
 
 The size label tells a narrow first hour from a wide one. Many traders expect price to leave a narrow initial
 balance more easily and to stay inside a wide one more often; it is a tendency, not a rule, and the indicator only
 shows the number.
 
-### What both ranges share
+### What the ranges share
 
 - **Lines.** The high and the low are solid lines, the midline is dashed and the projections or extensions are
   dotted.
 - **Labels.** With *⑪ Style → Level labels* on, the lines of the latest range carry their names at the right end:
-  `ORH`, `ORL`, `OR 50%`, `OR ×1` and `IBH`, `IBL`, `IB 50%`, `IB ×0.5`, `IB ×1`. *Price in level labels* adds the
-  price. When the two ranges share a high or a low — the high of the first half hour is often the high of the first
-  hour — the names share one label, `ORH · IBH`, instead of two printed over each other. So do two lines closer
-  than a twentieth of a range, `OR ×1 · IB ×0.5`; with the price on, each name then keeps its own price.
+  `ORH`, `ORL`, `OR 50%`, `OR ×1` and `NY IBH`, `NY IBL`, `NY IB 50%`, `NY IB ×0.5`, `NY IB ×1`. *Price in level
+  labels* adds the price. When two ranges that are both still extending share a high or a low — the high of the
+  first half hour is often the high of the first hour — the names share one label, `ORH · NY IBH`, instead of two
+  printed over each other. So do two lines closer than a twentieth of a range, `OR ×1 · NY IB ×0.5`; with the
+  price on, each name then keeps its own price.
+- **Size label.** It sits over the middle of the box — under it for the opening range — with one fact per line, so
+  it stays about as narrow as the box and the bars of the window cannot cross it.
 - **Line end.** While the lines extend they end *① General → Level labels offset, bars* to the right of the last
   bar, like every other level line, and never later than their *Extend for* time.
-- **Past days.** The opening range keeps all its lines. The initial balance keeps its box, its high and its low;
+- **Past days.** The opening range keeps all its lines. An initial balance keeps its box, its high and its low;
   the midline and the extensions stay for the latest day only, which keeps the chart readable and leaves room
   within TradingView's limit of 500 lines.
 - **Average.** The average behind `% of avg` and behind the dashboard is taken over the last
   *⑩ Dashboard → Average length* ranges, from the bars loaded on the chart.
 - **Timeframes.** A range is drawn up to *① General → Hide sessions above, minutes* and only when the bars of the
   chart can measure its window: the window has to be a whole number of bars long and has to start where a bar
-  starts. A 1-hour chart whose bars open on the hour cannot measure 09:30 – 10:30, so nothing is drawn there; on
-  30, 15, 5 and 1 minutes it is.
+  starts. A 1-hour chart whose bars open on the hour cannot measure 09:30 – 10:30, so nothing is drawn there, while
+  09:00 – 10:00 is one of its bars; on 30, 15, 5 and 1 minutes both are drawn.
 
 ## ⑨ Time tools
 
@@ -248,7 +254,7 @@ Columns: session name · hours on your own clock · status (`Open · 2h 05m left
 latest range · average range. The first line names the timezone the hours are shown in. The last row, `Day`, shows
 the range of the current day, its share of the average daily range (`62% of ADR`) and that average.
 
-The opening range and the initial balance, when they are on, have a row each under the sessions. Their status is
+The opening range and each initial balance, when they are on, have a row under the sessions. Their status is
 `Forming · 23m left` while the window runs; `Inside`, `Broken up`, `Broken down` or `Broken both ways` while their
 lines extend; and `Opens in 17h 30m` after that. A range is broken by a bar that closes outside it.
 

@@ -112,8 +112,8 @@ Two levels share one price — for example London and New York made the same hig
 and two labels at one price overlap. Nothing is wrong with the levels themselves. One label for such levels is on
 the roadmap.
 
-The opening range and the initial balance already do it: lines of the two at one price, or very close to each
-other, get one label, `ORH · IBH`.
+The opening range and the initial balances already do it: lines of two of them at one price, or very close to
+each other, get one label, `ORH · NY IBH`.
 
 ## A session label is crossed by candles
 
@@ -174,28 +174,35 @@ without extended hours has no Asia and no Frankfurt session, and its London sess
 
 ## What is the initial balance and how do I show it?
 
-The initial balance, IB for short, is the range of the first hour of the regular session: 09:30 to 10:30 in New
-York for US stocks and index futures. Tick *⑧ Opening range and initial balance → Show initial balance*. The first
-hour gets a box; when it closes, its high (`IBH`), its low (`IBL`) and its middle are extended to the New York
-close, with extension lines half a range and a whole range away on both sides. The label over the box gives the
-size of the first hour and its share of the average of the last days: `IB  42.0 p · 78% of avg`.
+The initial balance, IB for short, is the range of the first hour of a session. Which hour that is depends on the
+market: 09:30 to 10:30 in New York for US stocks and index futures, where the term comes from, and 09:00 to 10:00
+in Frankfurt for the DAX and other European markets. Forex has no official session, so traders pick one of the
+two, or the first hour of London.
 
-![Initial balance with its size label, its lines and their labels](images/initial-balance.png)
+Tick *⑧ Opening range and initial balance → Show initial balance*. Two rows are ready, `EU IB` for Frankfurt and
+`NY IB` for New York; untick the one you do not need. Each first hour gets a box; when it closes, its high
+(`NY IBH`), its low (`NY IBL`) and its middle are extended for the hours set in *IB extend, hours*, with extension
+lines half a range and a whole range away on both sides. The label over the box gives the size of the first hour
+and its share of the average of the last days.
 
-For a market with another first hour change *IB window* and *IB clock*, for example `0800-0900` and `London`, or
-`0900-1000` and `Frankfurt` for the DAX. The opening range next to it can stay on: the two are separate switches.
+![Two initial balances with their size labels, their lines and the labels of the lines](images/initial-balance.png)
+
+A row is checkbox · name · window · city, like a session row. For another market type its own first hour and pick
+its city, for example `0800-0900` and `London`. The name is free text and starts every label of the row. The
+opening range next to them can stay on: all three are separate switches.
 
 ## The opening range or the initial balance is not drawn
 
 Check these in order.
 
-1. **Timeframe limit.** Both hide above *① General → Hide sessions above, minutes*, 60 by default.
-2. **The bars do not fit the window.** A range is measured only when its window is a whole number of bars long and
+1. **The switches.** An initial balance needs *Show initial balance* and the checkbox of its own row.
+2. **Timeframe limit.** All of them hide above *① General → Hide sessions above, minutes*, 60 by default.
+3. **The bars do not fit the window.** A range is measured only when its window is a whole number of bars long and
    starts where a bar starts. A 1-hour chart whose bars open on the hour cannot measure 09:30 – 10:30, and a
    30-minute opening range does not fit a 1-hour bar at all. A range taken from such bars would be wrong, so
    nothing is drawn. Switch to 30 minutes or lower.
-3. **History.** Only the last *History, days* are drawn.
-4. **The market does not trade then.** No bars in the window, no range.
+4. **History.** Only the last *History, days* are drawn.
+5. **The market does not trade then.** No bars in the window, no range.
 
 ## Does the indicator have alerts?
 
@@ -225,7 +232,8 @@ next.
 
 Previous day, week and month values do not: they are read with a one-bar offset. The high and low of the session
 that is *still running* move while the session makes new extremes — that is what a running range is. The breakout
-markers of the opening range and of the initial balance appear only after a bar has closed.
+markers of the opening range and of the initial balances, when they are switched on, appear only after a bar has
+closed.
 
 ## I updated the script but the chart still shows the old version
 

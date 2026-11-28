@@ -44,7 +44,7 @@ flowchart TD
     D --> E[updateLevels<br/>retire broken levels]
     A --> F[Period.feed × 3<br/>day, week, month]
     A --> G[Anchor.capture × 2<br/>midnight, custom time]
-    A --> H[runRange × 2<br/>opening range, initial balance]
+    A --> H[runRange × 3<br/>opening range, two initial balances]
     F --> J{last bar?}
     G --> J
     J -- yes --> K[Period.redraw / Anchor.refresh<br/>redraw current levels]
@@ -66,7 +66,7 @@ flowchart TD
 | `Marker` | A horizontal segment with a tag at its right end. | yes |
 | `Period` | Day, week or month: previous high and low, open, running range, break flags, three `Marker`s. | through `Marker` |
 | `Anchor` | An opening price taken at a fixed time of day, with one `Marker`. | through `Marker` |
-| `OpeningRange` | A range measured at the start of a session: its window and its look, a `Tracker`, the lines extended from it with their labels, and the breakout state. Two instances: the opening range and the initial balance. | yes |
+| `OpeningRange` | A range measured at the start of a session: its window and its look, a `Tracker`, the lines extended from it with their labels, and the breakout state. Three instances: the opening range and the two initial balances. | yes |
 
 ## Design decisions
 
@@ -88,18 +88,23 @@ old run and starts the new one on the same bar. This also makes 24-hour windows 
 A killzone is a session with a different look. Both are `Zone` objects in an array; the only difference is the
 `ZoneView` passed to `runZones`. Adding a slot is one input row and one `push`.
 
-### 2a. One engine for the opening range and the initial balance
+### 2a. One engine for the opening range and the initial balances
 
-The initial balance is an opening range with an hour-long window and a look of its own. Both are `OpeningRange`
-objects. No method of the type reads an input of either range: the window, the colour, the projections and the
-switches are fields, filled once by `newRange`, so the two differ only in the values they were built with.
+An initial balance is an opening range with an hour-long window and a look of its own. The opening range and the
+two initial balances are three `OpeningRange` objects. No method of the type reads an input of one of them: the
+window, the name, the colour, the projections and the switches are fields, filled once by `newRange`, so the three
+differ only in the values they were built with. A third initial balance would be one row of inputs and one more
+object in the family.
 
-Each range is handed the other one when it runs. A line drawn at a price where the other range already has a line
-takes that label over and prints both names, `ORH · IBH`: the high of the first half hour is often the high of the
+Each range is handed the whole family when it runs. A line drawn at a price where another range has a line takes
+that label over and prints both names, `ORH · NY IBH`: the high of the first half hour is often the high of the
 first hour, and two labels at one point would be printed over each other. Lines closer than `NEAR_SHARE` of a
 range are treated the same way when their text is on the same side, and with prices in the labels each name then
-keeps its own. The size label of a range ends at the right edge of its box, where no bar of the window can cross
-it and where it stays clear of the line labels further right.
+keeps its own. Only a range whose lines are still extending can hand a label over: one that has stopped keeps its
+labels where its lines ended, so the level of yesterday is never renamed by a line of today.
+
+The size label of a range sits over the middle of its box, one fact per line. That keeps it about as narrow as
+the box, and inside the box's own time no bar of the window can reach it.
 
 ### 3. Live levels are redrawn, history is frozen
 
@@ -156,7 +161,7 @@ read the timezone of the chart, so the hours cannot simply be shown on the user'
 A session on a daily chart is meaningless, and a previous-week level on a weekly chart is the bar itself. Each module
 checks the chart timeframe and stays silent when it cannot be right (`intradayOk`, `Period.visible`).
 
-The opening range and the initial balance have a second gate, `onGrid`. Their numbers are read as exact levels, so
+The opening range and the initial balances have a second gate, `onGrid`. Their numbers are read as exact levels, so
 a window is measured only on bars that fit it: the window has to be a whole number of bars long, and a bar has to
 open a whole number of bars after its start. A 30-minute window on 1-hour bars, or 09:30 – 10:30 on bars that open
 on the hour, is left alone.
@@ -164,7 +169,7 @@ on the hour, is left alone.
 ### 7. Breaks and breakouts are defined once
 
 - A **session level** or a **previous high / low** is broken by a trade-through: `high > level` or `low < level`.
-- A **breakout** of the opening range or of the initial balance is a close outside the range on a confirmed bar,
+- A **breakout** of the opening range or of an initial balance is a close outside the range on a confirmed bar,
   once per side.
 
 Markers and line styles read the same flags, and so will alerts when they return.
@@ -236,11 +241,11 @@ alert on a broken previous high, for one - has to be added to them, or it will n
 
 | Drawing | Per day, defaults | Per day, everything on |
 | --------- | ------------------- | ------------------------ |
-| Boxes | 4 | 11 |
-| Labels | 0 | about 25 |
-| Lines | 0 | about 32 |
+| Boxes | 4 | 12 |
+| Labels | 0 | about 26 |
+| Lines | 0 | about 34 |
 
-The initial balance is drawn with this budget in mind: a finished day keeps its box, its high and its low, and the
+The initial balances are drawn with this budget in mind: a finished day keeps its box, its high and its low, and the
 midline, the extensions and the line labels exist for the latest day only.
 
 With everything enabled the 500-line limit covers roughly two weeks of history, which is why *History* defaults to
@@ -280,7 +285,7 @@ levels fold back to their first bar.
   is cut off. Without that column, and as the hours table alone, it fits.
 - The dashboard status uses the wall clock; it does not know the exchange calendar.
 - Every level has its own label. Two levels at one price therefore print two labels over each other. Only the
-  opening range and the initial balance share a label at a shared price.
+  opening range and the initial balances share a label at a shared price.
 - A level label ends at the end of its line, `i_offset` bars after the last bar. It is complete only when the
   right margin of the chart is at least that wide.
 - Lines keep the colours of the inputs. A thin line in a pale default colour can be faint on a white chart.

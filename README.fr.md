@@ -46,7 +46,7 @@ script, et les horaires des sessions suivent d'eux-mêmes le passage à l'heure 
 | ⑤ | **Killzones** | 5 emplacements de plus avec leur propre apparence, préréglés sur les fenêtres habituelles Asia / London / New York |
 | ⑥ | **Previous day / week / month** | PDH/PDL, PWH/PWL, PMH/PML |
 | ⑦ | **Opening prices** | Ouverture du jour, de la semaine, du mois, de minuit et d'une heure de votre choix |
-| ⑧ | **Opening range et initial balance** | Deux ranges du début de session, chacun avec son interrupteur : boîte du range, lignes prolongées avec étiquettes, médiane, projections, marqueurs de cassure et taille du range par rapport à sa moyenne |
+| ⑧ | **Opening range et initial balance** | Un opening range et deux initial balances — la première heure de Francfort et celle de New York — chacun avec son interrupteur : boîte du range, lignes prolongées avec étiquettes, médiane, projections, taille du range par rapport à sa moyenne, marqueurs de cassure en option |
 | ⑨ | **Time tools** | Séparateurs de jours et étiquettes des jours de la semaine |
 | ⑩ | **Dashboard** | Quelle session est ouverte, ses heures à votre propre heure, temps restant ou temps avant l'ouverture, amplitude en cours face à sa moyenne, amplitude du jour face à l'ADR |
 | ⑪ | **Style** | Taille du texte, style et épaisseur des lignes, options des étiquettes, filtre des niveaux éloignés |
@@ -77,7 +77,7 @@ Chaque image ci-dessous montre le même indicateur avec quelques cases cochées.
 <td width="50%" valign="top">
 <a href="docs/images/opening-range.png"><img src="docs/images/opening-range.png" alt="Boîte de l'opening range avec lignes prolongées, médiane, deux projections et marqueurs de cassure"></a>
 <b>Opening range</b><br>
-<sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code></sub>
+<sub>⑧ <i>Show opening range</i>, <i>Breakout markers</i>, <i>Projection 2 ×</i> = <code>2</code></sub>
 </td>
 </tr>
 <tr>
@@ -159,8 +159,8 @@ La documentation détaillée est rédigée en anglais.
   décalage d'une barre : une barre historique montre exactement ce qui était connu à sa clôture.
 - **Un niveau de session est cassé par un passage du prix.** Un plus haut est cassé par un plus haut supérieur, un
   plus bas par un plus bas inférieur.
-- **Une cassure de l'opening range ou de l'initial balance exige une clôture.** Le marqueur apparaît quand une barre
-  clôture en dehors du range.
+- **Une cassure de l'opening range ou de l'initial balance exige une clôture.** Quand les marqueurs sont activés,
+  l'un d'eux apparaît dès qu'une barre clôture en dehors du range.
 - **Les niveaux en cours ne peuvent pas disparaître.** TradingView ne conserve que les 500 lignes, étiquettes et
   boîtes les plus récentes. Les niveaux en cours sont redessinés sur la dernière barre : la limite ne supprime donc
   que l'historique ancien.

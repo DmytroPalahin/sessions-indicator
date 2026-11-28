@@ -6,7 +6,7 @@ indicator("Sessions, Killzones, Opening Range and Dashboard with Auto DST", "Ses
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 //  Custom Sessions Indicator
-//  Sessions, killzones, liquidity levels, opening prices, opening range, initial balance and a dashboard in one
+//  Sessions, killzones, liquidity levels, opening prices, opening range, initial balances and a dashboard in one
 //  overlay.
 //
 //  File layout:
@@ -74,12 +74,13 @@ const string TT_OR_TIME  = "The window in which the opening range is measured, w
 const string TT_OR_CLOCK = "The city whose local time the window is written in. 'Exchange' follows the symbol; 'My time' is your own timezone, set in ① General."
 const string TT_OR_EXT   = "How long the range lines keep extending after the window closes."
 const string TT_OR_PROJ  = "Projection of the range above its high and below its low, as a multiple of the range. 0 turns a projection off."
-const string TT_OR_SIZE  = "Prints the size of the opening range under its box and, once the window has closed, its share of the average of the last ranges: OR  12.0 p · 85% of avg. ⑩ Dashboard → Average length sets how many ranges the average takes."
-const string TT_IB       = "The initial balance is the range of the first hour of the regular session: 09:30 - 10:30 in New York by default. Its high (IBH), its low (IBL) and its middle stay on the chart for the rest of the day, with extensions above and below."
-const string TT_IB_TIME  = "The window in which the initial balance is measured, written in the local time of the clock below."
-const string TT_IB_HOURS = "How long the lines of the initial balance keep extending after its window closes. 5.5 hours after 10:30 is the New York close at 16:00."
+const string TT_OR_SIZE  = "Prints the size of the opening range under its box and, once the window has closed, its share of the average of the last ranges: 12.0 p, 85% of avg. ⑩ Dashboard → Average length sets how many ranges the average takes."
+const string TT_IB       = "The initial balance is the range of the first hour of a session. Two rows are ready: the first hour of Frankfurt, 09:00 - 10:00, which European indices are read against, and the first hour of New York, 09:30 - 10:30, the classic one. The high, the low and the middle of each stay on the chart for the hours set below, with extensions above and below."
+const string TT_IB_ROW   = "Checkbox · name · window · city. The window is written in the local time of that city and follows its daylight saving time. The name starts every label of the row: NY IBH, NY IBL, NY IB 50%."
+const string TT_IB_COLS  = "Colours of the two rows above, in the same order."
+const string TT_IB_HOURS = "How long the lines keep extending after the window closes, for the two rows above, in the same order. 5.5 hours after 10:30 is the New York close at 16:00."
 const string TT_IB_EXT   = "Lines above the high and below the low of the initial balance, as multiples of its size: 0.5 is half a range away, 1 a whole range. 0 turns a pair off."
-const string TT_IB_SIZE  = "Prints the size of the initial balance over its box and, once its window has closed, its share of the average of the last days: IB  42.0 p · 78% of avg. ⑩ Dashboard → Average length sets how many days the average takes."
+const string TT_IB_SIZE  = "Prints the name and the size of an initial balance over its box and, once its window has closed, its share of the average of the last days: 42.0 p, 78% of avg. ⑩ Dashboard → Average length sets how many days the average takes."
 const string TT_AVG      = "Number of completed sessions (and days) used for the 'Avg' column."
 const string TT_DAY_CLK  = "The city at whose midnight a new day starts for the separators and the weekday labels."
 const string TT_DASH_HRS = "Shows the hours of every session on your own clock: the timezone set in ① General → My timezone. With the dashboard off this is a small table of its own in the corner chosen above, with enabled killzones under the sessions; with the dashboard on it is the 'Hours' column."
@@ -310,7 +311,7 @@ float  i_orHours   = input.float(6.0, "Extend for, hours", minval = 0.0, maxval 
 bool   i_orMid     = input.bool(true, "Midline", group = G_OR)
 float  i_orProj1   = input.float(1.0, "Projection 1 ×", minval = 0.0, step = 0.5, tooltip = TT_OR_PROJ, group = G_OR)
 float  i_orProj2   = input.float(0.0, "Projection 2 ×", minval = 0.0, step = 0.5, tooltip = TT_OR_PROJ, group = G_OR)
-bool   i_orSignals = input.bool(true, "Breakout markers", group = G_OR)
+bool   i_orSignals = input.bool(false, "Breakout markers", group = G_OR)
 
 // ⑨ Time tools
 bool  i_sepOn  = input.bool(false, "Day separators", inline = "sep", group = G_TIME)
@@ -342,18 +343,27 @@ bool     i_inkAuto  = input.bool(true, "Label text adapts to the chart backgroun
 bool     i_sLocal   = input.bool(true, "Hours are local: 08:00 is 8 o'clock in the row's city", tooltip = TT_S_LOCAL, group = G_SESSIONS)
 // Shown under the inputs of the opening range, as the last of them.
 bool     i_orSize   = input.bool(false, "Size label", tooltip = TT_OR_SIZE, group = G_OR)
-// The initial balance. Its group puts these rows under the opening range, whose engine it shares.
+// The initial balances. Their group puts these rows under the opening range, whose engine they share. A row is laid
+// out like a session row: checkbox · name · window · city, with the colours and the hours on rows of their own.
 bool     i_ibOn      = input.bool(false, "Show initial balance", tooltip = TT_IB, group = G_OR)
-string   i_ibTime    = input.session("0930-1030", "IB window", tooltip = TT_IB_TIME, group = G_OR)
-Clock    i_ibClock   = input.enum(Clock.newYork, "IB clock", tooltip = TT_OR_CLOCK, group = G_OR)
-color    i_ibCol     = input.color(#EC407A, "IB colour", group = G_OR)
-float    i_ibHours   = input.float(5.5, "IB extend, hours", minval = 0.0, maxval = 24.0, step = 0.5, tooltip = TT_IB_HOURS, group = G_OR)
+bool     i_ib1On     = input.bool(true, "", inline = "ib1", group = G_OR)
+string   i_ib1Name   = input.string("EU IB", "", inline = "ib1", group = G_OR)
+string   i_ib1Time   = input.session("0900-1000", "", inline = "ib1", group = G_OR)
+Clock    i_ib1Clock  = input.enum(Clock.frankfurt, "", inline = "ib1", group = G_OR, tooltip = TT_IB_ROW)
+bool     i_ib2On     = input.bool(true, "", inline = "ib2", group = G_OR)
+string   i_ib2Name   = input.string("NY IB", "", inline = "ib2", group = G_OR)
+string   i_ib2Time   = input.session("0930-1030", "", inline = "ib2", group = G_OR)
+Clock    i_ib2Clock  = input.enum(Clock.newYork, "", inline = "ib2", group = G_OR, tooltip = TT_IB_ROW)
+color    i_ib1Col    = input.color(#7E57C2, "IB colours", inline = "ibc", group = G_OR)
+color    i_ib2Col    = input.color(#EC407A, "", inline = "ibc", group = G_OR, tooltip = TT_IB_COLS)
+float    i_ib1Hours  = input.float(5.5, "IB extend, hours", minval = 0.0, maxval = 24.0, step = 0.5, inline = "ibh", group = G_OR)
+float    i_ib2Hours  = input.float(5.5, "", minval = 0.0, maxval = 24.0, step = 0.5, inline = "ibh", group = G_OR, tooltip = TT_IB_HOURS)
 bool     i_ibMid     = input.bool(true, "IB midline", group = G_OR)
 float    i_ibExt1    = input.float(0.5, "IB extensions ×", minval = 0.0, step = 0.5, inline = "ibx", group = G_OR)
 float    i_ibExt2    = input.float(1.0, "", minval = 0.0, step = 0.5, inline = "ibx", group = G_OR)
 float    i_ibExt3    = input.float(0.0, "", minval = 0.0, step = 0.5, inline = "ibx", tooltip = TT_IB_EXT, group = G_OR)
-bool     i_ibSignals = input.bool(true, "IB breakout markers", group = G_OR)
 bool     i_ibSize    = input.bool(true, "IB size label", tooltip = TT_IB_SIZE, group = G_OR)
+bool     i_ibSignals = input.bool(false, "IB breakout markers", group = G_OR)
 
 //#endregion
 
@@ -431,7 +441,8 @@ sessionZone(Clock c) =>
 var string KZ_TZ   = zoneOf(i_kClock)
 var string OPEN_TZ = zoneOf(i_oClock)
 var string OR_TZ   = zoneOf(i_orClock)
-var string IB_TZ   = zoneOf(i_ibClock)
+var string IB1_TZ  = zoneOf(i_ib1Clock)
+var string IB2_TZ  = zoneOf(i_ib2Clock)
 var string DAY_TZ  = zoneOf(i_dClock)
 
 int    tfSec      = timeframe.in_seconds()
@@ -572,10 +583,11 @@ type Anchor
     float  price     = na
     Marker mk
 
-// @type  A range measured in a window at the start of a session - the opening range or the initial balance - with
+// @type  A range measured in a window at the start of a session - the opening range or an initial balance - with
 //        the lines extended from it and its breakout state.
+// @field id       Number of the range in its family, which tells it from the others.
 // @field title    Name in the dashboard.
-// @field code     Short name in the labels on the chart.
+// @field code     Name at the start of its labels on the chart.
 // @field sess     The window, as a session string.
 // @field tz       Timezone the window is written in.
 // @field startMin Start of the window in minutes since midnight.
@@ -598,9 +610,10 @@ type Anchor
 // @field cap      The size label of that box.
 // @field rails    The extended lines: the high, the low, then the midline and the projections.
 // @field tags     The labels of the lines, in the same order. Empty when level labels are off.
-// @field names    The texts of those labels without a price. An empty text marks a label handed to the other range.
+// @field names    The texts of those labels without a price. An empty text marks a label handed to another range.
 // @field spots    The styles of those labels: the side of the line the text is on.
 type OpeningRange
+    int           id
     string        title
     string        code
     string        sess
@@ -1021,17 +1034,21 @@ method refresh(Anchor this) =>
     this.mk.place(this.startTime, rightEdge, this.enabled and timeframe.isintraday ? this.price : na, this.title, this.col, false)
     true
 
-// ── Opening range and initial balance ────────────────────────────────────────────────────────────────────
+// ── Opening range and initial balances ───────────────────────────────────────────────────────────────────
 
-// @function Text of the size label of a range: its name, its size and, once the window has closed, its share of the
-//           average size of the latest windows.
+// @function Text of the size label of a range, one fact per line so that it stays as narrow as the box it belongs
+//           to: its name, its size and, once the window has closed, its share of the average of the latest windows.
 // @param closed True when the window has ended.
 method sizeText(OpeningRange this, float hi, float lo, bool closed) =>
-    string txt  = this.code + "  " + fmtSpan(hi - lo, lo)
+    string txt  = this.code + "\n" + fmtSpan(hi - lo, lo)
     float  mean = this.trk.spans.avg()
     if closed and this.trk.spans.size() > 1 and mean > 0
-        txt += " · " + str.tostring((hi - lo) / mean * 100, "0") + "% of avg"
+        txt += "\n" + str.tostring((hi - lo) / mean * 100, "0") + "% of avg"
     txt
+
+// @function Time coordinate of the size label: the middle of the box, where no bar of the window can cross the text.
+method sizeX(OpeningRange this) =>
+    math.round((this.trk.startTime + this.trk.endTime) / 2.0)
 
 // @function Breakout state of the latest window, as the dashboard prints it.
 method stateText(OpeningRange this) =>
@@ -1040,26 +1057,28 @@ method stateText(OpeningRange this) =>
 // @function Adds one extended line of a range and, with level labels on, its label.
 // @param txt   Text of the label, without the price.
 // @param below True puts the label under the line.
-// @param peer  The other range. Its line at the same price, or within NEAR_SHARE of a range from it, hands its label
-//              over when the text is on the same side: the two names share one label instead of being printed over
-//              each other.
-method rail(OpeningRange this, float price, string style, string txt, bool below, OpeningRange peer) =>
+// @param peers Every range of the family. A line of another range that is still extending, at the same price or
+//              within NEAR_SHARE of a range from it, hands its label over when the text is on the same side: the
+//              names share one label instead of being printed over each other. A range that has stopped extending
+//              keeps its labels where its lines ended, away from the new ones.
+method rail(OpeningRange this, float price, string style, string txt, bool below, array<OpeningRange> peers) =>
     this.rails.push(line.new(this.trk.lastEnd, price, barEnd, price, xloc = xloc.bar_time, color = this.col, style = style, width = 1))
     if i_tags
         string spot    = levelTagStyle(below)
         float  slack   = (this.trk.lastHi - this.trk.lastLo) * NEAR_SHARE
         string caption = i_tagPrice ? txt + "  " + str.tostring(price, format.mintick) : txt
-        if peer.tags.size() > 0
-            for [i, ln] in peer.rails
-                float  other = ln.get_y1()
-                string twin  = peer.names.get(i)
-                if twin != "" and peer.spots.get(i) == spot and math.abs(other - price) <= slack
-                    // A name at the same price joins the label as it is; a name at another price brings its price.
-                    if i_tagPrice and other != price
-                        twin += "  " + str.tostring(other, format.mintick)
-                    caption := twin + " · " + caption
-                    peer.names.set(i, "")
-                    peer.tags.get(i).set_text("")
+        for peer in peers
+            if peer.id != this.id and peer.armed and peer.tags.size() > 0
+                for [i, ln] in peer.rails
+                    float  other = ln.get_y1()
+                    string twin  = peer.names.get(i)
+                    if twin != "" and peer.spots.get(i) == spot and math.abs(other - price) <= slack
+                        // A name at the same price joins the label as it is; a name at another price brings its price.
+                        if i_tagPrice and other != price
+                            twin += "  " + str.tostring(other, format.mintick)
+                        caption := twin + " · " + caption
+                        peer.names.set(i, "")
+                        peer.tags.get(i).set_text("")
         this.names.push(txt)
         this.spots.push(spot)
         this.tags.push(label.new(barEnd, price, caption, xloc = xloc.bar_time, style = spot, color = color(na), textcolor = inkOf(this.col), size = TEXT_SIZE))
@@ -1069,8 +1088,8 @@ method rail(OpeningRange this, float price, string style, string txt, bool below
 // @param inside  True when the current bar belongs to the window.
 // @param key     Identity of the run the bar belongs to (see windowKey).
 // @param visible False on bars older than the history window: the range is followed but not drawn.
-// @param peer    The other range (see rail).
-method run(OpeningRange this, bool inside, int key, bool visible, OpeningRange peer) =>
+// @param peers   Every range of the family (see rail).
+method run(OpeningRange this, bool inside, int key, bool visible, array<OpeningRange> peers) =>
     Tracker t = this.trk
     t.advance(inside, key)
     this.upNow := false
@@ -1097,30 +1116,28 @@ method run(OpeningRange this, bool inside, int key, bool visible, OpeningRange p
         this.cap   := na
         if visible
             this.frame := box.new(t.startTime, t.hi, t.endTime, t.lo, xloc = xloc.bar_time, border_color = color.new(this.col, 30), border_width = 1, bgcolor = color.new(this.col, 85))
-            // The size label ends at the right edge of the box: over the box no bar can cross it, and it stays clear
-            // of the line labels further right.
             if this.sized
-                this.cap := label.new(t.endTime, this.capBelow ? t.lo : t.hi, this.sizeText(t.hi, t.lo, false), xloc = xloc.bar_time, style = tagStyleOf(Align.finish, this.capBelow), color = color(na), textcolor = inkOf(this.col), size = TEXT_SIZE)
+                this.cap := label.new(this.sizeX(), this.capBelow ? t.lo : t.hi, this.sizeText(t.hi, t.lo, false), xloc = xloc.bar_time, style = tagStyleOf(Align.middle, this.capBelow), color = color(na), textcolor = inkOf(this.col), size = TEXT_SIZE)
     else if t.active and not na(this.frame)
         this.frame.set_top(t.hi)
         this.frame.set_bottom(t.lo)
         this.frame.set_right(t.endTime)
         if not na(this.cap)
-            this.cap.set_xy(t.endTime, this.capBelow ? t.lo : t.hi)
+            this.cap.set_xy(this.sizeX(), this.capBelow ? t.lo : t.hi)
             this.cap.set_text(this.sizeText(t.hi, t.lo, false))
     if t.ended
         this.armed := true
         if visible
             float span = t.lastHi - t.lastLo
-            this.rail(t.lastHi, line.style_solid, this.code + "H", false, peer)
-            this.rail(t.lastLo, line.style_solid, this.code + "L", true, peer)
+            this.rail(t.lastHi, line.style_solid, this.code + "H", false, peers)
+            this.rail(t.lastLo, line.style_solid, this.code + "L", true, peers)
             if this.showMid
-                this.rail((t.lastHi + t.lastLo) / 2, line.style_dashed, this.code + " 50%", false, peer)
+                this.rail((t.lastHi + t.lastLo) / 2, line.style_dashed, this.code + " 50%", false, peers)
             for k in this.steps
                 if k > 0
                     string txt = this.code + " ×" + str.tostring(k)
-                    this.rail(t.lastHi + span * k, line.style_dotted, txt, false, peer)
-                    this.rail(t.lastLo - span * k, line.style_dotted, txt, true, peer)
+                    this.rail(t.lastHi + span * k, line.style_dotted, txt, false, peers)
+                    this.rail(t.lastLo - span * k, line.style_dotted, txt, true, peers)
     if this.armed
         int stop = t.lastEnd + int(this.hours * MS_HOUR)
         if time >= stop
@@ -1148,14 +1165,14 @@ method run(OpeningRange this, bool inside, int key, bool visible, OpeningRange p
 
 // @function Advances a range on the current bar. A bar that does not line up with the window is left out, so a
 //           timeframe that cannot measure the window draws nothing instead of a wrong range.
-// @param peer The other range (see rail).
-runRange(OpeningRange r, OpeningRange peer) =>
+// @param peers Every range of the family (see rail).
+runRange(OpeningRange r, array<OpeningRange> peers) =>
     bool inside = not na(time(timeframe.period, r.sess, r.tz))
     int  key    = na
     if inside
         inside := onGrid(r.startMin, r.endMin, r.tz)
         key    := windowKey(r.startMin, r.endMin, r.tz)
-    r.run(inside, key, inWindow, peer)
+    r.run(inside, key, inWindow, peers)
 
 //#endregion
 
@@ -1174,10 +1191,11 @@ newPeriod(string code, bool showHL, bool showOpen, color hlCol, color openCol) =
     Period.new(code, showHL, showOpen, hlCol, openCol, hiMk = Marker.new(), loMk = Marker.new(), openMk = Marker.new())
 
 // @function A range built from its inputs, with its buffers ready.
+// @param id       Number of the range in its family.
 // @param capBelow True puts the size label under the box.
 // @param slim     True removes the midline and the projections of a day when the next one starts.
-newRange(string title, string code, string sess, string tz, color col, float hours, bool showMid, array<float> steps, bool signals, bool sized, bool capBelow, bool slim) =>
-    OpeningRange.new(title, code, sess, tz, clockMinutes(sess, 0), clockMinutes(sess, 5), col, hours, showMid, steps, signals, sized, capBelow, slim, newTracker(), rails = array.new<line>(), tags = array.new<label>(), names = array.new<string>(), spots = array.new<string>())
+newRange(int id, string title, string code, string sess, string tz, color col, float hours, bool showMid, array<float> steps, bool signals, bool sized, bool capBelow, bool slim) =>
+    OpeningRange.new(id, title, code, sess, tz, clockMinutes(sess, 0), clockMinutes(sess, 5), col, hours, showMid, steps, signals, sized, capBelow, slim, newTracker(), rails = array.new<line>(), tags = array.new<label>(), names = array.new<string>(), spots = array.new<string>())
 
 var array<Zone>  sessions  = array.new<Zone>()
 var array<Zone>  killzones = array.new<Zone>()
@@ -1205,8 +1223,15 @@ var Period monthPeriod = newPeriod("M", i_pmOn, i_moOn, i_pmCol, i_moCol)
 var Anchor midnightOpen = Anchor.new("00:00 Open", i_mnCol, i_mnOn, mk = Marker.new())
 var Anchor customOpen   = Anchor.new(str.tostring(i_coHour, "00") + ":" + str.tostring(i_coMin, "00") + " Open", i_coCol, i_coOn, mk = Marker.new())
 
-var OpeningRange openingRange   = newRange("Opening range", "OR", i_orTime, OR_TZ, i_orCol, i_orHours, i_orMid, array.from(i_orProj1, i_orProj2), i_orSignals, i_orSize, true, false)
-var OpeningRange initialBalance = newRange("Initial balance", "IB", i_ibTime, IB_TZ, i_ibCol, i_ibHours, i_ibMid, array.from(i_ibExt1, i_ibExt2, i_ibExt3), i_ibSignals, i_ibSize, false, true)
+var OpeningRange openingRange = newRange(0, "Opening range", "OR", i_orTime, OR_TZ, i_orCol, i_orHours, i_orMid, array.from(i_orProj1, i_orProj2), i_orSignals, i_orSize, true, false)
+var OpeningRange balance1     = newRange(1, i_ib1Name, i_ib1Name, i_ib1Time, IB1_TZ, i_ib1Col, i_ib1Hours, i_ibMid, array.from(i_ibExt1, i_ibExt2, i_ibExt3), i_ibSignals, i_ibSize, false, true)
+var OpeningRange balance2     = newRange(2, i_ib2Name, i_ib2Name, i_ib2Time, IB2_TZ, i_ib2Col, i_ib2Hours, i_ibMid, array.from(i_ibExt1, i_ibExt2, i_ibExt3), i_ibSignals, i_ibSize, false, true)
+// The family is handed to each of its members, so that lines of two ranges at one price can share a label.
+var array<OpeningRange> ranges = array.new<OpeningRange>()
+if barstate.isfirst
+    ranges.push(openingRange)
+    ranges.push(balance1)
+    ranges.push(balance2)
 
 var array<string> WEEKDAYS = array.from("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
 
@@ -1251,11 +1276,13 @@ if barstate.islast
     midnightOpen.refresh()
     customOpen.refresh()
 
-// 4. Opening range and initial balance. Each one is handed the other, so a high or a low they share gets one label.
+// 4. Opening range and initial balances.
 if i_orOn and intradayOk
-    runRange(openingRange, initialBalance)
-if i_ibOn and intradayOk
-    runRange(initialBalance, openingRange)
+    runRange(openingRange, ranges)
+if i_ibOn and i_ib1On and intradayOk
+    runRange(balance1, ranges)
+if i_ibOn and i_ib2On and intradayOk
+    runRange(balance2, ranges)
 
 // 5. Time tools.
 if dayRolled and inWindow and timeframe.isintraday
@@ -1377,8 +1404,11 @@ if i_dashOn and barstate.islast
     if i_orOn
         rangeRow(openingRange, row)
         row += 1
-    if i_ibOn
-        rangeRow(initialBalance, row)
+    if i_ibOn and i_ib1On
+        rangeRow(balance1, row)
+        row += 1
+    if i_ibOn and i_ib2On
+        rangeRow(balance2, row)
         row += 1
     if i_dashDay
         float daySpan = dayPeriod.curHi - dayPeriod.curLo

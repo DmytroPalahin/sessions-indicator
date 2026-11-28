@@ -15,23 +15,25 @@ How versions are counted for an indicator:
 
 ### Added
 
-- **Initial balance.** A second range next to the opening range, in *⑧ Opening range and initial balance*, off by
-  default: the first hour of the session — 09:30 to 10:30 New York, with a window and a city of its own — as a
-  box, the lines `IBH`, `IBL` and `IB 50%` extended to the New York close, up to three pairs of extensions (half a
-  range and a whole range by default) and breakout markers. A label over the box gives the size of the first hour
-  and its share of the average of the last days: `IB  42.0 p · 78% of avg`. Earlier days keep the box, the high
-  and the low.
+- **Initial balance.** Two more ranges next to the opening range, in *⑧ Opening range and initial balance*, off by
+  default: the first hour of Frankfurt (`EU IB`, 09:00 – 10:00) and the first hour of New York (`NY IB`, 09:30 –
+  10:30). A row is checkbox · name · window · city, like a session row, with the colours and the hours the lines
+  extend for on rows of their own. Each first hour is a box; its high, its low and its middle are extended with up
+  to three pairs of extensions, half a range and a whole range away by default. A label over the box gives its
+  size and its share of the average of the last days. Earlier days keep the box, the high and the low.
 - Labels on the lines of the opening range: `ORH`, `ORL`, `OR 50%`, `OR ×1`. They follow *⑪ Style → Level labels*
-  and carry the price with *Price in level labels*. Lines of the opening range and of the initial balance at one
-  price, or very close to each other, get one label instead of two printed over each other: `ORH · IBH`,
-  `OR ×1 · IB ×0.5`.
-- *⑧ Size label* for the opening range, off by default: `OR  12.0 p · 85% of avg` under its box.
-- A dashboard row for the opening range and one for the initial balance when they are on: `Forming · 23m left`
-  while the window runs, then `Inside`, `Broken up`, `Broken down` or `Broken both ways` while the lines extend,
-  with the size of the range and its average.
+  and carry the price with *Price in level labels*. Lines of the opening range and of an initial balance at one
+  price, or very close to each other, get one label instead of two printed over each other: `ORH · NY IBH`,
+  `OR ×1 · NY IB ×0.5`.
+- *⑧ Size label* for the opening range, off by default: its size and its share of the average under its box.
+- A dashboard row for the opening range and for each initial balance that is on: `Forming · 23m left` while the
+  window runs, then `Inside`, `Broken up`, `Broken down` or `Broken both ways` while the lines extend, with the
+  size of the range and its average.
 
 ### Changed
 
+- *⑧ Breakout markers* is off by default: the triangles on the first close outside the opening range are shown
+  only when the box is ticked. Tick it to keep them.
 - The group *⑧ Opening range* is now *⑧ Opening range and initial balance*. No setting moved: the new inputs are
   declared after all older ones, so saved settings keep applying.
 - While the lines of the opening range extend, they end *① General → Level labels offset, bars* to the right of

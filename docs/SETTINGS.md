@@ -192,6 +192,11 @@ price that stays inside it, leaves it on one side or leaves it on both.
 | IB breakout markers | on | A triangle on the first bar that closes outside the initial balance, once per side, while the lines extend. |
 | IB size label | on | Prints the size of the initial balance over its box and, once the window has closed, its share of the average of the last days: `IB  42.0 p · 78% of avg`. |
 
+![Initial balance with its size label, its lines and their labels](images/initial-balance.png)
+
+*⑧ Show initial balance, EURUSD on 5 minutes with the chart set to Paris time: the first hour of New York is
+15:30 – 16:30 there.*
+
 The size label tells a narrow first hour from a wide one. Many traders expect price to leave a narrow initial
 balance more easily and to stay inside a wide one more often; it is a tendency, not a rule, and the indicator only
 shows the number.
@@ -203,7 +208,8 @@ shows the number.
 - **Labels.** With *⑪ Style → Level labels* on, the lines of the latest range carry their names at the right end:
   `ORH`, `ORL`, `OR 50%`, `OR ×1` and `IBH`, `IBL`, `IB 50%`, `IB ×0.5`, `IB ×1`. *Price in level labels* adds the
   price. When the two ranges share a high or a low — the high of the first half hour is often the high of the first
-  hour — the names share one label, `ORH · IBH`, instead of two printed over each other.
+  hour — the names share one label, `ORH · IBH`, instead of two printed over each other. So do two lines closer
+  than a twentieth of a range, `OR ×1 · IB ×0.5`; with the price on, each name then keeps its own price.
 - **Line end.** While the lines extend they end *① General → Level labels offset, bars* to the right of the last
   bar, like every other level line, and never later than their *Extend for* time.
 - **Past days.** The opening range keeps all its lines. The initial balance keeps its box, its high and its low;

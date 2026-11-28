@@ -96,7 +96,10 @@ switches are fields, filled once by `newRange`, so the two differ only in the va
 
 Each range is handed the other one when it runs. A line drawn at a price where the other range already has a line
 takes that label over and prints both names, `ORH · IBH`: the high of the first half hour is often the high of the
-first hour, and two labels at one point would be printed over each other.
+first hour, and two labels at one point would be printed over each other. Lines closer than `NEAR_SHARE` of a
+range are treated the same way when their text is on the same side, and with prices in the labels each name then
+keeps its own. The size label of a range ends at the right edge of its box, where no bar of the window can cross
+it and where it stays clear of the line labels further right.
 
 ### 3. Live levels are redrawn, history is frozen
 

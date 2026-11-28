@@ -112,7 +112,8 @@ Two levels share one price — for example London and New York made the same hig
 and two labels at one price overlap. Nothing is wrong with the levels themselves. One label for such levels is on
 the roadmap.
 
-The opening range and the initial balance already do it: a high or a low they share gets one label, `ORH · IBH`.
+The opening range and the initial balance already do it: lines of the two at one price, or very close to each
+other, get one label, `ORH · IBH`.
 
 ## A session label is crossed by candles
 
@@ -178,6 +179,8 @@ York for US stocks and index futures. Tick *⑧ Opening range and initial balanc
 hour gets a box; when it closes, its high (`IBH`), its low (`IBL`) and its middle are extended to the New York
 close, with extension lines half a range and a whole range away on both sides. The label over the box gives the
 size of the first hour and its share of the average of the last days: `IB  42.0 p · 78% of avg`.
+
+![Initial balance with its size label, its lines and their labels](images/initial-balance.png)
 
 For a market with another first hour change *IB window* and its city, for example `0800-0900` and `London`, or
 `0900-1000` and `Frankfurt` for the DAX. The opening range next to it can stay on: the two are separate switches.

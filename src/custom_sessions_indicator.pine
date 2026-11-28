@@ -40,6 +40,8 @@ const int    MS_DAY    = 86400000
 const string NO_VALUE  = "—"
 // Contrast that label text must reach against the chart background (WCAG AA for normal text).
 const float  INK_CONTRAST = 4.5
+// Two lines of the opening range and the initial balance that are closer than this share of a range share one label.
+const float  NEAR_SHARE = 0.05
 
 const string G_GENERAL  = "① General"
 const string G_SESSIONS = "② Sessions"
@@ -597,6 +599,7 @@ type Anchor
 // @field rails    The extended lines: the high, the low, then the midline and the projections.
 // @field tags     The labels of the lines, in the same order. Empty when level labels are off.
 // @field names    The texts of those labels without a price. An empty text marks a label handed to the other range.
+// @field spots    The styles of those labels: the side of the line the text is on.
 type OpeningRange
     string        title
     string        code
@@ -623,6 +626,7 @@ type OpeningRange
     array<line>   rails
     array<label>  tags
     array<string> names
+    array<string> spots
 
 //#endregion
 
@@ -1036,20 +1040,29 @@ method stateText(OpeningRange this) =>
 // @function Adds one extended line of a range and, with level labels on, its label.
 // @param txt   Text of the label, without the price.
 // @param below True puts the label under the line.
-// @param peer  The other range. Its line at the same price hands its label over, so the two names share one label
-//              instead of being printed over each other.
+// @param peer  The other range. Its line at the same price, or within NEAR_SHARE of a range from it, hands its label
+//              over when the text is on the same side: the two names share one label instead of being printed over
+//              each other.
 method rail(OpeningRange this, float price, string style, string txt, bool below, OpeningRange peer) =>
     this.rails.push(line.new(this.trk.lastEnd, price, barEnd, price, xloc = xloc.bar_time, color = this.col, style = style, width = 1))
     if i_tags
-        string name = txt
+        string spot    = levelTagStyle(below)
+        float  slack   = (this.trk.lastHi - this.trk.lastLo) * NEAR_SHARE
+        string caption = i_tagPrice ? txt + "  " + str.tostring(price, format.mintick) : txt
         if peer.tags.size() > 0
             for [i, ln] in peer.rails
-                if ln.get_y1() == price and peer.names.get(i) != ""
-                    name := peer.names.get(i) + " · " + txt
+                float  other = ln.get_y1()
+                string twin  = peer.names.get(i)
+                if twin != "" and peer.spots.get(i) == spot and math.abs(other - price) <= slack
+                    // A name at the same price joins the label as it is; a name at another price brings its price.
+                    if i_tagPrice and other != price
+                        twin += "  " + str.tostring(other, format.mintick)
+                    caption := twin + " · " + caption
                     peer.names.set(i, "")
                     peer.tags.get(i).set_text("")
-        this.names.push(name)
-        this.tags.push(label.new(barEnd, price, i_tagPrice ? name + "  " + str.tostring(price, format.mintick) : name, xloc = xloc.bar_time, style = levelTagStyle(below), color = color(na), textcolor = inkOf(this.col), size = TEXT_SIZE))
+        this.names.push(txt)
+        this.spots.push(spot)
+        this.tags.push(label.new(barEnd, price, caption, xloc = xloc.bar_time, style = spot, color = color(na), textcolor = inkOf(this.col), size = TEXT_SIZE))
     true
 
 // @function Advances a range by one bar: measures the window, extends its lines and detects the breakout.
@@ -1078,19 +1091,22 @@ method run(OpeningRange this, bool inside, int key, bool visible, OpeningRange p
                 this.rails.get(i).delete()
         this.tags.clear()
         this.names.clear()
+        this.spots.clear()
         this.rails.clear()
         this.frame := na
         this.cap   := na
         if visible
             this.frame := box.new(t.startTime, t.hi, t.endTime, t.lo, xloc = xloc.bar_time, border_color = color.new(this.col, 30), border_width = 1, bgcolor = color.new(this.col, 85))
+            // The size label ends at the right edge of the box: over the box no bar can cross it, and it stays clear
+            // of the line labels further right.
             if this.sized
-                this.cap := label.new(t.startTime, this.capBelow ? t.lo : t.hi, this.sizeText(t.hi, t.lo, false), xloc = xloc.bar_time, style = tagStyleOf(Align.start, this.capBelow), color = color(na), textcolor = inkOf(this.col), size = TEXT_SIZE)
+                this.cap := label.new(t.endTime, this.capBelow ? t.lo : t.hi, this.sizeText(t.hi, t.lo, false), xloc = xloc.bar_time, style = tagStyleOf(Align.finish, this.capBelow), color = color(na), textcolor = inkOf(this.col), size = TEXT_SIZE)
     else if t.active and not na(this.frame)
         this.frame.set_top(t.hi)
         this.frame.set_bottom(t.lo)
         this.frame.set_right(t.endTime)
         if not na(this.cap)
-            this.cap.set_y(this.capBelow ? t.lo : t.hi)
+            this.cap.set_xy(t.endTime, this.capBelow ? t.lo : t.hi)
             this.cap.set_text(this.sizeText(t.hi, t.lo, false))
     if t.ended
         this.armed := true
@@ -1161,7 +1177,7 @@ newPeriod(string code, bool showHL, bool showOpen, color hlCol, color openCol) =
 // @param capBelow True puts the size label under the box.
 // @param slim     True removes the midline and the projections of a day when the next one starts.
 newRange(string title, string code, string sess, string tz, color col, float hours, bool showMid, array<float> steps, bool signals, bool sized, bool capBelow, bool slim) =>
-    OpeningRange.new(title, code, sess, tz, clockMinutes(sess, 0), clockMinutes(sess, 5), col, hours, showMid, steps, signals, sized, capBelow, slim, newTracker(), rails = array.new<line>(), tags = array.new<label>(), names = array.new<string>())
+    OpeningRange.new(title, code, sess, tz, clockMinutes(sess, 0), clockMinutes(sess, 5), col, hours, showMid, steps, signals, sized, capBelow, slim, newTracker(), rails = array.new<line>(), tags = array.new<label>(), names = array.new<string>(), spots = array.new<string>())
 
 var array<Zone>  sessions  = array.new<Zone>()
 var array<Zone>  killzones = array.new<Zone>()

@@ -22,8 +22,9 @@ How versions are counted for an indicator:
   and its share of the average of the last days: `IB  42.0 p · 78% of avg`. Earlier days keep the box, the high
   and the low.
 - Labels on the lines of the opening range: `ORH`, `ORL`, `OR 50%`, `OR ×1`. They follow *⑪ Style → Level labels*
-  and carry the price with *Price in level labels*. A high or a low that the opening range and the initial balance
-  share gets one label, `ORH · IBH`.
+  and carry the price with *Price in level labels*. Lines of the opening range and of the initial balance at one
+  price, or very close to each other, get one label instead of two printed over each other: `ORH · IBH`,
+  `OR ×1 · IB ×0.5`.
 - *⑧ Size label* for the opening range, off by default: `OR  12.0 p · 85% of avg` under its box.
 - A dashboard row for the opening range and one for the initial balance when they are on: `Forming · 23m left`
   while the window runs, then `Inside`, `Broken up`, `Broken down` or `Broken both ways` while the lines extend,

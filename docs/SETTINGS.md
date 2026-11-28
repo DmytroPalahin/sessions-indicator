@@ -171,9 +171,9 @@ balance of New York is a common pair.
 | Breakout markers | off | A triangle on the first bar that closes outside the range, once per side: under the bar for a close above the range, over the bar for a close below it. A breakout is looked for while the lines extend, that is for *Extend for, hours* after the window closes. |
 | Size label | off | Prints the size of the range under its box and, once the window has closed, its share of the average of the last ranges: `OR`, `12.0 p`, `85% of avg`, one under the other. |
 
-![Opening range with projections and breakout markers](images/opening-range.png)
+![Opening range with its line labels and two projections](images/opening-range.png)
 
-*⑧ Show opening range with Breakout markers and Projection 2 × = `2`, EURUSD on 5 minutes.*
+*⑧ Show opening range with Projection 2 × = `2`, EURUSD on 5 minutes.*
 
 ### Initial balance
 

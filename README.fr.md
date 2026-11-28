@@ -6,7 +6,7 @@
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
 [![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/)
-[![Version](https://img.shields.io/badge/version-4.4.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.5.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MPL--2.0-brightgreen)](LICENSE)
 [![CI](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml/badge.svg)](https://github.com/DmytroPalahin/sessions-indicator/actions/workflows/ci.yml)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/)
@@ -75,9 +75,9 @@ Chaque image ci-dessous montre le même indicateur avec quelques cases cochées.
 <sub>⑤ <i>Show killzones</i> · ⑥ <i>Previous day high / low</i> · ⑦ <i>Day open</i>, <i>Midnight open</i></sub>
 </td>
 <td width="50%" valign="top">
-<a href="docs/images/opening-range.png"><img src="docs/images/opening-range.png" alt="Boîte de l'opening range avec lignes prolongées, médiane, deux projections et marqueurs de cassure"></a>
+<a href="docs/images/opening-range.png"><img src="docs/images/opening-range.png" alt="Boîte de l'opening range avec lignes prolongées, leurs étiquettes, médiane et deux projections"></a>
 <b>Opening range</b><br>
-<sub>⑧ <i>Show opening range</i>, <i>Breakout markers</i>, <i>Projection 2 ×</i> = <code>2</code></sub>
+<sub>⑧ <i>Show opening range</i>, <i>Projection 2 ×</i> = <code>2</code></sub>
 </td>
 </tr>
 <tr>
@@ -184,7 +184,7 @@ surprenne.
 
 ## État du projet
 
-La version 4.4.0 est la version actuelle, celle qui est publiée sur TradingView. Elle compile et fonctionne sans
+La version 4.5.0 est la version actuelle, celle qui est publiée sur TradingView. Elle compile et fonctionne sans
 erreur ni avertissement, et elle a été exécutée sur des graphiques forex, crypto, futures et actions, de 30 secondes
 au journalier. Le journal de vérification de [docs/TESTING.md](docs/TESTING.md) indique ce qui a été vérifié et ce
 qui reste ouvert.

@@ -10,7 +10,7 @@ How a release goes from this repository to the TradingView community library.
 | Title | Sessions, Killzones, Opening Range and Dashboard with Auto DST |
 | Author | [dmitry_plhn](https://www.tradingview.com/u/dmitry_plhn/) |
 | Access | Public, open-source: everyone can add it to a chart and read the code on the page. It is the code of this repository. |
-| Code | Version 4.4.0 — the file at the tag `v4.4.0` |
+| Code | Version 4.5.0 — the file at the tag `v4.5.0` |
 | First published | 2026-11-27, from version 4.4.0 |
 | Categories | Multi-timeframe · Pivot points and levels |
 | Tags | `sessions`, `killzones`, `forex` |

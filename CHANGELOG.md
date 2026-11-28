@@ -13,6 +13,10 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+## [4.5.0] - 2026-11-28
+
+The initial balance of Frankfurt and of New York, and labels on the lines of the opening range.
+
 ### Added
 
 - **Initial balance.** Two more ranges next to the opening range, in *⑧ Opening range and initial balance*, off by

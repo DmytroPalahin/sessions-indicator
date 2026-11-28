@@ -2,7 +2,7 @@
 
 # Custom Sessions Indicator
 
-**Sessions, killzones, liquidity levels, opening prices, opening range and a dashboard — one TradingView overlay, every part of it configurable.**
+**Sessions, killzones, liquidity levels, opening prices, opening range, initial balance and a dashboard — one TradingView overlay, every part of it configurable.**
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
 [![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/)
@@ -32,8 +32,8 @@ Frankfurt, London and New York sessions as soft colour boxes. Everything else is
 so the chart stays clean until you ask for more.
 
 People look for it under different names: a TradingView session indicator, session high and low levels, the Asian
-range, ICT killzones, previous day high and low, an opening range breakout tool. It is all of these in one script,
-and the session hours follow daylight-saving time on their own.
+range, ICT killzones, previous day high and low, an opening range breakout tool, the initial balance of the first
+hour. It is all of these in one script, and the session hours follow daylight-saving time on their own.
 
 | # | Module | What you get |
 | --- | -------- | -------------- |
@@ -44,7 +44,7 @@ and the session hours follow daylight-saving time on their own.
 | ⑤ | **Killzones** | 5 more slots with their own look, preset to the usual Asia / London / New York windows |
 | ⑥ | **Previous day / week / month** | PDH/PDL, PWH/PWL, PMH/PML |
 | ⑦ | **Opening prices** | Day, week, month, midnight and one custom time of day |
-| ⑧ | **Opening range** | Range box, extended lines, midline, projections and breakout markers |
+| ⑧ | **Opening range and initial balance** | Two ranges of the session start, each with its own switch: range box, extended lines with labels, midline, projections, breakout markers and the size of the range against its average |
 | ⑨ | **Time tools** | Day separators and weekday labels |
 | ⑩ | **Dashboard** | Which session is open, its hours on your own clock, time left or time to open, current range against its average, day range against ADR |
 | ⑪ | **Style** | Text size, line style and width, label options, a filter for distant levels |
@@ -152,7 +152,8 @@ To type the hours as you see them on your chart, untick *Hours are local* under 
 - **No repainting from the future.** Previous day / week / month values are read with a one-bar offset, so a
   historical bar shows exactly what was known when it closed.
 - **Session levels break on a trade-through.** A high is broken by a higher high, a low by a lower low.
-- **Opening range breakouts need a close.** The marker appears when a bar closes outside the range.
+- **Opening range and initial balance breakouts need a close.** The marker appears when a bar closes outside the
+  range.
 - **Live levels cannot disappear.** TradingView keeps only the newest 500 lines, labels and boxes. Current levels are
   redrawn on the last bar, so the limit only ever removes old history.
 
@@ -160,7 +161,9 @@ To type the hours as you see them on your chart, untick *Hours are local* under 
 
 These come from how Pine Script and TradingView work. They are listed so that nothing surprises you.
 
-- Sessions, killzones and the opening range are intraday tools. They hide above the timeframe set in *① General*.
+- Sessions, killzones, the opening range and the initial balance are intraday tools. They hide above the timeframe
+  set in *① General*. The two ranges also need bars that fit their window: a chart whose bars open on the hour cannot
+  measure 09:30 – 10:30, so nothing is drawn there.
 - Levels far from price squeeze the candles, because TradingView fits every level of an indicator into the price
   scale. *⑪ Style → Hide levels farther than* removes them; so does *Scale price chart only* in the price-scale menu.
 - The dashboard clock follows the schedule, not the exchange calendar: it does not know about weekends and holidays.

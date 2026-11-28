@@ -14,8 +14,8 @@ With every input at its default the chart shows the four main sessions and nothi
 | Input | Default | What it does |
 | ------- | --------- | -------------- |
 | History, days (0 = all) | `20` | Drawings older than this many days are skipped. `0` draws the whole loaded history. |
-| Hide sessions above, minutes | `60` | Sessions, killzones and the opening range are hidden on chart timeframes above this value. |
-| Level labels offset, bars | `5` | How many bars to the right of the last bar the level lines end. Their labels sit at that end, so keep the right margin of the chart at least this wide. |
+| Hide sessions above, minutes | `60` | Sessions, killzones, the opening range and the initial balance are hidden on chart timeframes above this value. |
+| Level labels offset, bars | `5` | How many bars to the right of the last bar the level lines end. Their labels sit at that end, so keep the right margin of the chart at least this wide. The lines of the opening range and of the initial balance end there too while they extend. |
 | My timezone | `Paris, Berlin, Madrid` | The timezone your own chart shows — the clock in its bottom right corner. TradingView does not tell an indicator which one it is, so pick it here. It is used in two places: the hours table (*⑩ Dashboard → Hours on my clock*), which shows every session on your clock, and every clock set to `My time`. Sessions are drawn in the right place whatever is chosen here. |
 
 *My timezone* offers `Honolulu`, `Los Angeles`, `Denver`, `Chicago`, `Mexico City`, `New York, Toronto`,
@@ -149,7 +149,14 @@ chart.
 
 *⑤ Show killzones, ⑥ Previous day high / low, ⑦ Day open and Midnight open, EURUSD on 5 minutes.*
 
-## ⑧ Opening range
+## ⑧ Opening range and initial balance
+
+Two ranges measured at the start of a session, each with its own switch. Both work the same way: a box while the
+window runs, then lines from its high, its low and its middle, projections above and below, and a marker on the
+first close outside. They can be shown together — a 30-minute opening range inside the first-hour initial balance
+is a common pair.
+
+### Opening range
 
 | Input | Default | What it does |
 | ------- | --------- | -------------- |
@@ -162,12 +169,52 @@ chart.
 | Projection 1 × | `1.0` | Lines at one range above the high and below the low. `0` turns them off. |
 | Projection 2 × | `0.0` | A second pair of projections. |
 | Breakout markers | on | A triangle on the first bar that closes outside the range, once per side: under the bar for a close above the range, over the bar for a close below it. A breakout is looked for while the lines extend, that is for *Extend for, hours* after the window closes. |
-
-The high and the low of the range are solid lines, the midline is dashed and the projections are dotted.
+| Size label | off | Prints the size of the range under its box and, once the window has closed, its share of the average of the last ranges: `OR  12.0 p · 85% of avg`. |
 
 ![Opening range with projections and breakout markers](images/opening-range.png)
 
 *⑧ Show opening range with Projection 2 × = `2`, EURUSD on 5 minutes.*
+
+### Initial balance
+
+The initial balance is the range of the first hour of the regular session: 09:30 to 10:30 in New York for US stocks
+and index futures. It comes from the market profile, where the rest of the day is read against that first hour:
+price that stays inside it, leaves it on one side or leaves it on both.
+
+| Input | Default | What it does |
+| ------- | --------- | -------------- |
+| Show initial balance | off | Master switch. |
+| IB window | `0930-1030`, `New York` | The window in which the initial balance is measured and the city whose local time it is written in. `Exchange` follows the symbol. For another market set its own first hour, for example `0800-0900` and `London`. |
+| IB colour | pink | Colour of the box, the lines, the labels and the markers. |
+| IB lines extend for, hours | `5.5` | How long the lines keep extending after the window closes. 5.5 hours after 10:30 is the New York close at 16:00. |
+| IB midline | on | A dashed line at the middle of the initial balance. |
+| IB extensions × | `0.5`, `1.0`, `0.0` | Three pairs of lines above the high and below the low, as multiples of the size of the initial balance: `0.5` is half a range away, `1.0` a whole range. `0` turns a pair off. |
+| IB breakout markers | on | A triangle on the first bar that closes outside the initial balance, once per side, while the lines extend. |
+| IB size label | on | Prints the size of the initial balance over its box and, once the window has closed, its share of the average of the last days: `IB  42.0 p · 78% of avg`. |
+
+The size label tells a narrow first hour from a wide one. Many traders expect price to leave a narrow initial
+balance more easily and to stay inside a wide one more often; it is a tendency, not a rule, and the indicator only
+shows the number.
+
+### What both ranges share
+
+- **Lines.** The high and the low are solid lines, the midline is dashed and the projections or extensions are
+  dotted.
+- **Labels.** With *⑪ Style → Level labels* on, the lines of the latest range carry their names at the right end:
+  `ORH`, `ORL`, `OR 50%`, `OR ×1` and `IBH`, `IBL`, `IB 50%`, `IB ×0.5`, `IB ×1`. *Price in level labels* adds the
+  price. When the two ranges share a high or a low — the high of the first half hour is often the high of the first
+  hour — the names share one label, `ORH · IBH`, instead of two printed over each other.
+- **Line end.** While the lines extend they end *① General → Level labels offset, bars* to the right of the last
+  bar, like every other level line, and never later than their *Extend for* time.
+- **Past days.** The opening range keeps all its lines. The initial balance keeps its box, its high and its low;
+  the midline and the extensions stay for the latest day only, which keeps the chart readable and leaves room
+  within TradingView's limit of 500 lines.
+- **Average.** The average behind `% of avg` and behind the dashboard is taken over the last
+  *⑩ Dashboard → Average length* ranges, from the bars loaded on the chart.
+- **Timeframes.** A range is drawn up to *① General → Hide sessions above, minutes* and only when the bars of the
+  chart can measure its window: the window has to be a whole number of bars long and has to start where a bar
+  starts. A 1-hour chart whose bars open on the hour cannot measure 09:30 – 10:30, so nothing is drawn there; on
+  30, 15, 5 and 1 minutes it is.
 
 ## ⑨ Time tools
 
@@ -194,6 +241,10 @@ Columns: session name · hours on your own clock · status (`Open · 2h 05m left
 latest range · average range. The first line names the timezone the hours are shown in. The last row, `Day`, shows
 the range of the current day, its share of the average daily range (`62% of ADR`) and that average.
 
+The opening range and the initial balance, when they are on, have a row each under the sessions. Their status is
+`Forming · 23m left` while the window runs; `Inside`, `Broken up`, `Broken down` or `Broken both ways` while their
+lines extend; and `Opens in 17h 30m` after that. A range is broken by a bar that closes outside it.
+
 The hours table of its own is shown on the timeframes where sessions are drawn. The dashboard stays on every
 timeframe; above the session limit the ranges of the sessions show `—`.
 
@@ -210,7 +261,7 @@ set to Paris time, the default of ① My timezone.*
 | Dashboard text follows the chart theme | on | Dark text on light charts, light text on dark charts. |
 | Dashboard text colour | light grey | Used when the option above is off. |
 | Level lines | `Solid`, `1` | Style — `Solid`, `Dashed` or `Dotted` — and width, 1 to 4, of session levels, previous highs and lows, and opening prices. |
-| Level labels | on | Text at the right end of each level line. |
+| Level labels | on | Text at the right end of each level line, the lines of the opening range and of the initial balance included. |
 | Price in level labels | off | Appends the price to the label. |
 | Hide levels farther than, × ADR (0 = never) | `0.0` | Levels farther from the last price than this many average daily ranges are not drawn. Use it when a distant weekly or monthly level squeezes the candles. Session levels fold back to the bar where they formed. The average daily range is taken over *⑩ Dashboard → Average length* days. |
 | Level labels position | `At the line end` | `At the line end` prints the text over the right end of the line — under it for lows — inside the chart, where the price scale cannot cut it off. `After the line` prints it to the right of the line; that needs a right margin wide enough for the whole text. |

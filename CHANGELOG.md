@@ -13,6 +13,35 @@ How versions are counted for an indicator:
 
 ## [Unreleased]
 
+### Added
+
+- **Initial balance.** A second range next to the opening range, in *⑧ Opening range and initial balance*, off by
+  default: the first hour of the session — 09:30 to 10:30 New York, with a window and a city of its own — as a
+  box, the lines `IBH`, `IBL` and `IB 50%` extended to the New York close, up to three pairs of extensions (half a
+  range and a whole range by default) and breakout markers. A label over the box gives the size of the first hour
+  and its share of the average of the last days: `IB  42.0 p · 78% of avg`. Earlier days keep the box, the high
+  and the low.
+- Labels on the lines of the opening range: `ORH`, `ORL`, `OR 50%`, `OR ×1`. They follow *⑪ Style → Level labels*
+  and carry the price with *Price in level labels*. A high or a low that the opening range and the initial balance
+  share gets one label, `ORH · IBH`.
+- *⑧ Size label* for the opening range, off by default: `OR  12.0 p · 85% of avg` under its box.
+- A dashboard row for the opening range and one for the initial balance when they are on: `Forming · 23m left`
+  while the window runs, then `Inside`, `Broken up`, `Broken down` or `Broken both ways` while the lines extend,
+  with the size of the range and its average.
+
+### Changed
+
+- The group *⑧ Opening range* is now *⑧ Opening range and initial balance*. No setting moved: the new inputs are
+  declared after all older ones, so saved settings keep applying.
+- While the lines of the opening range extend, they end *① General → Level labels offset, bars* to the right of
+  the last bar, like the other level lines, so their labels have room.
+
+### Fixed
+
+- The opening range is measured only on bars that fit its window. On a stock chart with 1-hour bars the
+  30-minute window used to give the range of the whole first hour; on such a chart, and on one whose bars do not
+  start where the window starts, nothing is drawn now.
+
 ## [4.4.0] - 2026-11-27
 
 A new page on TradingView, with the code open and a description that matches the script.

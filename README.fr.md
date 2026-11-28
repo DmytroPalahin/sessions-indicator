@@ -2,7 +2,7 @@
 
 # Custom Sessions Indicator
 
-**Sessions, killzones, niveaux de liquidité, prix d'ouverture, opening range et tableau de bord — un seul indicateur TradingView, entièrement configurable.**
+**Sessions, killzones, niveaux de liquidité, prix d'ouverture, opening range, initial balance et tableau de bord — un seul indicateur TradingView, entièrement configurable.**
 
 [![Pine Script](https://img.shields.io/badge/Pine%20Script-v6-2962FF)](https://www.tradingview.com/pine-script-docs/)
 [![On TradingView](https://img.shields.io/badge/on-TradingView-131722?logo=tradingview&logoColor=white)](https://www.tradingview.com/script/aK5XyDPb-Sessions-Killzones-Opening-Range-and-Dashboard-with-Auto-DST/)
@@ -34,8 +34,8 @@ pas plus.
 
 On le cherche sous différents noms : indicateur de sessions pour TradingView, plus hauts et plus bas de session,
 range asiatique (Asian range), killzones ICT, plus haut et plus bas de la veille, cassure du range d'ouverture
-(opening range breakout). Il réunit tout cela dans un seul script, et les horaires des sessions suivent d'eux-mêmes
-le passage à l'heure d'été.
+(opening range breakout), balance initiale de la première heure (initial balance). Il réunit tout cela dans un seul
+script, et les horaires des sessions suivent d'eux-mêmes le passage à l'heure d'été.
 
 | № | Module | Ce que vous obtenez |
 | --- | -------- | -------------- |
@@ -46,7 +46,7 @@ le passage à l'heure d'été.
 | ⑤ | **Killzones** | 5 emplacements de plus avec leur propre apparence, préréglés sur les fenêtres habituelles Asia / London / New York |
 | ⑥ | **Previous day / week / month** | PDH/PDL, PWH/PWL, PMH/PML |
 | ⑦ | **Opening prices** | Ouverture du jour, de la semaine, du mois, de minuit et d'une heure de votre choix |
-| ⑧ | **Opening range** | Boîte du range, lignes prolongées, médiane, projections et marqueurs de cassure |
+| ⑧ | **Opening range et initial balance** | Deux ranges du début de session, chacun avec son interrupteur : boîte du range, lignes prolongées avec étiquettes, médiane, projections, marqueurs de cassure et taille du range par rapport à sa moyenne |
 | ⑨ | **Time tools** | Séparateurs de jours et étiquettes des jours de la semaine |
 | ⑩ | **Dashboard** | Quelle session est ouverte, ses heures à votre propre heure, temps restant ou temps avant l'ouverture, amplitude en cours face à sa moyenne, amplitude du jour face à l'ADR |
 | ⑪ | **Style** | Taille du texte, style et épaisseur des lignes, options des étiquettes, filtre des niveaux éloignés |
@@ -159,8 +159,8 @@ La documentation détaillée est rédigée en anglais.
   décalage d'une barre : une barre historique montre exactement ce qui était connu à sa clôture.
 - **Un niveau de session est cassé par un passage du prix.** Un plus haut est cassé par un plus haut supérieur, un
   plus bas par un plus bas inférieur.
-- **Une cassure de l'opening range exige une clôture.** Le marqueur apparaît quand une barre clôture en dehors du
-  range.
+- **Une cassure de l'opening range ou de l'initial balance exige une clôture.** Le marqueur apparaît quand une barre
+  clôture en dehors du range.
 - **Les niveaux en cours ne peuvent pas disparaître.** TradingView ne conserve que les 500 lignes, étiquettes et
   boîtes les plus récentes. Les niveaux en cours sont redessinés sur la dernière barre : la limite ne supprime donc
   que l'historique ancien.
@@ -170,8 +170,10 @@ La documentation détaillée est rédigée en anglais.
 Elles découlent du fonctionnement de Pine Script et de TradingView. Elles sont listées pour que rien ne vous
 surprenne.
 
-- Les sessions, les killzones et l'opening range sont des outils intrajournaliers. Ils se masquent au-dessus de
-  l'unité de temps définie dans *① General*.
+- Les sessions, les killzones, l'opening range et l'initial balance sont des outils intrajournaliers. Ils se masquent
+  au-dessus de l'unité de temps définie dans *① General*. Les deux ranges demandent aussi des barres qui s'accordent
+  avec leur fenêtre : un graphique dont les barres ouvrent à l'heure pile ne peut pas mesurer 09:30 – 10:30, et rien
+  n'y est tracé.
 - Les niveaux éloignés du prix écrasent les bougies, car TradingView fait tenir tous les niveaux d'un indicateur dans
   l'échelle des prix. *⑪ Style → Hide levels farther than* les retire ; l'option *Scale price chart only* du menu de
   l'échelle des prix aussi.

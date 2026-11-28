@@ -44,7 +44,7 @@ flowchart TD
     D --> E[updateLevels<br/>retire broken levels]
     A --> F[Period.feed × 3<br/>day, week, month]
     A --> G[Anchor.capture × 2<br/>midnight, custom time]
-    A --> H[OpeningRange.run]
+    A --> H[runRange × 2<br/>opening range, initial balance]
     F --> J{last bar?}
     G --> J
     J -- yes --> K[Period.redraw / Anchor.refresh<br/>redraw current levels]
@@ -52,6 +52,7 @@ flowchart TD
     C --> L
     B --> M[Dashboard]
     F --> M
+    H --> M
 ```
 
 ## Types
@@ -65,15 +66,15 @@ flowchart TD
 | `Marker` | A horizontal segment with a tag at its right end. | yes |
 | `Period` | Day, week or month: previous high and low, open, running range, break flags, three `Marker`s. | through `Marker` |
 | `Anchor` | An opening price taken at a fixed time of day, with one `Marker`. | through `Marker` |
-| `OpeningRange` | A `Tracker`, the lines extended from it and the breakout state. | yes |
+| `OpeningRange` | A range measured at the start of a session: its window and its look, a `Tracker`, the lines extended from it with their labels, and the breakout state. Two instances: the opening range and the initial balance. | yes |
 
 ## Design decisions
 
 ### 1. State and drawing are separate
 
 `Tracker` knows what a window is doing and never touches the chart. `Zone.draw`, `OpeningRange.run` and the others
-read a tracker and draw. Sessions, killzones and the opening range therefore share one implementation of "what is a
-time window", and a display bug cannot corrupt statistics.
+read a tracker and draw. Sessions, killzones, the opening range and the initial balance therefore share one
+implementation of "what is a time window", and a display bug cannot corrupt statistics.
 
 ### 1a. A window run has an identity
 
@@ -86,6 +87,16 @@ old run and starts the new one on the same bar. This also makes 24-hour windows 
 
 A killzone is a session with a different look. Both are `Zone` objects in an array; the only difference is the
 `ZoneView` passed to `runZones`. Adding a slot is one input row and one `push`.
+
+### 2a. One engine for the opening range and the initial balance
+
+The initial balance is an opening range with an hour-long window and a look of its own. Both are `OpeningRange`
+objects. No method of the type reads an input of either range: the window, the colour, the projections and the
+switches are fields, filled once by `newRange`, so the two differ only in the values they were built with.
+
+Each range is handed the other one when it runs. A line drawn at a price where the other range already has a line
+takes that label over and prints both names, `ORH · IBH`: the high of the first half hour is often the high of the
+first hour, and two labels at one point would be printed over each other.
 
 ### 3. Live levels are redrawn, history is frozen
 
@@ -106,7 +117,8 @@ wrong or missing.
 ### 5. Every time names its clock
 
 A session row carries the city whose local time its hours are written in; the killzones, the opening range, the
-midnight and custom opens and the day separators each have a *Clock* in their own group, New York by default. A
+initial balance, the midnight and custom opens and the day separators each have a *Clock* of their own, New York
+by default. A
 `Zone` stores its timezone, and everything that asks "is this bar inside?" goes through it: `time()`, the
 identity of a run and the dashboard countdown. Named IANA zones carry their own daylight saving rules, so the
 weeks in which New York, London and Sydney are out of step need no date arithmetic in the script.
@@ -141,10 +153,16 @@ read the timezone of the chart, so the hours cannot simply be shown on the user'
 A session on a daily chart is meaningless, and a previous-week level on a weekly chart is the bar itself. Each module
 checks the chart timeframe and stays silent when it cannot be right (`intradayOk`, `Period.visible`).
 
+The opening range and the initial balance have a second gate, `onGrid`. Their numbers are read as exact levels, so
+a window is measured only on bars that fit it: the window has to be a whole number of bars long, and a bar has to
+open a whole number of bars after its start. A 30-minute window on 1-hour bars, or 09:30 – 10:30 on bars that open
+on the hour, is left alone.
+
 ### 7. Breaks and breakouts are defined once
 
 - A **session level** or a **previous high / low** is broken by a trade-through: `high > level` or `low < level`.
-- An **opening range breakout** is a close outside the range on a confirmed bar, once per side.
+- A **breakout** of the opening range or of the initial balance is a close outside the range on a confirmed bar,
+  once per side.
 
 Markers and line styles read the same flags, and so will alerts when they return.
 
@@ -215,9 +233,12 @@ alert on a broken previous high, for one - has to be added to them, or it will n
 
 | Drawing | Per day, defaults | Per day, everything on |
 | --------- | ------------------- | ------------------------ |
-| Boxes | 4 | 10 |
-| Labels | 0 | about 23 |
-| Lines | 0 | about 30 |
+| Boxes | 4 | 11 |
+| Labels | 0 | about 25 |
+| Lines | 0 | about 32 |
+
+The initial balance is drawn with this budget in mind: a finished day keeps its box, its high and its low, and the
+midline, the extensions and the line labels exist for the latest day only.
 
 With everything enabled the 500-line limit covers roughly two weeks of history, which is why *History* defaults to
 20 days and why live levels are redrawn.
@@ -255,7 +276,8 @@ levels fold back to their first bar.
 - On a phone-width chart the dashboard with the *Hours* column is wider than the pane, and its first column
   is cut off. Without that column, and as the hours table alone, it fits.
 - The dashboard status uses the wall clock; it does not know the exchange calendar.
-- Every level has its own label. Two levels at one price therefore print two labels over each other.
+- Every level has its own label. Two levels at one price therefore print two labels over each other. Only the
+  opening range and the initial balance share a label at a shared price.
 - A level label ends at the end of its line, `i_offset` bars after the last bar. It is complete only when the
   right margin of the chart is at least that wide.
 - Lines keep the colours of the inputs. A thin line in a pale default colour can be faint on a white chart.

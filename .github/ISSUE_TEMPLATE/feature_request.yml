@@ -25,6 +25,7 @@ body:
         - Previous day / week / month
         - Opening prices
         - Opening range
+        - Initial balance
         - Session VWAP
         - Time tools
         - Dashboard

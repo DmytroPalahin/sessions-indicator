@@ -73,7 +73,7 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 8 | *⑥ Previous day / week / month* on | `PDH`/`PDL`/`PWH`/`PWL`/`PMH`/`PML` match the previous daily, weekly and monthly candles |
 | 9 | *Keep past periods* on | Earlier days keep their lines, ending at the day boundary |
 | 10 | *⑦ Opening prices* on | Each line starts on the right bar and matches that bar's open |
-| 11 | *⑧ Opening range* on, stock chart | Box for 09:30–10:00, lines for six hours, one triangle per side at most |
+| 11 | *⑧ Show opening range* on, stock chart | Box for 09:30–10:00, lines for six hours with `ORH`, `ORL`, `OR 50%` and `OR ×1` at their right end, one triangle per side at most |
 | 12 | *(reserved for the session VWAP, which is parked on the `feature/vwap` branch)* | — |
 | 13 | *⑨ Time tools* on | One separator and one weekday label per day |
 | 14 | *⑩ Dashboard* on | Status matches the clock; ranges match the labels on the chart |
@@ -86,6 +86,10 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 21 | Regular-hours chart (stock or futures, RTH) | The New York session is drawn every day, although no bar separates two days |
 | 22 | *Hide levels farther than* = `2` with weekly and monthly levels on | Distant levels disappear and the price scale stops being stretched |
 | 23 | Level labels on a chart with the default right margin, then *Level labels position* = `After the line` | `At the line end`: every label is complete, over its line or under it for lows. `After the line`: the text follows the line and long labels are cut off by the price scale |
+| 24 | *⑧ Show initial balance* on, 5- and 15-minute chart | Box for 09:30–10:30 New York with `IB  … · …% of avg` over it; from 10:30 to 16:00 the lines `IBH`, `IBL`, `IB 50%`, `IB ×0.5` and `IB ×1`; one triangle per side at most; earlier days keep the box, the high and the low only |
+| 25 | Opening range and initial balance on together | Where the two share a high or a low there is one label, `ORH · IBH` or `ORL · IBL`; no text is printed over other text |
+| 26 | Both ranges on a 1-hour chart whose bars open on the hour, then on 30 minutes | 1 hour: neither range is drawn and there is no script error; 30 minutes: both are drawn |
+| 27 | *⑩ Dashboard* with both ranges on | A row for each under the sessions: `Forming · … left` inside the window, then `Inside` or `Broken …` while the lines extend, then `Opens in …`; size and average match the size labels on the chart |
 
 ## Verification log
 
@@ -140,3 +144,4 @@ Run before every release. Add the indicator to the chart and walk through the ro
 | 2026-11-27 | 4.3.1 | Release build | pass — the tagged file itself was saved in TradingView and published as the update: it compiles without errors, the editor marks nothing and the saved source equals the file. On `OANDA:EURUSD` 15m the instance on the chart took the new version, has 120 inputs, all at their defaults, and 20 plots, draws the session boxes and reports no script error. |
 | 2026-11-27 | 4.4.0 | New title in `indicator()`, no link in the header, a title check in `tools/check.py` | Static checks pass, 57 tests. Only the declaration line and comments differ from 4.3.1, so the build was compiled for the first time when it was saved for the release — see the next row. |
 | 2026-11-27 | 4.4.0 | Release build and the new page | pass — the tagged file itself was saved in TradingView: it compiles without errors, the editor marks nothing and the saved source equals the file. It was published as a new public, open-source script; a private publication of the same form came first and was deleted after its page had been read. The public page shows the title, the description of 3 713 characters with its five headings and eight list lines, the picture with the script name in the legend, both categories and the three tags, and the code served for it equals the file. On `OANDA:EURUSD` 15m the instance on the chart has 120 inputs, 20 plots and no script error. Not checked: the indicator search, which lists a new script only after its review. |
+| 2026-11-28 | unreleased | Initial balance as a second range on the engine of the opening range; labels on the range lines; size labels; dashboard rows; ranges measured only on bars that fit the window | Static checks pass, 57 tests. Editor analysis: 0 errors, 0 warnings. Not done yet: the full compile with **Add to chart** and the chart matrix rows 11 and 24 to 27. |
